@@ -91,8 +91,9 @@ function section1() {
         text.setAttributeNS(null, 'y', 0);
         var txt = document.createTextNode("Hello World");
         text.appendChild(txt);
-        bubble.appendChild(text)
         text.style.fontFamily = "Comic Neue, cursive"
+    
+        bubble.appendChild(text)
         frame.appendChild(bubble)
         var bboxtext = bubble.getBBox();
         text.setAttribute("transform", "translate(" + 4 + "," + bboxtext.height + ")");
