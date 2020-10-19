@@ -23,6 +23,11 @@
             </div>
             <pre>
             <code>
+function SVG(elementName) {
+    return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+}
+
+
 function setPoly(x, y, frame) {
     console.log(x,y);
     var poly = SVG("polygon")
@@ -38,23 +43,40 @@ function setPoly(x, y, frame) {
     return poly
 }
 
-function section1() {
+function section1(bubbleText) {
+
     var frame = document.getElementById("svg01");
+    
+    while (frame.firstChild) {
+        frame.removeChild(frame.firstChild);
+    }
     var bubble = SVG("g")
+
+
     var text = SVG("text");
     text.setAttributeNS(null, 'x', 0);
     text.setAttributeNS(null, 'y', 0);
-    var txt = document.createTextNode("Hello World");
+    var txt = document.createTextNode(bubbleText);
     text.appendChild(txt);
+    text.style.fontFamily = "Comic Neue, cursive"
+
     bubble.appendChild(text)
     frame.appendChild(bubble)
     var bboxtext = bubble.getBBox();
     text.setAttribute("transform", "translate(" + 4 + "," + bboxtext.height + ")");
-    text.style.fontFamily = "Comic Neue, cursive"
-    var poly = setPoly(bboxtext.width+8, bboxtext.height+8, frame)
+    
+    
+    console.log(bboxtext.width)
+    console.log(bboxtext.height)
+    var poly = setPoly(bboxtext.width*1+8, bboxtext.height+8, frame)
+
+
     bubble.appendChild(poly)
-    bubble.setAttribute("transform", "translate(" + 20 + "," + 20 + ")");    
+    bubble.setAttribute("transform", "translate(" + 20 + "," + 20 + ")");
+    
 }
+
+section1("this is a line of text")
             </code>
         </pre>
         </div>
