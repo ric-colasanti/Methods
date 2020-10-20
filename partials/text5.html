@@ -44,45 +44,48 @@
 
 
     function setPoly(x, y, frame) {
-        console.log(x,y);
-        var poly = SVG("polygon")
+        let poly = SVG("polygon")
         poly.setAttribute("fill", "none")
         poly.setAttribute("stroke", "black")
-        array = [[0, y],[5,y],[15,200],[10,y],[x, y],[x, 0],[0, 0]]
-        for (value of array) {
-            point = frame.createSVGPoint();
+        let array = [[0, y], [5, y], [20, 200], [15, y], [x, y], [x, 0], [0, 0]]
+        for (let value of array) {
+            let point = frame.createSVGPoint();
             point.x = value[0];
             point.y = value[1]
             poly.points.appendItem(point);
         }
         return poly
     }
-
+    
+    function setLine(frame,bubble, fontFamily,bubbleText){
+        let text = SVG("text");
+        let txt = document.createTextNode(bubbleText);
+        text.appendChild(txt);
+        text.style.fontFamily = fontFamily;
+        bubble.appendChild(text)
+        frame.appendChild(bubble)
+        let bboxtext = bubble.getBBox();
+        let offset = bboxtext.height;
+        text.setAttribute("transform", "translate(" + 4 + "," + offset + ")");
+        return bboxtext;
+    }
     function section1(bubbleText) {
 
-        var frame = document.getElementById("svg01");
+        let frame = document.getElementById("svg01");
         while (frame.firstChild) {
             frame.removeChild(frame.firstChild);
         }
-        var bubble = SVG("g")
+        let bubble = SVG("g")
+        let fontFamily = "Comic Neue, cursive"
+        let bboxtext = setLine(frame,bubble,fontFamily,bubbleText);
+        bboxtext = setLine(frame,bubble,fontFamily,bubbleText);
+        bboxtext = setLine(frame,bubble,fontFamily,bubbleText);
+        bboxtext = setLine(frame,bubble,fontFamily,bubbleText);
+        bboxtext = setLine(frame,bubble,fontFamily,bubbleText);
 
-
-        var text = SVG("text");
-        text.setAttributeNS(null, 'x', 0);
-        text.setAttributeNS(null, 'y', 0);
-        var txt = document.createTextNode(bubbleText);
-        text.appendChild(txt);
-        text.style.fontFamily = "Comic Neue, cursive"
-    
-        bubble.appendChild(text)
-        frame.appendChild(bubble)
-        var bboxtext = bubble.getBBox();
-        text.setAttribute("transform", "translate(" + 4 + "," + bboxtext.height + ")");
-        
-        
         console.log(bboxtext.width)
         console.log(bboxtext.height)
-        var poly = setPoly(bboxtext.width*1+8, bboxtext.height+8, frame)
+        let poly = setPoly(bboxtext.width*1+8, bboxtext.height+8, frame)
 
 
         bubble.appendChild(poly)
