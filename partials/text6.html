@@ -1,5 +1,6 @@
 <h1>SVG Bubble right </h1>
-<p>Work in progress</p>
+<p>Auto sizing speech bubbles with fixed end points.</p>
+<p>Type text of any length in to the text box to see it work. You can copy pat of this text for quickness.</p>
 
 <div class="container-fluid">
 
@@ -24,6 +25,77 @@
             </div>
             <pre>
             <code>
+function setPoly(pos,x,width, y,height, frame) {
+    let array;
+    let poly = SVG("polygon")
+    poly.setAttribute("fill", "none")
+    poly.setAttribute("stroke", "black")
+    if(pos=="right"){
+        let offset = width-4
+        array = [[0+offset, y], [x-20+offset, y], [x-25+offset, 200-height], [x-10+offset, y], [x+offset, y], [x+offset, 0], [0+offset, 0]]
+    }else{
+        array = [[0, y], [5, y], [20, 200], [15, y], [x, y], [x, 0], [0, 0]]
+    }
+    for (let value of array) {
+        let point = frame.createSVGPoint();
+        point.x = value[0];
+        point.y = value[1]
+        poly.points.appendItem(point);
+    }
+    return poly
+}
+
+function setLine(frame,bubble, fontFamily,bubbleText){
+    let text = SVG("text");
+    let txt = document.createTextNode(bubbleText);
+    text.appendChild(txt);
+    text.style.fontFamily = fontFamily;
+    bubble.appendChild(text)
+    frame.appendChild(bubble)
+    let bboxtext = bubble.getBBox();
+    let offset = bboxtext.height;
+    text.setAttribute("transform", "translate(" + 4 + "," + offset + ")");
+    return bboxtext;
+}
+function section1(pos,bubbleText,yoffset) {
+    let bboxtext
+    let bubble = SVG("g")
+    let fontFamily = "Comic Neue, cursive"
+    let words = bubbleText.split(" ");
+    var count = 0
+    var line=words[count]
+    var flag = true;
+    while(flag){
+        while (((line.length+words[count].length)<30) &&(flag)){
+            count++;
+            line+=" "+words[count]
+            flag = count< words.length-1;
+        }
+        bboxtext = setLine(frame,bubble,fontFamily,line);
+        line=""
+    }
+    let xpos = 0
+    if(pos == "right"){
+        xpos = (frame.clientWidth-bboxtext.width)-4
+    }
+    bubble.setAttribute("transform", "translate(" + xpos + "," + yoffset + ")");
+    bboxtext = bubble.getBBox();
+    let poly = setPoly(pos,bboxtext.width+8,bboxtext.x, bboxtext.height+8,yoffset, frame)
+    bubble.appendChild(poly)
+    return bboxtext.height+8
+}
+let frame = document.getElementById("svg01");
+function writeBubble(leftTxt,rightTxt){
+
+    while (frame.firstChild) {
+        frame.removeChild(frame.firstChild);
+    }
+    let yoffset = 0
+    yoffset = section1("left",leftTxt,yoffset)
+    yoffset+= 4
+    section1("right",rightTxt,yoffset)
+}
+writeBubble(" This is a multiline text on the left"," and this is some text on the right")
 
             </code>
         </pre>
@@ -45,7 +117,6 @@
 
 
     function setPoly(pos,x,width, y,height, frame) {
-        console.log(height)
         let array;
         let poly = SVG("polygon")
         poly.setAttribute("fill", "none")
