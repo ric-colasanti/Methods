@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@1,700&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@1,700&display=swap" rel="stylesheet">
     <style>
         .bgTextBox {
             background-color: rgb(241, 241, 241);
@@ -18,75 +18,81 @@
             border-width: 0.5px;
             padding: 10px;
         }
-        .highlight pre{
-  white-space: pre-wrap;
-}
+
+        .highlight pre {
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 
 <body ng-app="rlcApp">
 
-    <nav class="navbar navbar-expand-md bgTextBox navbar-light">
-        <!-- Brand -->
-        <a class="navbar-brand" href="#/!">Comic </a>
+<nav class="navbar navbar-expand-md bgTextBox navbar-light">
+    <!-- Brand -->
+    <a class="navbar-brand" href="#/!">Comic </a>
 
-        <!-- Toggler/collapsibe Button -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <!-- Navbar links -->
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbardrop" data-toggle="dropdown">
-                      Text
-                    </a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#!text">Text</a>
-                        <a class="dropdown-item" href="#!text2">Polygon</a>
-                      <a class="dropdown-item" href="#!text3">Bubble 1</a>
-                        <a class="dropdown-item" href="#!text4">Bubble 2</a>
-                        <a class="dropdown-item" href="#!text5">Bubble 3</a>
-                    </div>
-                  </li>
-            </ul>
-        </div>
-    </nav>
-    <br>
-    <div class="container">
-        <div ng-view></div>
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbardrop" data-toggle="dropdown">
+                    Text
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#!text">Text</a>
+                    <a class="dropdown-item" href="#!text2">Polygon</a>
+                    <a class="dropdown-item" href="#!text3">Bubble </a>
+                    <a class="dropdown-item" href="#!text4">Bubble interactive</a>
+                    <a class="dropdown-item" href="#!text5">Bubble multi-line</a>
+                    <a class="dropdown-item" href="#!text6">Bubble right</a>
+                </div>
+            </li>
+        </ul>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+</nav>
+<br>
+<div class="container">
+    <div ng-view></div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
 
 
-    <script>
-        var app = angular.module("rlcApp", ["ngRoute"]);
-        app.config(function ($routeProvider) {
-            $routeProvider
-                .when("/", {
-                    templateUrl: "partials/main.html"
-                })
-                .when("/text", {
-                    templateUrl: "partials/text1.html"
-                })
-                .when("/text2", {
-                    templateUrl: "partials/text2.html"
-                })
-                .when("/text3", {
-                    templateUrl: "partials/text3.html"
-                })                
-                .when("/text4", {
-                    templateUrl: "partials/text4.html"
-                }).when("/text5", {
-                templateUrl: "partials/text5.html"
+<script>
+    var app = angular.module("rlcApp", ["ngRoute"]);
+    app.config(function ($routeProvider) {
+        $routeProvider
+            .when("/", {
+                templateUrl: "partials/main.html"
+            })
+            .when("/text", {
+                templateUrl: "partials/text1.html"
+            })
+            .when("/text2", {
+                templateUrl: "partials/text2.html"
+            })
+            .when("/text3", {
+                templateUrl: "partials/text3.html"
+            })
+            .when("/text4", {
+                templateUrl: "partials/text4.html"
+            })
+            .when("/text5", {
+            templateUrl: "partials/text5.html"
+            })
+            .when("/text6", {
+                templateUrl: "partials/text6.html"
             });
-        });
-    </script>
+    });
+</script>
 </body>
 
 </html>
