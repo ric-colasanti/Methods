@@ -1,6 +1,6 @@
 <h1>SVG Bubble right </h1>
 <p>Auto sizing speech bubbles with fixed end points.</p>
-<p>Type text of any length in to the text box to see it work. You can copy part of this text for quickness.</p>
+<p>Click write to put text in bubbles</p>
 
 <div class="container-fluid">
 
@@ -13,9 +13,9 @@
             <br>
             <div class="form-group">
                 <label for="txt1">Left</label>
-                <input id="txt1" type="text" class="form-control" >
+                <input id="txt1" type="text" class="form-control" value="This is a multiline text on the left">
                 <label for="txt2">Right</label>
-                <input id="txt2" type="text" class="form-control" >
+                <input id="txt2" type="text" class="form-control" value="and this is some text on the right">
               </div>
               <button type="button" class="btn btn-success" onclick="writeBubble(document.getElementById('txt1').value,document.getElementById('txt2').value)">Write</button>
         </div>
@@ -187,5 +187,5 @@ writeBubble(" This is a multiline text on the left"," and this is some text on t
         yoffset+= 4
         section1("right",rightTxt,yoffset)
     }
-    writeBubble(" This is a multiline text on the left"," and this is some text on the right")
+
 </script>
