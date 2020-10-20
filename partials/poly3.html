@@ -114,10 +114,12 @@ function section1() {
         poly.setAttribute("ry", "10")
         poly.setAttribute("width", "160")
         poly.setAttribute("height", "61")
+        poly.setAttribute("stroke-width","0.5")
         bubble.appendChild(poly)
         let polyl = SVG("polyline")
         polyl.setAttribute("fill", "rgb(245,245,255)")
         polyl.setAttribute("stroke", "black")
+        polyl.setAttribute("stroke-width","0.5")
         let array = [[60, 60], [120, 120], [80, 60]]
         for (value of array) {
             point = frame.createSVGPoint();
