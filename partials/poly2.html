@@ -1,0 +1,68 @@
+<h1>SVG Ploygonline </h1>
+<p></p>
+
+
+<div class="container-fluid">
+
+
+    <div class="row">
+        <div class="col-sm-4 bgDemo">
+            <svg id="svg01" width="300" height="300" style="border-style: solid;"></svg>
+        </div>
+        <div class="col-sm-8 bgTextBox">
+            <h4>Add polygon </h4>
+            <div id="boxsize">
+            </div>
+            <pre>
+            <code>
+
+
+            </code>
+        </pre>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<script>
+    function SVG(elementName) {
+        return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+    }
+
+    function section1() {
+        var frame = document.getElementById("svg01");
+        var bubble = SVG("g")
+        var poly = SVG("polygon")
+        poly.setAttribute("fill","rgb(200,200,255)")
+        poly.setAttribute("stroke","black")
+        array = [[50,0],[50,61],[130,61],[130,0]]
+        for(value of array){
+            point = frame.createSVGPoint();
+            point.x = value[0];
+            point.y = value[1]
+            poly.points.appendItem(point);
+        }
+        bubble.appendChild(poly)
+       var polyl = SVG("polyline")
+       polyl.setAttribute("fill","rgb(200,200,255)")
+       polyl.setAttribute("stroke","black")
+        array = [[60,60],[60,120],[120,120],[120,60]]
+        for(value of array){
+            point = frame.createSVGPoint();
+            point.x = value[0];
+            point.y = value[1]
+            polyl.points.appendItem(point);
+        }
+        bubble.appendChild(polyl)
+        bubble.setAttribute("transform", "translate(" + 20 + "," + 20 + ")");
+        frame.appendChild(bubble)
+    }
+
+    section1()
+</script>
