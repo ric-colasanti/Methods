@@ -52,6 +52,7 @@
                     <a class="dropdown-item" href="#!text4">Bubble interactive</a>
                     <a class="dropdown-item" href="#!text5">Bubble multi-line</a>
                     <a class="dropdown-item" href="#!text6">Bubble left and right</a>
+                    <a class="dropdown-item" href="#!text7">Just text</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -94,8 +95,11 @@
             .when("/poly3", {
                 templateUrl: "partials/poly3.html"
             })
+            .when("/text", {
+                templateUrl: "partials/text1.html"
+            })
             .when("/text2", {
-                templateUrl: "partials/text2.html"
+            templateUrl: "partials/text2.html"
             })
             .when("/text3", {
                 templateUrl: "partials/text3.html"
@@ -108,7 +112,10 @@
             })
             .when("/text6", {
                 templateUrl: "partials/text6.html"
-            });
+            })
+            .when("/text7", {
+            templateUrl: "partials/text7.html"
+        });
     });
 </script>
 </body>
