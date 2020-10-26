@@ -1,5 +1,6 @@
-<h1>SVG speech bubble </h1>
-<p>This is a multiline bubble. Type text of any length in to the text box to see it work. You can copy part of this text for quickness.</p>
+<h1>SVG object bubble </h1>
+<p>This is a multiline bubble. Type text of any length in to the text box to see it work. You can copy part of this text
+    for quickness.</p>
 
 
 <div class="container-fluid">
@@ -14,8 +15,9 @@
             <div class="form-group">
                 <label for="pwd">Text</label>
                 <input id="txt1" type="text" class="form-control" id="pwd">
-              </div>
-              <!-- <button type="button" class="btn btn-success" onclick="section1(document.getElementById('txt1').value)">Write</button> -->
+            </div>
+            <button type="button" class="btn btn-success"
+                onclick="section1(document.getElementById('txt1').value)">Write</button>
         </div>
         <div class="col-sm-8 bgTextBox">
             <h4>Speech bubble</h4>
@@ -23,6 +25,63 @@
             </div>
             <pre>
             <code>
+class Bubble {
+    constructor() {
+        this.bubble = SVG("g")
+        this.textGroup = SVG("g")
+        this.poly = SVG("rect")
+        this.poly.setAttribute("fill", "rgb(245,245,255)")
+        this.poly.setAttribute("stroke", "black")
+        this.poly.setAttribute("x", "0")
+        this.poly.setAttribute("y", "0")
+        this.poly.setAttribute("rx", "10")
+        this.poly.setAttribute("ry", "10")
+        this.poly.setAttribute("stroke-width", "0.5")
+        this.bubble.appendChild(this.poly)
+        this.bubble.appendChild(this.textGroup)
+        this.xOffset = 0
+        this.yOffset = 0
+    }
+
+    translate(x,y){
+        this.xOffset = x
+        this.yOffset = y
+        this.bubble.setAttribute("transform", "translate(" + x + "," + y + ")");
+    }
+
+    setText(bubbleText) {
+        function setLine(textGroup, bubbleText) {
+            let text = SVG("text");
+            let txt = document.createTextNode(bubbleText);
+            text.appendChild(txt);
+
+            //text.style.fontFamily = fontFamily;
+            textGroup.appendChild(text)
+            let bboxtext = textGroup.getBBox();
+            let offset = bboxtext.height;
+            text.setAttribute("transform", "translate(" + 4 + "," + offset + ")");
+        }
+
+        let words = bubbleText.split(" ");
+        var count = 0
+        var line = words[count]
+        var flag = true;
+        while (flag) {
+            while (((line.length + words[count].length) < 20) && (flag)) {
+                count++;
+                line += " " + words[count]
+                flag = count < words.length - 1;
+            }
+            setLine(this.textGroup, line);
+            line = ""
+        }
+        let bboxtext = this.textGroup.getBBox();
+        this.poly.setAttribute("width", bboxtext.width + 16)
+        this.poly.setAttribute("height", bboxtext.height + 16)
+
+    }
+}
+
            </code>
         </pre>
         </div>
@@ -42,67 +101,118 @@
     }
 
 
-       
-    function setLine(bubble,bubbleText){
-        let text = SVG("text");
-        let txt = document.createTextNode(bubbleText);
-        text.appendChild(txt);
-        //text.style.fontFamily = fontFamily;
-        bubble.appendChild(text)
-        let bboxtext = bubble.getBBox();
-        let offset = bboxtext.height;
-        text.setAttribute("transform", "translate(" + 4 + "," + offset + ")");
-    }
-    class Bubble{
+
+
+    class Bubble {
         constructor() {
-        this.bubble = SVG("g")
-        this.textGroup = SVG("g")
-        this.poly = SVG("rect")
-        this.poly.setAttribute("fill", "rgb(245,245,255)")
-        this.poly.setAttribute("stroke", "black")
-        this.poly.setAttribute("x", "0")
-        this.poly.setAttribute("y", "0")
-        this.poly.setAttribute("rx", "10")
-        this.poly.setAttribute("ry", "10")
-        this.poly.setAttribute("stroke-width","0.5")
-        this.bubble.appendChild(this.poly)
-        this.bubble.appendChild(this.textGroup)         
+            this.bubble = SVG("g")
+            this.textGroup = SVG("g")
+            this.poly = SVG("rect")
+            this.polyl = SVG("polyline")
+            this.polyl.setAttribute("fill", "rgb(245,245,255)")
+            this.polyl.setAttribute("stroke", "black")
+            this.polyl.setAttribute("stroke-width", "0.5")
+            this.polyAbsX=0
+            this.polyAbsY=0
+            this.poly.setAttribute("fill", "rgb(245,245,255)")
+            this.poly.setAttribute("stroke", "black")
+            this.poly.setAttribute("x", "0")
+            this.poly.setAttribute("y", "0")
+            this.poly.setAttribute("rx", "10")
+            this.poly.setAttribute("ry", "10")
+            this.poly.setAttribute("stroke-width", "0.5")
+            this.bubble.appendChild(this.poly)
+            this.bubble.appendChild(this.textGroup)
+            this.bubble.appendChild(this.polyl)
+            this.xOffset = 0
+            this.yOffset = 0
         }
-    }
-    function section1(bubbleText,bubble) {
-        let words = bubbleText.split(" ");
-        var count = 0
-        var line=words[count]
-        var flag = true;
-        while(flag){
-            while (((line.length+words[count].length)<20) &&(flag)){
-                count++;
-                line+=" "+words[count]
-                flag = count< words.length-1;
+
+        getDimensions(){
+            let bboxtext = this.poly.getBBox();
+            return [this.xOffset,this.yOffset,bboxtext.width,bboxtext.height,this.polyAbsX,this.polyAbsY]
+        }
+
+        translate(x, y) {
+            this.xOffset = x
+            this.yOffset = y
+            this.bubble.setAttribute("transform", "translate(" + x + "," + y + ")");
+        }
+
+        addPointer(frame,xPos,yPos) {
+            let bboxtext = this.textGroup.getBBox();
+            this.polyAbsX = xPos-this.xOffset
+            this.polyAbsY= yPos-this.yOffset
+            let array = [
+                [20, bboxtext.height + 15],
+                [this.polyAbsX,this.polyAbsY],
+                [40, bboxtext.height + 15]
+            ]
+            while (this.poly.lastChild) {
+                this.poly.removeChild(this.poly.lastChild);
             }
-            setLine(bubble.textGroup,line);
-            line=""
+            for (let index = 0; index < array.length; index++) {
+                let point = frame.createSVGPoint();
+                point.x = array[index][0];
+                point.y = array[index][1]
+                this.polyl.points.appendItem(point);
+            }
         }
-        let bboxtext = bubble.textGroup.getBBox();
-        bubble.poly.setAttribute("width", bboxtext.width+16)
-        bubble.poly.setAttribute("height", bboxtext.height+16)
-        
 
-        console.log("offset: ",bubble.offsetLeft)
+        setText(bubbleText) {
+            function setLine(textGroup, bubbleText) {
+                let text = SVG("text");
+                let txt = document.createTextNode(bubbleText);
+                text.appendChild(txt);
 
+                //text.style.fontFamily = fontFamily;
+                textGroup.appendChild(text)
+                let bboxtext = textGroup.getBBox();
+                let offset = bboxtext.height;
+                text.setAttribute("transform", "translate(" + 4 + "," + offset + ")");
+            }
 
-        console.log(bboxtext.width)
-        console.log(bboxtext.height)
-  
-        
+            let words = bubbleText.split(" ");
+            var count = 0
+            var line = words[count]
+            var flag = true;
+            while (flag) {
+                while (((line.length + words[count].length) < 20) && (flag)) {
+                    count++;
+                    line += " " + words[count]
+                    flag = count < words.length - 1;
+                }
+                setLine(this.textGroup, line);
+                line = ""
+            }
+            let bboxtext = this.textGroup.getBBox();
+            this.poly.setAttribute("width", bboxtext.width + 16)
+            this.poly.setAttribute("height", bboxtext.height + 16)
+
+        }
     }
-    let frame = document.getElementById("svg01");
+
+    function section1(bubbleText, ) {
+
+        let frame = document.getElementById("svg01");
         while (frame.firstChild) {
             frame.removeChild(frame.firstChild);
         }
-    let bubble = new Bubble()
-    frame.appendChild(bubble.bubble)
+        let bubble = new Bubble()
+        frame.appendChild(bubble.bubble)
+        bubble.setText(bubbleText)
+        bubble.translate(20, 20)
+        bubble.addPointer(frame,50,200)
+        bd = bubble.getDimensions()
+        let bubble2 = new Bubble()
+        frame.appendChild(bubble2.bubble)
+        bubble2.setText(" test of more stuff")
+        bubble2.translate(bd[4]+50, bd[1]+bd[3]+5)
+        bubble2.addPointer(frame,150,200)
+        console.log(bubble2.getDimensions())
+        
+    }
 
-    section1("This is a very long line and should go on more than one line in the bubble",bubble)
 
+    section1("This is a very long  and should go on more than one line in the bubble", )
 </script>
