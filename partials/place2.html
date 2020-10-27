@@ -1,6 +1,6 @@
 <h1>Bubble placement </h1>
 <p>Position part of a random speech bubble above the same colored head and put on same line if possible</p>
-
+<p>If there are no element in the canvas refresh screen</p>
 
 <div class="container-fluid">
 
@@ -8,15 +8,7 @@
     <div class="row">
         <div class="col-sm-4 bgDemo">
             <svg id="svg01" width="300" height="300" style="border-style: solid;"></svg>
-            <br>
-            <br>
-            <br>
-            <div class="form-group">
-                <label for="pwd">Text</label>
-                <input id="txt1" type="text" class="form-control" id="pwd">
-            </div>
-            <button type="button" class="btn btn-success"
-                onclick="section1(document.getElementById('txt1').value)">Write</button>
+
         </div>
         <div class="col-sm-8 bgTextBox">
             <h4>Speech bubble</h4>
@@ -24,7 +16,44 @@
             </div>
             <pre>
             <code>
-
+var positionInfo = frame.getBoundingClientRect();
+var height = positionInfo.height;
+var width = positionInfo.width;
+let heads = []
+let colors = ["red", "orange", "yellow", "green", "blue", "purple"]
+let speechOrder = []
+numOfHeads = 4
+for (let i = 0; i < numOfHeads; i++) {
+    let head = new Circle(colors[i])
+    heads.push(head)
+    frame.appendChild(head.element)
+    let xpos = width / (numOfHeads + 1) * (i) + (width / (numOfHeads) / 2)
+    head.translate(xpos, 200)
+    speechOrder.push(i)
+}
+speechOrder = shuffle(speechOrder);
+let bubbles = []
+let line =0
+for (let i = 0; i < speechOrder.length; i++) {
+    let s = speechOrder[i]
+    let headPos = heads[s].xOffset
+    bWidth = getRandomInt(20,width-150)
+    bubble = new Bubble(colors[s],bWidth)
+    bubbles.push(bubble)
+    frame.appendChild(bubble.element)
+    xPos = getRandomInt(headPos-bWidth,headPos)
+    xPos = minBounds(5,xPos)
+    xPos -= maxBounds(width-10,bWidth,xPos)
+    if(i>0){ // is it a second bubbble
+        let previous = bubbles[i-1]
+        console.log(previous.xOffset+previous.width+5,xPos)
+        if (previous.xOffset+previous.width+5>xPos){
+            line++
+        }
+    }
+    bubble.translate(xPos,line*25+10)
+        
+}
            </code>
         </pre>
         </div>
@@ -70,11 +99,13 @@
     }
     class Circle {
         constructor(color) {
+
+            this.center = 20
             this.element = SVG("circle")
             this.element.setAttribute("stroke", "black")
-            this.element.setAttribute("cx", 20)
+            this.element.setAttribute("cx", this.center)
             this.element.setAttribute("cy", 20)
-            this.element.setAttribute("r", 20)
+            this.element.setAttribute("r",20)
             this.element.setAttribute("fill", color)
             this.xOffset = 0
             this.yOffset = 0
@@ -82,6 +113,7 @@
         translate(x, y) {
             this.xOffset = x
             this.yOffset = y
+            this.center += x
             this.element.setAttribute("transform", "translate(" + x + "," + y + ")");
         }
     }
@@ -127,11 +159,11 @@
     }
     speechOrder = shuffle(speechOrder);
     let bubbles = []
-    let line =0
+    let lineNum =0
     for (let i = 0; i < speechOrder.length; i++) {
         let s = speechOrder[i]
-        let headPos = heads[s].xOffset
-        bWidth = getRandomInt(10,width-150)
+        let headPos = heads[s].center
+        bWidth = getRandomInt(20,width-150)
         bubble = new Bubble(colors[s],bWidth)
         bubbles.push(bubble)
         frame.appendChild(bubble.element)
@@ -142,10 +174,17 @@
             let previous = bubbles[i-1]
             console.log(previous.xOffset+previous.width+5,xPos)
             if (previous.xOffset+previous.width+5>xPos){
-                line++
+                lineNum++
             }
         }
-        bubble.translate(xPos,line*25+10)
+        bubble.translate(xPos,lineNum*25+10)
+        let line = SVG("line")
+        line.setAttribute("x1",headPos)
+        line.setAttribute("y1",200)
+        line.setAttribute("x2",headPos)
+        line.setAttribute("y2",bubble.yOffset+20)
+        line.setAttribute("stroke", "black")
+        frame.appendChild(line)
            
     }
 </script>
