@@ -1,0 +1,143 @@
+<h1>Bubble placement </h1>
+<p>Position part of a random speech bubble above the same colored head</p>
+
+
+<div class="container-fluid">
+
+
+    <div class="row">
+        <div class="col-sm-4 bgDemo">
+            <svg id="svg01" width="300" height="300" style="border-style: solid;"></svg>
+            <br>
+            <br>
+            <br>
+            <div class="form-group">
+                <label for="pwd">Text</label>
+                <input id="txt1" type="text" class="form-control" id="pwd">
+            </div>
+            <button type="button" class="btn btn-success"
+                onclick="section1(document.getElementById('txt1').value)">Write</button>
+        </div>
+        <div class="col-sm-8 bgTextBox">
+            <h4>Speech bubble</h4>
+            <div id="boxsize">
+            </div>
+            <pre>
+            <code>
+
+           </code>
+        </pre>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<script>
+    function SVG(elementName) {
+        return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+    }
+
+    function shuffle(a) {
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+    function minBounds(minVal, val){
+        if(val< minVal){
+            return minVal
+        }
+        return val
+    }
+    function maxBounds(maxVal,bWidth, val){
+        if(val+bWidth> maxVal){
+            return (val+bWidth)-maxVal
+        }
+        return 0
+    }
+
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    class Circle {
+        constructor(color) {
+            this.element = SVG("circle")
+            this.element.setAttribute("stroke", "black")
+            this.element.setAttribute("cx", 20)
+            this.element.setAttribute("cy", 20)
+            this.element.setAttribute("r", 20)
+            this.element.setAttribute("fill", color)
+            this.xOffset = 0
+            this.yOffset = 0
+        }
+        translate(x, y) {
+            this.xOffset = x
+            this.yOffset = y
+            this.element.setAttribute("transform", "translate(" + x + "," + y + ")");
+        }
+    }
+
+    class Bubble {
+        constructor(color, width) {
+            this.element = SVG("rect")
+            this.element.setAttribute("stroke", "black")
+            this.element.setAttribute("x", 0)
+            this.element.setAttribute("y", 0)
+            this.element.setAttribute("height", 20)
+            this.element.setAttribute("width", width)
+            this.element.setAttribute("fill", color)
+            this.xOffset = 0
+            this.yOffset = 0
+        }
+        translate(x, y) {
+            this.xOffset = x
+            this.yOffset = y
+            this.element.setAttribute("transform", "translate(" + x + "," + y + ")");
+        }
+    }
+
+    let frame = document.getElementById("svg01");
+    while (frame.firstChild) {
+        frame.removeChild(frame.firstChild);
+    }
+    var positionInfo = frame.getBoundingClientRect();
+    var height = positionInfo.height;
+    var width = positionInfo.width;
+    let heads = []
+    let colors = ["red", "orange", "yellow", "green", "blue", "purple"]
+    let speechOrder = []
+    numOfHeads = 4
+    for (let i = 0; i < numOfHeads; i++) {
+        let head = new Circle(colors[i])
+        heads.push(head)
+        frame.appendChild(head.element)
+        xpos = width / (numOfHeads + 1) * (i) + (width / (numOfHeads) / 2)
+        head.translate(xpos, 200)
+        speechOrder.push(i)
+    }
+    speechOrder = shuffle(speechOrder);
+    let bubbles = []
+    for (let i = 0; i < speechOrder.length; i++) {
+        let s = speechOrder[i]
+        let headPos = heads[s].xOffset
+        bWidth = getRandomInt(10,width-10)
+        bubble = new Bubble(colors[s],bWidth)
+        frame.appendChild(bubble.element)
+        xPos = getRandomInt(headPos-bWidth,headPos)
+        console.log(xPos);
+        xPos = minBounds(5,xPos)
+        console.log(xPos)
+        xPos -= maxBounds(width-10,bWidth,xPos)
+        bubble.translate(xPos,i*25+10)
+        
+    }
+</script>

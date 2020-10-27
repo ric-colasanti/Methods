@@ -67,6 +67,15 @@
                     <a class="dropdown-item" href="#!poly5">Object bubble</a>
                 </div>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbardrop2" data-toggle="dropdown">
+                    Placement
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#!place1">Above</a>
+                    <a class="dropdown-item" href="#!place2">Same line</a>
+                </div>
+            </li>
         </ul>
     </div>
 </nav>
@@ -102,6 +111,12 @@
             })
             .when("/poly5", {
                 templateUrl: "partials/poly5.html"
+            })
+            .when("/place1", {
+                templateUrl: "partials/place1.html"
+            })
+            .when("/place2", {
+                templateUrl: "partials/place2.html"
             })
             .when("/text", {
                 templateUrl: "partials/text1.html"
