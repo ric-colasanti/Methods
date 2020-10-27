@@ -1,0 +1,320 @@
+<h1>Bubble placement no overlap</h1>
+<p>WORK IN PROGRESS</p>
+<p>Position part of a random speech bubble above the same colored head and put on same line if possible. The pointer
+    lines should not intersect with the box of another head</p>
+<p>If there are no element in the canvas refresh screen</p>
+
+<div class="container-fluid">
+
+
+    <div class="row">
+        <div class="col-sm-4 bgDemo">
+            <svg id="svg01" width="300" height="300" style="border-style: solid;"></svg>
+            <br>
+            <h4> Number of heads</h4>
+            <div>
+                <input type="range" min="1" max="6" value="3" class="slider" id="sld1">
+                <p>Value: <span id="value"></span></p>
+            </div>
+            <button type="button" class="btn btn-success"
+                onclick="chatter(document.getElementById('sld1').value)">Update</button>
+        </div>
+
+
+        <div class="col-sm-8 bgTextBox">
+            <h4>Speech bubble</h4>
+
+            <pre>
+            <code>
+class Bubble {
+    constructor(head, previous, width) {
+        this.previous = previous;
+        this.head = head;
+        this.element = SVG("rect")
+        this.element.setAttribute("stroke", "black")
+        this.element.setAttribute("x", 0)
+        this.element.setAttribute("y", 0)
+        this.element.setAttribute("height", 20)
+        this.element.setAttribute("width", width)
+        this.element.setAttribute("fill", head.color)
+        this.width = width
+        this.xOffset = 0
+        this.yOffset = 0
+    }
+    translate(x, y) {
+        this.xOffset = x
+        this.yOffset = y
+        this.element.setAttribute("transform", "translate(" + x + "," + y + ")");
+    }
+    headPos(list,center,range){
+        if (this.previous!=null){
+            //console.log("prev",this.previous.head.center,this.previous.head.center>this.head.center,this.head.color,this.previous.head.color);
+            list.push(this.previous.head.color)
+            if(this.previous.head.center<center){
+                if(this.previous.head.center>range[0]){
+                    range[0]=this.previous.head.center
+                }
+            }else{
+                if(this.previous.head.center<range[1]){
+                    range[1]=this.previous.head.center
+                }    
+            }
+            this.previous.headPos(list,center,range)
+        }
+        //return list;
+    }
+}
+
+function chatter(nHeads) {
+    console.log(nHeads);
+    let frame = document.getElementById("svg01");
+    while (frame.firstChild) {
+        frame.removeChild(frame.firstChild);
+    }
+    var positionInfo = frame.getBoundingClientRect();
+    var height = positionInfo.height;
+    var width = positionInfo.width;
+    let heads = []
+    let colors = ["red", "orange", "yellow", "green", "blue", "purple"]
+    let speechOrder = []
+    numOfHeads = parseInt(nHeads)
+    for (let i = 0; i < numOfHeads; i++) {
+        let head = new Circle(colors[i])
+        heads.push(head)
+        frame.appendChild(head.element)
+        let xPos = width / (numOfHeads + 1) * (i) + (width / (numOfHeads) / 2)
+        head.translate(xPos, 200)
+        speechOrder.push(i)
+    }
+    speechOrder = shuffle(speechOrder);
+    let bubbles = []
+    let lineNum = 0
+    for (let i = 0; i < speechOrder.length; i++) {
+        let s = speechOrder[i]
+        let headPos = heads[s].center
+        let range = [0,300]
+        if (i > 0) {
+            bWidth = getRandomInt(20, width - 50)
+            bubble = new Bubble(heads[s], bubbles[i - 1], bWidth)
+            let list =[]
+            let center = heads[s].center
+            
+            bubble.headPos(list,center,range)
+            console.log(list)
+            console.log("center ",center);
+            console.log("range ",range[0],range[1]);
+            bWidth = getRandomInt(20, range[1]-range[0])
+            bubble.element.setAttribute("width",bWidth)
+        } else {
+            bWidth = getRandomInt(20, width - 150)
+            bubble = new Bubble(heads[s], null, bWidth)
+        }
+        bubbles.push(bubble)
+        frame.appendChild(bubble.element)
+        xPos = getRandomInt(headPos - bWidth, headPos)
+        xPos = minBounds(range[0]+10, xPos)
+        xPos -= maxBounds(range[1] - 10, bWidth, xPos)
+        if (i > 0) { // is it a second bubbble
+            let previous = bubbles[i - 1]
+            if (previous.xOffset + previous.width + 5 > xPos) {
+                lineNum++
+            }
+        }
+        bubble.translate(xPos, lineNum * 25 + 10)
+        let line = SVG("line")
+        line.setAttribute("x1", headPos)
+        line.setAttribute("y1", 200)
+        line.setAttribute("x2", headPos)
+        line.setAttribute("y2", bubble.yOffset + 20)
+        line.setAttribute("stroke", "black")
+        frame.appendChild(line)
+
+    }
+}
+           </code>
+        </pre>
+           
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <script>
+        var slider = document.getElementById("sld1");
+        var output = document.getElementById("value");
+        output.innerHTML = slider.value;
+        slider.oninput = function () {
+            output.innerHTML = this.value;
+        }
+
+        function SVG(elementName) {
+            return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+        }
+
+        function shuffle(a) {
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function minBounds(minVal, val) {
+            if (val < minVal) {
+                return minVal
+            }
+            return val
+        }
+
+        function maxBounds(maxVal, bWidth, val) {
+            if (val + bWidth > maxVal) {
+                return (val + bWidth) - maxVal
+            }
+            return 0
+        }
+
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        class Circle {
+            constructor(color) {
+
+                this.center = 20
+                this.color = color
+                this.element = SVG("circle")
+                this.element.setAttribute("stroke", "black")
+                this.element.setAttribute("cx", this.center)
+                this.element.setAttribute("cy", 20)
+                this.element.setAttribute("r", 20)
+                this.element.setAttribute("fill", this.color)
+                this.xOffset = 0
+                this.yOffset = 0
+            }
+            translate(x, y) {
+                this.xOffset = x
+                this.yOffset = y
+                this.center += x
+                this.element.setAttribute("transform", "translate(" + x + "," + y + ")");
+            }
+        }
+
+        class Bubble {
+            constructor(head, previous, width) {
+                this.previous = previous;
+                this.head = head;
+                this.element = SVG("rect")
+                this.element.setAttribute("stroke", "black")
+                this.element.setAttribute("x", 0)
+                this.element.setAttribute("y", 0)
+                this.element.setAttribute("height", 20)
+                this.element.setAttribute("width", width)
+                this.element.setAttribute("fill", head.color)
+                this.width = width
+                this.xOffset = 0
+                this.yOffset = 0
+            }
+            translate(x, y) {
+                this.xOffset = x
+                this.yOffset = y
+                this.element.setAttribute("transform", "translate(" + x + "," + y + ")");
+            }
+            headPos(list, center, range) {
+                if (this.previous != null) {
+                    //console.log("prev",this.previous.head.center,this.previous.head.center>this.head.center,this.head.color,this.previous.head.color);
+                    list.push(this.previous.head.color)
+                    if (this.previous.head.center < center) {
+                        if (this.previous.head.center > range[0]) {
+                            range[0] = this.previous.head.center
+                        }
+                    } else {
+                        if (this.previous.head.center < range[1]) {
+                            range[1] = this.previous.head.center
+                        }
+                    }
+                    this.previous.headPos(list, center, range)
+                }
+                //return list;
+            }
+        }
+
+        function chatter(nHeads) {
+            console.log(nHeads);
+            let frame = document.getElementById("svg01");
+            while (frame.firstChild) {
+                frame.removeChild(frame.firstChild);
+            }
+            var positionInfo = frame.getBoundingClientRect();
+            var height = positionInfo.height;
+            var width = positionInfo.width;
+            let heads = []
+            let colors = ["red", "orange", "yellow", "green", "blue", "purple"]
+            let speechOrder = []
+            numOfHeads = parseInt(nHeads)
+            for (let i = 0; i < numOfHeads; i++) {
+                let head = new Circle(colors[i])
+                heads.push(head)
+                frame.appendChild(head.element)
+                let xPos = width / (numOfHeads + 1) * (i) + (width / (numOfHeads) / 2)
+                head.translate(xPos, 200)
+                speechOrder.push(i)
+            }
+            speechOrder = shuffle(speechOrder);
+            let bubbles = []
+            let lineNum = 0
+            for (let i = 0; i < speechOrder.length; i++) {
+                let s = speechOrder[i]
+                let headPos = heads[s].center
+                let range = [10, 290]
+                if (i > 0) {
+                    bWidth = getRandomInt(20, width - 50)
+                    bubble = new Bubble(heads[s], bubbles[i - 1], bWidth)
+                    let list = []
+                    let center = heads[s].center
+
+                    bubble.headPos(list, center, range)
+                    console.log(list)
+                    console.log("center ", center);
+                    console.log("range ", range[0], range[1]);
+                    bWidth = getRandomInt(20, range[1] - range[0])
+                    bubble.element.setAttribute("width", bWidth)
+                } else {
+                    bWidth = getRandomInt(20, width - 150)
+                    bubble = new Bubble(heads[s], null, bWidth)
+                }
+                bubbles.push(bubble)
+                frame.appendChild(bubble.element)
+                xPos = getRandomInt(headPos - bWidth, headPos)
+                xPos = minBounds(range[0] + 10, xPos)
+                xPos -= maxBounds(range[1] - 10, bWidth, xPos)
+                if (i > 0) { // is it a second bubbble
+                    let previous = bubbles[i - 1]
+                    if (previous.xOffset + previous.width + 5 > xPos) {
+                        lineNum++
+                    }
+                }
+                bubble.translate(xPos, lineNum * 25 + 10)
+                let line = SVG("line")
+                line.setAttribute("x1", headPos)
+                line.setAttribute("y1", 200)
+                line.setAttribute("x2", headPos)
+                line.setAttribute("y2", bubble.yOffset + 20)
+                line.setAttribute("stroke", "black")
+                frame.appendChild(line)
+
+            }
+        }
+
+        function section1(val) {
+            console.log(val);
+        }
+
+
+        chatter(3)
+    </script>

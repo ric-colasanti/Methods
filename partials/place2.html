@@ -18,11 +18,11 @@
                 onclick="chatter(document.getElementById('sld1').value)">Update</button>
         </div>
 
-    </div>
-    <div class="col-sm-8 bgTextBox">
-        <h4>Speech bubble</h4>
-    </div>
-    <pre>
+
+        <div class="col-sm-8 bgTextBox">
+            <h4>Speech bubble</h4>
+        </div>
+        <pre>
             <code>
 var positionInfo = frame.getBoundingClientRect();
 var height = positionInfo.height;
@@ -64,11 +64,10 @@ for (let i = 0; i < speechOrder.length; i++) {
 }
            </code>
         </pre>
-</div>
+    </div>
 </div>
 
 
-</div>
 
 
 
@@ -167,7 +166,7 @@ for (let i = 0; i < speechOrder.length; i++) {
         let heads = []
         let colors = ["red", "orange", "yellow", "green", "blue", "purple"]
         let speechOrder = []
-        numOfHeads =  parseInt(nHeads)
+        numOfHeads = parseInt(nHeads)
         for (let i = 0; i < numOfHeads; i++) {
             let head = new Circle(colors[i])
             heads.push(head)
@@ -212,7 +211,6 @@ for (let i = 0; i < speechOrder.length; i++) {
         console.log(val);
     }
 
-  
+
     chatter(3)
-  
 </script>
