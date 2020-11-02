@@ -1,0 +1,65 @@
+<h1>SVG Text</h1>
+<p></p>
+
+
+<div class="container-fluid">
+
+
+    <div class="row">
+        <div class="col-sm-4 bgDemo">
+            <svg id="svg01" width="300" height="300" style="border-style: solid;"></svg>
+        </div>
+        <div class="col-sm-8 bgTextBox">
+            <h4>Text size</h4>
+            <div id="boxsize">
+            </div>
+            <pre>
+            <code>
+function SVG(elementName) {
+    return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+}
+var frame = document.getElementById("svg01");
+var text = SVG("text");
+text.setAttributeNS(null, 'x', 20);
+text.setAttributeNS(null, 'y', 20);
+var txt = document.createTextNode("Hello World");
+text.appendChild(txt);
+frame.appendChild(text);
+var bboxtext = text.getBBox();
+            
+            </code>
+        </pre>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<script>
+    function SVG(elementName) {
+        return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+    }
+
+    function section1() {
+        var frame = document.getElementById("svg01");
+        var text = SVG("text");
+        text.setAttributeNS(null, 'x', 20);
+        text.setAttributeNS(null, 'y', 20);
+        var txt = document.createTextNode("Hello World");
+        text.appendChild(txt);
+        var bboxtext = text.getBBox();
+
+        console.log(bboxtext.width)
+        document.getElementById("boxsize").innerHTML = "The text is " + bboxtext.width.toFixed(0) + " wide and " +
+            bboxtext.height + " high.";
+            frame.appendChild(text);
+        
+    }
+
+    section1()
+</script>
