@@ -41,7 +41,18 @@ function main() {
   camera.position.set(0, 1.6, 0);
 
   const scene = new THREE.Scene();
-
+  {
+    const loader = new THREE.CubeTextureLoader();
+    const texture = loader.load([
+      'https://threejsfundamentals.org/threejs/resources/images/grid-1024.png',
+      'https://threejsfundamentals.org/threejs/resources/images/grid-1024.png',
+      'https://threejsfundamentals.org/threejs/resources/images/grid-1024.png',
+      'https://threejsfundamentals.org/threejs/resources/images/grid-1024.png',
+      'https://threejsfundamentals.org/threejs/resources/images/grid-1024.png',
+      'https://threejsfundamentals.org/threejs/resources/images/grid-1024.png',
+    ]);
+    scene.background = texture;
+  }
   {
     const color = 0xFFFFFF;
     const intensity = 1;
