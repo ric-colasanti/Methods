@@ -60,7 +60,17 @@ function main() {
     light.position.set(-1, 2, 4);
     scene.add(light);
   }
+{
+  const geometry = new THREE.PlaneBufferGeometry( 7, 6,4 );
+const material = new THREE.MeshBasicMaterial( {color: 0xf34600, side: THREE.DoubleSide} );
+const plane = new THREE.Mesh( geometry, material );
 
+plane.position.x = .5;
+plane.position.y = -.50;
+plane.position.z = -3;
+plane.rotation.x =1.5
+scene.add( plane );
+}
   const boxWidth = 1;
   const boxHeight = 1;
   const boxDepth = 1;
