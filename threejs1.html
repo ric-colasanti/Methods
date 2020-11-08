@@ -92,7 +92,13 @@ scene.add( plane );
   const cubes = [
     makeInstance(geometry, 0x44aa88,  2),
   ];
-  const sndcube = makeInstance(geometry, 0x00aa88,  -1)
+const geometry2 = new THREE.SphereGeometry( 0.5, 12, 12 );
+const material2 = new THREE.MeshPhongMaterial( {color: 0xaaaadd} );
+const sphere = new THREE.Mesh( geometry2, material2 );
+sphere.position.x = -1
+sphere.position.y = 1.6;
+sphere.position.z = -2;
+scene.add( sphere );
   function resizeRendererToDisplaySize(renderer) {
     const canvas = renderer.domElement;
     const width = canvas.clientWidth;
@@ -112,19 +118,22 @@ scene.add( plane );
       camera.aspect = canvas.clientWidth / canvas.clientHeight;
       camera.updateProjectionMatrix();
     }
-    
+    if(sphere.position.z<-10){
+          dz=0.05
+      }
+      if(sphere.position.z>10){
+          dz=-0.05
+      }
+      sphere.position.z+=dz
+    sphere.rotation.x += 0.05;
+    sphere.rotation.z += 0.05;
+
     cubes.forEach((cube, ndx) => {
       const speed = 1 + ndx * .1;
       const rot = time * speed;
       cube.rotation.x = rot;
       cube.rotation.y = rot;
-      if(cube.position.z<-10){
-          dz=0.05
-      }
-      if(cube.position.z>10){
-          dz=-0.05
-      }
-      cube.position.z+=dz
+     
       //console.log(cube.position.z); 
     });
     renderer.render(scene, camera);
