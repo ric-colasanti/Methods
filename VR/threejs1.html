@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html, body {
+  height: 100%;
+  margin: 0;
+}
+#canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script type ="module">
+
+
+
+
+import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
+import {VRButton} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/webxr/VRButton.js';
+import {POINTER_CLICK, POINTER_ENTER, POINTER_EXIT, Pointer} from './pointer.js'
+let pointer
+const on = (elem, type, cb) => elem.addEventListener(type,cb)
+function main() {
+  const canvas = document.querySelector('#canvas');
+  const renderer = new THREE.WebGLRenderer({canvas});
+  renderer.xr.enabled = true;
+  document.body.appendChild(VRButton.createButton(renderer));
+
+  const fov = 75;
+  const aspect = 2;  // the canvas default
+  const near = 0.1;
+  const far = 50;
+  const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+  camera.position.set(0, 1.6, 0);
+
+  const scene = new THREE.Scene();
+  {
+    const loader = new THREE.CubeTextureLoader();
+    const texture = loader.load([
+      'https://threejsfundamentals.org/threejs/resources/images/grid-1024.png',
+      'https://threejsfundamentals.org/threejs/resources/images/grid-1024.png',
+      'https://threejsfundamentals.org/threejs/resources/images/grid-1024.png',
+      'https://threejsfundamentals.org/threejs/resources/images/grid-1024.png',
+      'https://threejsfundamentals.org/threejs/resources/images/grid-1024.png',
+      'https://threejsfundamentals.org/threejs/resources/images/grid-1024.png',
+    ]);
+    scene.background = texture;
+  }
+  {
+    const color = 0xFFFFFF;
+    const intensity = 1;
+    const light = new THREE.DirectionalLight(color, intensity);
+    light.position.set(-1, 2, 4);
+    scene.add(light);
+  }
+{
+  const geometry = new THREE.PlaneBufferGeometry( 7, 6,4 );
+const material = new THREE.MeshBasicMaterial( {color: 0xf34600, side: THREE.DoubleSide} );
+const plane = new THREE.Mesh( geometry, material );
+
+plane.position.x = 0;
+plane.position.y = 0;
+plane.position.z = -1.4;
+plane.rotation.x =1.5
+scene.add( plane );
+}
+  const boxWidth = 1;
+  const boxHeight = 1;
+  const boxDepth = 1;
+  const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+
+  function makeInstance(geometry, color, x) {
+    const material = new THREE.MeshPhongMaterial({color});
+
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+
+    cube.position.x = x;
+    cube.position.y = 1.6;
+    cube.position.z = -2;
+    cube.userData.clickable = true
+    
+//change cube to green BG when hovering over it
+
+on(cube,POINTER_CLICK,()=>{
+            console.log("clicking on the cube")
+            cube.material.color.set(0xff0000)
+        })
+        //change cube to green BG when hovering over it
+        on(cube,POINTER_ENTER,()=>{
+            console.log("entering the cube")
+            cube.material.color.set(0x00ff00)
+        })
+        on(cube,POINTER_EXIT,()=>{
+            console.log('exiting the cube')
+            cube.material.color.set(0xffffff)
+        })
+
+    return cube;
+  }
+
+  const cubes = [
+    makeInstance(geometry, 0x44aa88,  2),
+  ];
+const geometry2 = new THREE.SphereGeometry( 0.5, 12, 12 );
+const material2 = new THREE.MeshPhongMaterial( {color: 0xaaaadd} );
+const sphere = new THREE.Mesh( geometry2, material2 );
+sphere.position.x = -1
+sphere.position.y = 1.6;
+sphere.position.z = -2;
+scene.add( sphere );
+
+
+pointer = new Pointer(scene,renderer,camera, {
+
+//Pointer searches everything in the scene by default
+//override this to match just certain things
+intersectionFilter: ((o) => o.userData.clickable),
+
+//make the camera pan when moving the mouse. good for simulating head turning on desktop
+cameraFollowMouse:true,
+
+// set to true to move the controller node forward and tilt with the mouse.
+// good for testing VR controls on desktop
+mouseSimulatesController:false,
+
+})
+
+
+//change cube to red BG when clicking
+
+
+  function resizeRendererToDisplaySize(renderer) {
+    const canvas = renderer.domElement;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
+    }
+    return needResize;
+  }
+
+  function render(time) {
+    time *= 0.001;
+
+    if (resizeRendererToDisplaySize(renderer)) {
+      const canvas = renderer.domElement;
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
+    }
+    if(sphere.position.z<-10){
+          dz=0.1
+      }
+      if(sphere.position.z>10){
+          dz=-0.1
+      }
+      sphere.position.z+=dz
+    sphere.rotation.x += 0.05;
+    sphere.rotation.z += 0.05;
+
+    cubes.forEach((cube, ndx) => {
+      const speed = 1 + ndx * .1;
+      const rot = time * speed;
+      cube.rotation.x = rot;
+      cube.rotation.y = rot;
+     
+      //console.log(cube.position.z); 
+    });
+    renderer.render(scene, camera);
+  }
+  let dz = -0.1
+  renderer.setAnimationLoop(render);
+}
+
+main();
+
+    </script>
+</body>
+</html>
