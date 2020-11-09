@@ -91,7 +91,7 @@ scene.add( plane );
     
 //change cube to green BG when hovering over it
 
-on(cube,POINTER_CLICK,()=>{
+        on(cube,POINTER_CLICK,()=>{
             console.log("clicking on the cube")
             cube.material.color.set(0xff0000)
         })
@@ -117,6 +117,10 @@ const sphere = new THREE.Mesh( geometry2, material2 );
 sphere.position.x = -1
 sphere.position.y = 1.6;
 sphere.position.z = -2;
+sphere.userData.clickable = true
+on(sphere,POINTER_CLICK,()=>{
+            dz =-dz
+        })
 scene.add( sphere );
 
 
