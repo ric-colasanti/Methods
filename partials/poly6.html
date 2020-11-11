@@ -1,6 +1,5 @@
 <h1>SVG speech bubble and JSON figure </h1>
-<p>This is a multiline bubble. Type text of any length in to the text box to see it work. You can copy part of this text
-    for quickness.</p>
+<p>Text can be placed in the text box and the figure can be positioned with the slider</p>
 
 
 <div class="container-fluid">
@@ -14,9 +13,9 @@
             <br>
             <div class="form-group">
                 <label for="pwd">Text</label>
-                <input id="txt1" type="text" class="form-control" value = "This is a very long line and should go on more than one line in the bubble" id="pwd">
+                <input id="txt1" type="text" class="form-control" value = "Text can be placed in the text box and the figure can be positioned with the slider" id="pwd">
                 <br>
-                <input type="range" min="30" max="250" value="50" class="slider" id="sld1">
+                <input type="range" min="50" max="200" value="80" class="slider" id="sld1">
                 <p>Value: <span id="value"></span></p>
             </div>
             <button type="button" class="btn btn-success"
@@ -307,5 +306,5 @@ function section1(bubbleText) {
       
     }
 
-    section1("This is a very long line and should go on more than one line in the bubble",50)
+    section1("Text can be placed in the text box and the figure can be positioned with the slider",80)
 </script>
