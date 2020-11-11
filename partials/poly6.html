@@ -238,7 +238,7 @@ function section1(bubbleText) {
         }
         var bground = SVG("image")
         var backgroundImage = "nick-nazzaro-desert.png";
-        bground.setAttribute('href', "img/" + backgroundImage);
+        bground.setAttribute('href', "Methods/img/" + backgroundImage);
         bground.setAttribute("height", "100%")
         frame.appendChild(bground)
         let bubble = SVG("g")
@@ -292,10 +292,10 @@ function section1(bubbleText) {
         bubble.appendChild(polyl)
 
         let figure = new SVG("g")
-        fetch("img/torso_colour_test-02.json")
+        fetch("Methods/img/torso_colour_test-02.json")
             .then(response => response.json())
             .then(json => process(json, figure));
-        fetch("img/head_colour_test-02.json")
+        fetch("Methods/img/head_colour_test-02.json")
             .then(response => response.json())
             .then(json => {
                 process(json, figure);
