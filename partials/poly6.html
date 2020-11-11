@@ -14,10 +14,13 @@
             <br>
             <div class="form-group">
                 <label for="pwd">Text</label>
-                <input id="txt1" type="text" class="form-control" id="pwd">
+                <input id="txt1" type="text" class="form-control" value = "This is a very long line and should go on more than one line in the bubble" id="pwd">
+                <br>
+                <input type="range" min="30" max="250" value="50" class="slider" id="sld1">
+                <p>Value: <span id="value"></span></p>
             </div>
             <button type="button" class="btn btn-success"
-                onclick="section1(document.getElementById('txt1').value)">Write</button>
+                onclick="section1(document.getElementById('txt1').value,document.getElementById('sld1').value)">Write</button>
         </div>
         <div class="col-sm-8 bgTextBox">
             <h4>JSON figure with speach bubble </h4>
@@ -227,8 +230,9 @@ function section1(bubbleText) {
         text.setAttribute("transform", "translate(" + 4 + "," + offset + ")");
     }
 
-    function section1(bubbleText) {
-        let pos = 50
+    function section1(bubbleText,pos) {
+        console.log(pos);
+        pos = parseInt(pos)
         let frame = document.getElementById("svg01");
         while (frame.firstChild) {
             frame.removeChild(frame.firstChild);
@@ -303,5 +307,5 @@ function section1(bubbleText) {
       
     }
 
-    section1("This is a very long line and should go on more than one line in the bubble")
+    section1("This is a very long line and should go on more than one line in the bubble",50)
 </script>
