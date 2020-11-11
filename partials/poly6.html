@@ -1,0 +1,307 @@
+<h1>SVG speech bubble and JSON figure </h1>
+<p>This is a multiline bubble. Type text of any length in to the text box to see it work. You can copy part of this text
+    for quickness.</p>
+
+
+<div class="container-fluid">
+
+
+    <div class="row">
+        <div class="col-sm-4 bgDemo">
+            <svg id="svg01" width="300" height="300" style="border-style: solid;"></svg>
+            <br>
+            <br>
+            <br>
+            <div class="form-group">
+                <label for="pwd">Text</label>
+                <input id="txt1" type="text" class="form-control" id="pwd">
+            </div>
+            <button type="button" class="btn btn-success"
+                onclick="section1(document.getElementById('txt1').value)">Write</button>
+        </div>
+        <div class="col-sm-8 bgTextBox">
+            <h4>JSON figure with speach bubble </h4>
+            <div id="boxsize">
+            </div>
+            <pre>
+            <code>
+function SVG(elementName) {
+    return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+}
+
+
+function process(jdata, ct) {
+    var elements = []
+    var keys = Object.keys(jdata);
+    console.log(jdata[keys[0].length])
+    jdata[keys[0]].forEach(element => {
+        //console.log(element)
+        var elem = SVG(element.svgtype);
+        var attributes = element.attributes;
+        for (a in attributes) {
+            elem.setAttribute(a, attributes[a])
+        }
+
+        elem.setAttribute("id", element.count)
+        elements.push(elem);
+    });
+    for (const key in elements) {
+        if (elements.hasOwnProperty(key)) {
+            var elem = elements[key];
+            ct.appendChild(elem);
+        }
+    }
+}
+
+function add(ct, svg_canvas,size,xpos) {
+    svg_canvas.appendChild(ct)
+    var rect = ct.getBBox();
+    x = rect.x;
+    h = rect.height;
+    y = rect.y;
+    w = rect.width;
+    x = -x;
+    y = -y;
+    
+    height = parseInt(svg_canvas.getAttribute("height"))
+    scale = (height / h) * size;
+    ny = y * scale + (height - (h * scale));
+    offset = (w*scale)/2
+    nx = x * scale + xpos-offset    
+    ct.setAttribute("transform", "translate(" + nx + "," + ny + ") scale(" + scale + "," + scale + ")");
+}
+
+function setLine(bubble, fontFamily, bubbleText) {
+    let text = SVG("text");
+    let txt = document.createTextNode(bubbleText);
+    text.appendChild(txt);
+    //text.style.fontFamily = fontFamily;
+    bubble.appendChild(text)
+    let bboxtext = bubble.getBBox();
+    let offset = bboxtext.height;
+    text.setAttribute("transform", "translate(" + 4 + "," + offset + ")");
+}
+
+function section1(bubbleText) {
+    let pos = 50
+    let frame = document.getElementById("svg01");
+    while (frame.firstChild) {
+        frame.removeChild(frame.firstChild);
+    }
+    var bground = SVG("image")
+    var backgroundImage = "nick-nazzaro-desert.png";
+    bground.setAttribute('href', "../img/" + backgroundImage);
+    bground.setAttribute("height", "100%")
+    frame.appendChild(bground)
+    let bubble = SVG("g")
+    let textGroup = SVG("g")
+    let poly = SVG("rect")
+    poly.setAttribute("fill", "rgb(245,245,255)")
+    poly.setAttribute("stroke", "black")
+    poly.setAttribute("x", "0")
+    poly.setAttribute("y", "0")
+    poly.setAttribute("rx", "10")
+    poly.setAttribute("ry", "10")
+
+    poly.setAttribute("stroke-width", "0.5")
+    bubble.appendChild(poly)
+    bubble.appendChild(textGroup)
+    frame.appendChild(bubble)
+    bubble.setAttribute("transform", "translate(" + 0 + "," + 0 + ")");
+    textGroup.setAttribute("transform", "translate(" + 4 + "," + 4 + ")");
+    let fontFamily = "Comic Neue, cursive"
+    let words = bubbleText.split(" ");
+    var count = 0
+    var line = words[count]
+    var flag = true;
+    while (flag) {
+        while (((line.length + words[count].length) < 20) && (flag)) {
+            count++;
+            line += " " + words[count]
+            flag = count < words.length - 1;
+        }
+        setLine(textGroup, fontFamily, line);
+        line = ""
+    }
+    let bboxtext = textGroup.getBBox();
+    poly.setAttribute("width", bboxtext.width + 16)
+    poly.setAttribute("height", bboxtext.height + 16)
+    let polyl = SVG("polyline")
+    polyl.setAttribute("fill", "rgb(245,245,255)")
+    polyl.setAttribute("stroke", "black")
+    polyl.setAttribute("stroke-width", "0.5")
+    let array = [
+        [60, bboxtext.height + 15],
+        [pos, 145],
+        [80, bboxtext.height + 15]
+    ]
+    for (value of array) {
+        point = frame.createSVGPoint();
+        point.x = value[0];
+        point.y = value[1]
+        polyl.points.appendItem(point);
+    }
+    bubble.appendChild(polyl)
+    let figure = new SVG("g")
+    fetch("../img/torso_colour_test-02.json")
+        .then(response => response.json())
+        .then(json => process(json, figure));
+    fetch("../img/head_colour_test-02.json")
+        .then(response => response.json())
+        .then(json => {
+            process(json, figure);
+            add(figure,frame, 0.5,pos)
+            
+        });
+
+}
+            </code>
+        </pre>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<script>
+    function SVG(elementName) {
+        return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+    }
+
+
+    
+    function process(jdata, ct) {
+        var elements = []
+        var keys = Object.keys(jdata);
+        jdata[keys[0]].forEach(element => {
+            //console.log(element)
+            var elem = SVG(element.svgtype);
+            var attributes = element.attributes;
+            for (a in attributes) {
+                elem.setAttribute(a, attributes[a])
+            }
+
+            elem.setAttribute("id", element.count)
+            elements.push(elem);
+        });
+        for (const key in elements) {
+            if (elements.hasOwnProperty(key)) {
+                var elem = elements[key];
+                ct.appendChild(elem);
+            }
+        }
+    }
+
+    function add(ct, svg_canvas,size,xpos) {
+        svg_canvas.appendChild(ct)
+        var rect = ct.getBBox();
+        x = rect.x;
+        h = rect.height;
+        y = rect.y;
+        w = rect.width;
+        x = -x;
+        y = -y;
+        
+        height = parseInt(svg_canvas.getAttribute("height"))
+        scale = (height / h) * size;
+        ny = y * scale + (height - (h * scale));
+        offset = (w*scale)/2
+        nx = x * scale + xpos-offset
+        
+        ct.setAttribute("transform", "translate(" + nx + "," + ny + ") scale(" + scale + "," + scale + ")");
+    }
+
+    function setLine(bubble, fontFamily, bubbleText) {
+        let text = SVG("text");
+        let txt = document.createTextNode(bubbleText);
+        text.appendChild(txt);
+        //text.style.fontFamily = fontFamily;
+        bubble.appendChild(text)
+        let bboxtext = bubble.getBBox();
+        let offset = bboxtext.height;
+        text.setAttribute("transform", "translate(" + 4 + "," + offset + ")");
+    }
+
+    function section1(bubbleText) {
+        let pos = 50
+        let frame = document.getElementById("svg01");
+        while (frame.firstChild) {
+            frame.removeChild(frame.firstChild);
+        }
+        var bground = SVG("image")
+        var backgroundImage = "nick-nazzaro-desert.png";
+        bground.setAttribute('href', "../img/" + backgroundImage);
+        bground.setAttribute("height", "100%")
+        frame.appendChild(bground)
+        let bubble = SVG("g")
+        let textGroup = SVG("g")
+        let poly = SVG("rect")
+        poly.setAttribute("fill", "rgb(245,245,255)")
+        poly.setAttribute("stroke", "black")
+        poly.setAttribute("x", "0")
+        poly.setAttribute("y", "0")
+        poly.setAttribute("rx", "10")
+        poly.setAttribute("ry", "10")
+
+        poly.setAttribute("stroke-width", "0.5")
+        bubble.appendChild(poly)
+        bubble.appendChild(textGroup)
+        frame.appendChild(bubble)
+        bubble.setAttribute("transform", "translate(" + 0 + "," + 0 + ")");
+        textGroup.setAttribute("transform", "translate(" + 4 + "," + 4 + ")");
+        let fontFamily = "Comic Neue, cursive"
+        let words = bubbleText.split(" ");
+        var count = 0
+        var line = words[count]
+        var flag = true;
+        while (flag) {
+            while (((line.length + words[count].length) < 20) && (flag)) {
+                count++;
+                line += " " + words[count]
+                flag = count < words.length - 1;
+            }
+            setLine(textGroup, fontFamily, line);
+            line = ""
+        }
+        let bboxtext = textGroup.getBBox();
+        poly.setAttribute("width", bboxtext.width + 16)
+        poly.setAttribute("height", bboxtext.height + 16)
+        let polyl = SVG("polyline")
+        polyl.setAttribute("fill", "rgb(245,245,255)")
+        polyl.setAttribute("stroke", "black")
+        polyl.setAttribute("stroke-width", "0.5")
+        let array = [
+            [60, bboxtext.height + 15],
+            [pos, 145],
+            [80, bboxtext.height + 15]
+        ]
+        for (value of array) {
+            point = frame.createSVGPoint();
+            point.x = value[0];
+            point.y = value[1]
+            polyl.points.appendItem(point);
+        }
+        bubble.appendChild(polyl)
+
+        let figure = new SVG("g")
+        fetch("../img/torso_colour_test-02.json")
+            .then(response => response.json())
+            .then(json => process(json, figure));
+        fetch("../img/head_colour_test-02.json")
+            .then(response => response.json())
+            .then(json => {
+                process(json, figure);
+                add(figure,frame, 0.5,pos)
+                
+            });
+
+      
+    }
+
+    section1("This is a very long line and should go on more than one line in the bubble")
+</script>

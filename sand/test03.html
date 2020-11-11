@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #svg01 {
+            border-style: solid;
+
+        }
+    </style>
+    <svg id="svg01" width="800" height="800">
+</head>
+</svg>
+
+<body>
+    <script>
+        function SVG(elementName) {
+            return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+        }
+
+        var svg_canvas = document.getElementById("svg01");
+  
+       
+
+        function process(jdata,ct,xpos,ypos,c_scale) {
+            var elements = []
+            var keys = Object.keys(jdata);
+            console.log(jdata[keys[0].length])
+            jdata[keys[0]].forEach(element => {
+                //console.log(element)
+                var elem = SVG(element.svgtype);
+                var attributes = element.attributes;
+                for (a in attributes) {
+                    elem.setAttribute(a, attributes[a])
+                }
+               
+                console.log(element.count)
+                elem.setAttribute("id",element.count)
+                elements.push(elem);
+            });
+            for (const key in elements) {
+                if (elements.hasOwnProperty(key)) {
+                    var elem = elements[key];
+                    ct.appendChild(elem);
+                }
+            }
+             svg_canvas.appendChild(ct);
+            // var rect = ct.getBBox();
+            // x = rect.x;
+            // h = rect.height;
+            // y = rect.y;
+            // w = rect.width;
+            // x = -x;
+            // y = -y;
+            // height = parseInt(svg_canvas.getAttribute("height"))
+            // scale = (height / h) * c_scale;
+            // ny = y * scale + (height - (h * scale)) - ypos;
+            // nx = x * scale + xpos
+            // console.log(nx,xpos)
+            // ct.setAttribute("transform", "translate(" + nx + "," + ny + ") scale(" + scale + "," + scale + ")");
+            ct.setAttribute("transform", "translate(" + 0 + "," + 0 + ")")
+        }
+        var content1 = SVG("g");
+        content1.setAttribute("style",".cls-2:{fill#123456}")
+        //fetch("img/torso_colour_test-02.json")
+        //    .then(response => response.json())
+        //    .then(json => psetrocess(json,content1,20,110,0.8));
+        fetch("../img/torso_colour_test-02.json")
+            .then(response => response.json())
+            .then(json => process(json,content1,0,0,1));
+        fetch("../img/head_colour_test-02.json")
+            .then(response => response.json())
+            .then(json => process(json,content1,0,0,1));
+        //var content2 = SVG("g");
+        //fetch("img/torso_neutral-01.json")
+        //    .then(response => response.json())
+        //    .then(json => process(json,content2,400,0,0.8));
+        //fetch("img/head_left-01.json")
+        //    .then(response => response.json())
+        //    .then(json => process(json,content2,400,0,0.8));
+        var bground = SVG("image")
+        var backgroundImage = "nick-nazzaro-desert.png";
+        bground.setAttribute('href', "../img/" + backgroundImage);
+        bground.setAttribute("height", "100%")
+        svg_canvas.appendChild(bground)
+    </script>
+
+</body>
+
+</html>

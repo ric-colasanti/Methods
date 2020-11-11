@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #svg01{
+            border-style:solid ;
+        
+        }
+    </style>
+<svg id="svg01" width="600" height="600">
+</head>
+</svg>
+
+<body>
+    <script>
+        function SVG(elementName) {
+            return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+        }
+
+        var frame = document.getElementById("svg01");
+        var contents = SVG("g");
+        while (contents.firstChild) {
+            contents.removeChild(contents.firstChild);
+        }
+
+        function process(jdata) {
+            var elements = []
+            var keys = Object.keys(jdata);
+            jdata[keys[0]].forEach(element => {
+                console.log(element)
+                var elem = SVG(element.svgtype);
+                var path = element.stroke;
+                var style = element.style;
+                for(s in style){
+                    elem.setAttribute(s,style[s])
+                }
+                elem.setAttribute("d",
+                    path
+                );
+                elements.push(elem);
+            });
+            for (const key in elements) {
+                if (elements.hasOwnProperty(key)) {
+                    var elem = elements[key];
+                    //console.log(elem)
+                    contents.appendChild(elem);
+                }
+            }
+            frame.appendChild(contents);
+            var rect = contents.getBBox();
+            x = rect.x;
+            h = rect.height;
+            y = rect.y;
+            w = rect.width;
+            x = -x;
+            y = -y;
+            console.log(rect, x, y, w, h);
+            height = parseInt(frame.getAttribute("height"))
+            scale = (height / h) * 1.0;
+            console.log("height: " + frame.getAttribute("height"))
+            console.log("img height: " + -(y * scale));
+            ny = y * scale + (height - (h * scale));
+            nx = x * scale
+            contents.setAttribute("transform", "translate(" + nx + "," + ny + ") scale(" + scale + "," + scale + ")");
+        }
+        fetch("../img/torso_colour_test-02.json")
+            .then(response => response.json())
+            .then(json => process(json));
+
+    </script>
+
+</body>
+
+</html>
