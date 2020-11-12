@@ -14,13 +14,13 @@
             <br>
             <div class="form-group">
                 <label for="pwd">Text</label>
-                <input id="txt1" type="text" class="form-control" value = "Text can be placed in the text box and the figure can be positioned with the slider" id="pwd">
+                <input id="txt1" type="text" class="form-control" value = "Write text in here" id="pwd">
                 <br>
                 <input type="range" min="50" max="200" value="80" class="slider" id="sld1">
-                <p>Value: <span id="value"></span></p>
+                <p>Position    : <span id="pos">80</span></p>
             </div>
             <button type="button" class="btn btn-success"
-                onclick="section1(document.getElementById('txt1').value,document.getElementById('sld1').value)">Write</button>
+                onclick="update(document.getElementById('txt1').value,document.getElementById('sld1').value)">Write</button>
         </div>
         <div class="col-sm-8 bgTextBox">
             <h4>JSON figure with speach bubble </h4>
@@ -33,10 +33,10 @@ function SVG(elementName) {
 }
 
 
+
 function process(jdata, ct) {
     var elements = []
     var keys = Object.keys(jdata);
-    console.log(jdata[keys[0].length])
     jdata[keys[0]].forEach(element => {
         //console.log(element)
         var elem = SVG(element.svgtype);
@@ -70,7 +70,8 @@ function add(ct, svg_canvas,size,xpos) {
     scale = (height / h) * size;
     ny = y * scale + (height - (h * scale));
     offset = (w*scale)/2
-    nx = x * scale + xpos-offset    
+    nx = x * scale + xpos-offset
+    
     ct.setAttribute("transform", "translate(" + nx + "," + ny + ") scale(" + scale + "," + scale + ")");
 }
 
@@ -85,15 +86,10 @@ function setLine(bubble, fontFamily, bubbleText) {
     text.setAttribute("transform", "translate(" + 4 + "," + offset + ")");
 }
 
-function section1(bubbleText) {
-    let pos = 50
-    let frame = document.getElementById("svg01");
-    while (frame.firstChild) {
-        frame.removeChild(frame.firstChild);
-    }
+function section1(bubbleText,pos) {
     var bground = SVG("image")
     var backgroundImage = "nick-nazzaro-desert.png";
-    bground.setAttribute('href', "../img/" + backgroundImage);
+    bground.setAttribute('href', "img/" + backgroundImage);
     bground.setAttribute("height", "100%")
     frame.appendChild(bground)
     let bubble = SVG("g")
@@ -145,19 +141,26 @@ function section1(bubbleText) {
         polyl.points.appendItem(point);
     }
     bubble.appendChild(polyl)
+}
+function update(txt,pos){
+    section1(txt, parseInt(pos))
+    add(figure,frame, 0.5, parseInt(pos))
+}
+let frame = document.getElementById("svg01");
+    while (frame.firstChild) {
+        frame.removeChild(frame.firstChild);
+    }
     let figure = new SVG("g")
-    fetch("../img/torso_colour_test-02.json")
+    fetch("img/torso_colour_test-02.json")
         .then(response => response.json())
-        .then(json => process(json, figure));
-    fetch("../img/head_colour_test-02.json")
+        .then(json => {process(json, figure)
+    fetch("img/head_colour_test-02.json")
         .then(response => response.json())
         .then(json => {
             process(json, figure);
-            add(figure,frame, 0.5,pos)
-            
+            update("Text can be placed in the text box and the figure can be positioned with the slider",80)
         });
-
-}
+    });
             </code>
         </pre>
         </div>
@@ -172,6 +175,9 @@ function section1(bubbleText) {
 
 
 <script>
+  
+
+
     function SVG(elementName) {
         return document.createElementNS('http://www.w3.org/2000/svg', elementName);
     }
@@ -231,12 +237,6 @@ function section1(bubbleText) {
     }
 
     function section1(bubbleText,pos) {
-        console.log(pos);
-        pos = parseInt(pos)
-        let frame = document.getElementById("svg01");
-        while (frame.firstChild) {
-            frame.removeChild(frame.firstChild);
-        }
         var bground = SVG("image")
         var backgroundImage = "nick-nazzaro-desert.png";
         bground.setAttribute('href', "img/" + backgroundImage);
@@ -291,21 +291,34 @@ function section1(bubbleText) {
             polyl.points.appendItem(point);
         }
         bubble.appendChild(polyl)
+    }
+    function update(txt,pos){
+        section1(txt, parseInt(pos))
+        add(figure,frame, 0.5, parseInt(pos))
+    }
 
+
+
+    var slider = document.getElementById("sld1");
+        var output = document.getElementById("pos");
+        output.innerHTML = slider.value;
+        slider.oninput = function () {
+            output.innerHTML = this.value;
+        }
+    let frame = document.getElementById("svg01");
+        while (frame.firstChild) {
+            frame.removeChild(frame.firstChild);
+        }
         let figure = new SVG("g")
         fetch("img/torso_colour_test-02.json")
             .then(response => response.json())
-            .then(json => process(json, figure));
+            .then(json => {process(json, figure)
         fetch("img/head_colour_test-02.json")
             .then(response => response.json())
             .then(json => {
                 process(json, figure);
-                add(figure,frame, 0.5,pos)
-                
+                update("Text can be placed in the text box and the figure can be positioned with the slider",80)
             });
-
-      
-    }
-
-    section1("Text can be placed in the text box and the figure can be positioned with the slider",80)
+        });
+    
 </script>
