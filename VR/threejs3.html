@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script type="module">
+
+
+
+
+        import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
+import {VRButton} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/webxr/VRButton.js';
+//import { OrbitControls } from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js';
+
+//const controls = new OrbitControls();
+function main() {
+
+    function exampleTriangle() {
+	// This code demonstrates how to draw a triangle
+	    const triangle = new THREE.Geometry();
+	    triangle.vertices.push( new THREE.Vector3( 1, 1,0 ) );
+	    triangle.vertices.push( new THREE.Vector3( 3, 1, 0 ) );
+	    triangle.vertices.push( new THREE.Vector3( 3, 3, 0 ) );
+	
+        triangle.faces.push( new THREE.Face3( 0, 1, 2 ) );
+        var color1 = new THREE.Color( 0xff0000 );
+var color2 = new THREE.Color( 0x00ff00 );
+var color3 = new THREE.Color( 0x0000ff );
+triangle.faces[0].vertexColors = [ color1, color2, color3 ];
+	    return triangle;
+    }
+
+    function drawSquare(x1, y1, x2, y2,z) {
+
+        var square = new THREE.Geometry();
+        square.vertices.push( new THREE.Vector3( x1, y1, z ) );
+        square.vertices.push( new THREE.Vector3( x2, y1, z ) );
+        square.vertices.push( new THREE.Vector3( x2, y2, z ) );
+        square.vertices.push( new THREE.Vector3( x1, y2, z ) );
+        square.faces.push( new THREE.Face3( 0, 1, 2 ) );
+        square.faces.push( new THREE.Face3( 2, 3, 0 ) );
+        return square;
+    }
+
+    function resizeRendererToDisplaySize(renderer) {
+        const canvas = renderer.domElement;
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+        const needResize = canvas.width !== width || canvas.height !== height;
+        if (needResize) {
+            renderer.setSize(width, height, false);
+        }
+        return needResize;
+    }
+
+    function render(time) {
+        if (resizeRendererToDisplaySize(renderer)) {
+            const canvas = renderer.domElement;
+            camera.aspect = canvas.clientWidth / canvas.clientHeight;
+            camera.updateProjectionMatrix();
+        }
+        renderer.render(scene, camera);
+    }
+    
+    
+    const canvas = document.querySelector('#canvas');
+    const renderer = new THREE.WebGLRenderer({canvas});
+    renderer.xr.enabled = true;
+   
+    document.body.appendChild(VRButton.createButton(renderer));
+
+    const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    camera.position.set(5, 5, 10);
+
+    const scene = new THREE.Scene();
+  
+    const light = new THREE.DirectionalLight(0xFFFFFF, 1);
+    light.position.set(-1, 2, 4);
+    scene.add(light);
+
+
+    const geometry2 = new THREE.SphereGeometry( 0.5, 12, 12 );
+    const material2 = new THREE.MeshPhongMaterial( {color: 0xaaaadd} );
+    const sphere = new THREE.Mesh( geometry2, material2 );
+    sphere.position.x = -1
+    sphere.position.y = 1.6;
+    sphere.position.z = -2;
+
+   // scene.add( sphere );
+    var triangleMaterial = new THREE.MeshBasicMaterial(  );
+  var triangleGeometry = exampleTriangle();
+  var triangleMesh = new THREE.Mesh( triangleGeometry, triangleMaterial );
+  scene.add(triangleMesh);
+
+
+  var sqrMaterial = new THREE.MeshBasicMaterial( { color: 0xff00ff, side: THREE.DoubleSide } );
+  var sqrGeometry = drawSquare(-5,-5,7,9,-4);
+  var sqrMesh = new THREE.Mesh( sqrGeometry, sqrMaterial );
+ // scene.add(sqrMesh);
+  // creating and adding you
+    renderer.setAnimationLoop(render);
+}
+
+main();
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+<h1>SVG load json character and display char</h1>
+<p>Text can be placed in the text box and the figure can be positioned with the slider</p>
+
+
+
+<div class="container-fluid">
+
+
+    <div class="row">
+        <div class="col-sm-4 bgDemo">
+            <svg id="svg01" width="300" height="300" style="border-style: solid;"></svg>
+        </div>
+        <div class="col-sm-8 bgTextBox">
+            <h4>JSON figure with speach bubble </h4>
+            <div id="boxsize">
+            </div>
+            <pre>
+            <code>
+
+            </code>
+        </pre>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<script>
+  
+
+  
+
+
+    function SVG(elementName) {
+        return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+    }
+
+
+    
+    function process(jdata, ct) {
+        var elements = []
+        var keys = Object.keys(jdata);
+        jdata[keys[0]].forEach(element => {
+            //console.log(element)
+            var elem = SVG(element.svgtype);
+            var attributes = element.attributes;
+            for (a in attributes) {
+                elem.setAttribute(a, attributes[a])
+            }
+
+            elem.setAttribute("id", element.count)
+            elements.push(elem);
+        });
+        for (const key in elements) {
+            if (elements.hasOwnProperty(key)) {
+                var elem = elements[key];
+                ct.appendChild(elem);
+            }
+        }
+    }
+
+    function add(ct, svg_canvas,size,xpos) {
+        svg_canvas.appendChild(ct)
+        var rect = ct.getBBox();
+        x = rect.x;
+        h = rect.height;
+        y = rect.y;
+        w = rect.width;
+        x = -x;
+        y = -y;
+        
+        height = parseInt(svg_canvas.getAttribute("height"))
+        scale = (height / h) * size;
+        ny = y * scale + (height - (h * scale));
+        offset = (w*scale)/2
+        nx = x * scale + xpos-offset
+        
+        ct.setAttribute("transform", "translate(" + nx + "," + ny + ") scale(" + scale + "," + scale + ")");
+    }
+
+    function init(){
+    let frame = document.getElementById("svg01");
+        while (frame.firstChild) {
+            frame.removeChild(frame.firstChild);
+        }
+        let figure = new SVG("g")
+        fetch("img/torso_colour_test-02.json")
+            .then(response => response.json())
+            .then(json => {process(json, figure)
+        //fetch("img/head_colour_test-02.json")
+          //  .then(response => response.json())
+          //  .then(json => {
+          //      process(json, figure);
+            //    update("Text !!! can be placed in the text box and the figure can be positioned with the slider",80)
+            add(figure,frame, 0.5, parseInt(80))
+            });
+        //});
+    }
+    init();
+    
+</script>
