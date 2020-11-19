@@ -1,5 +1,5 @@
-<h1>SVG load json character and display char</h1>
-<p>Text can be placed in the text box and the figure can be positioned with the slider</p>
+<h1>Figure object</h1>
+
 
 
 
@@ -11,7 +11,7 @@
             <svg id="svg01" width="300" height="300" style="border-style: solid;"></svg>
         </div>
         <div class="col-sm-8 bgTextBox">
-            <h4>JSON figure with speach bubble </h4>
+            <h4>Figure as a js object</h4>
             <div id="boxsize">
             </div>
             <pre>
@@ -31,76 +31,115 @@
 
 
 <script>
-  
-
-  
-
-
     function SVG(elementName) {
         return document.createElementNS('http://www.w3.org/2000/svg', elementName);
     }
 
-
-    
-    function process(jdata, ct) {
-        var elements = []
-        var keys = Object.keys(jdata);
-        jdata[keys[0]].forEach(element => {
-            //console.log(element)
-            var elem = SVG(element.svgtype);
-            var attributes = element.attributes;
-            for (a in attributes) {
-                elem.setAttribute(a, attributes[a])
-            }
-
-            elem.setAttribute("id", element.count)
-            elements.push(elem);
-        });
-        for (const key in elements) {
-            if (elements.hasOwnProperty(key)) {
-                var elem = elements[key];
-                ct.appendChild(elem);
-            }
+    class Figure {
+        constructor() {
+            this.svg = new SVG("g")
         }
-    }
 
-    function add(ct, svg_canvas,size,xpos) {
-        svg_canvas.appendChild(ct)
-        var rect = ct.getBBox();
-        x = rect.x;
-        h = rect.height;
-        y = rect.y;
-        w = rect.width;
-        x = -x;
-        y = -y;
-        
-        height = parseInt(svg_canvas.getAttribute("height"))
-        scale = (height / h) * size;
-        ny = y * scale + (height - (h * scale));
-        offset = (w*scale)/2
-        nx = x * scale + xpos-offset
-        
-        ct.setAttribute("transform", "translate(" + nx + "," + ny + ") scale(" + scale + "," + scale + ")");
-    }
+        process(jdata) {
+            var elements = []
+            var keys = Object.keys(jdata);
+            jdata.forEach(element => {
+                console.log(element)
+                var elem = SVG(element.svgtype);
+                var attributes = element.attributes;
+                let a
+                for (a in attributes) {
+                    elem.setAttribute(a, attributes[a])
+                }
 
-    function init(){
-    let frame = document.getElementById("svg01");
-        while (frame.firstChild) {
-            frame.removeChild(frame.firstChild);
-        }
-        let figure = new SVG("g")
-        fetch("img/torso_colour_test-02.json")
-            .then(response => response.json())
-            .then(json => {process(json, figure)
-        //fetch("img/head_colour_test-02.json")
-          //  .then(response => response.json())
-          //  .then(json => {
-          //      process(json, figure);
-            //    update("Text !!! can be placed in the text box and the figure can be positioned with the slider",80)
-            add(figure,frame, 0.5, parseInt(80))
+                elem.setAttribute("id", element.count)
+                elements.push(elem);
             });
-        //});
+            for (const key in elements) {
+                if (elements.hasOwnProperty(key)) {
+                    var elem = elements[key];
+                    this.svg.appendChild(elem);
+                }
+            }
+        }
+
+        add(svg_canvas, size, xpos) {
+            svg_canvas.appendChild(this.svg)
+            var rect = this.svg.getBBox();
+            let x = rect.x;
+            let h = rect.height;
+            let y = rect.y;
+            let w = rect.width;
+            x = -x;
+            y = -y;
+            let height = parseInt(svg_canvas.getAttribute("height"))
+            this.scale = (height / h) * size;
+            this.y = y * this.scale + (height - (h * this.scale));
+            let offset = (w * this.scale) / 2
+            this.x = x * this.scale + xpos - offset
+            this.svg.setAttribute("transform", "translate(" + this.x + "," + this.y + ") scale(" + this.scale + "," + this.scale +
+                ")");
+        }
+    }
+
+
+
+
+    function loadFiles(files, figures, action) {
+        if (figures.length < files.length) {
+            fetch("img/" + files[figures.length])
+                .then(response => response.json())
+                .then(json => {
+                    figures.push(json)
+                    loadFiles(files, figures, action)
+                    //add(figure,frame, 0.5, parseInt(80))
+                });
+        } else {
+            action(figures);
+        }
+    }
+
+    let done = function (out) {
+        for (j in out) {
+            let character = new Figure()
+            for (k in out[j].the_character) {
+                for (i in out[j].the_character[k]) {
+                    console.log(j, k, i, out[j].the_character[k][i]);
+                    character.process(out[j].the_character[k][i])
+                    break
+                }
+
+            }
+            character.add(frame,0.5,80)
+            //print(out[j].length)
+            //printAllVals(out[j])
+        }
+    }
+
+
+    function printAllVals(obj) {
+        for (let k in obj) {
+            if (typeof obj[k] === "object") {
+                printAllVals(obj[k])
+            } else {
+                // base case, stop recurring
+                console.log(obj[k]);
+            }
+        }
+    }
+
+    function init() {
+        let frame = document.getElementById("svg01");
+        let figure = new SVG("g")
+        let files = ['character_new_mum.json']
+        let figures = []
+        loadFiles(files, figures, done)
+
+
+    }
+    let frame = document.getElementById("svg01");
+    while (frame.firstChild) {
+        frame.removeChild(frame.firstChild);
     }
     init();
-    
 </script>
