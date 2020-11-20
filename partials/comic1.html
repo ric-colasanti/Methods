@@ -62,9 +62,7 @@
                 }
             }
         }
-
-        add(svg_canvas, size, xpos) {
-            svg_canvas.appendChild(this.svg)
+        move(svg_canvas, size, xpos){
             var rect = this.svg.getBBox();
             let x = rect.x;
             let h = rect.height;
@@ -79,6 +77,10 @@
             this.x = x * this.scale + xpos - offset
             this.svg.setAttribute("transform", "translate(" + this.x + "," + this.y + ") scale(" + this.scale + "," + this.scale +
                 ")");
+        }
+        add(svg_canvas, size, xpos) {
+            svg_canvas.appendChild(this.svg)
+            this.move(svg_canvas, size, xpos)
         }
     }
 
@@ -111,6 +113,7 @@
 
             }
             character.add(frame,0.5,80)
+            character.move(frame,0.5,25)
             //print(out[j].length)
             //printAllVals(out[j])
         }
