@@ -72,6 +72,7 @@
             y = -y;
             let height = parseInt(svg_canvas.getAttribute("height"))
             this.scale = (height / h) * size;
+            console.log(this.scale);
             this.y = y * this.scale + (height - (h * this.scale));
             let offset = (w * this.scale) / 2
             this.x = x * this.scale + xpos - offset

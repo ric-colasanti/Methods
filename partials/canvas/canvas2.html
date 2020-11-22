@@ -1,0 +1,130 @@
+<style>
+    #tooltip {
+        background: cornsilk;
+        border: 1px solid black;
+        border-radius: 5px;
+        padding: 5px;
+    }
+</style>
+
+
+
+<h1>SVG Ploygon </h1>
+<p></p>
+
+
+<div class="container-fluid">
+
+
+    <div class="row">
+
+        <div class="col-sm-4 bgDemo">
+            <svg id="svg01" width="300" height="300" style="border-style: solid;"></svg>
+        </div>
+        <div class="col-sm-8 bgTextBox">
+            <h4>Add polygon </h4>
+            <div id="boxsize">
+            </div>
+            <pre>
+            <code>
+var frame = document.getElementById("svg01");
+var bubble = SVG("g")
+var poly = SVG("polygon")
+poly.setAttribute("fill","none")
+poly.setAttribute("stroke","black")
+array = [[0,0],[0,60],[60,60],[60,0]]
+for(value of array){
+    point = frame.createSVGPoint();
+    point.x = value[0];
+    point.y = value[1]
+    poly.points.appendItem(point);
+}
+bubble.appendChild(poly)
+bubble.setAttribute("transform", "translate(" + 20 + "," + 20 + ")");
+frame.appendChild(bubble)
+
+            </code>
+        </pre>
+        </div>
+    </div>
+
+    <div id="tooltip" display="none" style="position: absolute; display: none;"></div>
+
+</div>
+
+
+
+
+
+
+<script>
+    function showTooltip(evt, text) {
+        let tooltip = document.getElementById("tooltip");
+        tooltip.innerHTML = text;
+        tooltip.style.display = "block";
+        tooltip.style.left = evt.pageX + 10 + 'px';
+        tooltip.style.top = evt.pageY + 10 + 'px';
+    }
+
+    function hideTooltip() {
+        var tooltip = document.getElementById("tooltip");
+        tooltip.style.display = "none";
+    }
+
+    function SVG(elementName) {
+        return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+    }
+
+    class SVGCell {
+        constructor(id, size) {
+            this.xPos = 0;
+            this.yPos = 0;
+            this.svg = SVG("rect")
+            this.size = size
+            this.id = id
+            this.svg.setAttribute("x",this.xPos)
+            this.svg.setAttribute("y",this.yPos)
+            this.svg.setAttribute("width",this.size)
+            this.svg.setAttribute("height",this.size)
+            this.svg.addEventListener('mouseout', function (e) {
+                //e.currentTarget.setAttribute('fill', '#ff00cc');
+                hideTooltip()
+            });
+        }
+
+        setColor(color) {
+            this.svg.setAttribute("fill", color)
+        }
+        move(x, y) {
+            this.xPos = x
+            this.yPos = y
+            this.svg.setAttribute("transform", "translate(" + x * this.size + "," + y * this.size + ")");
+        }
+    }
+    var frame = document.getElementById("svg01");
+        
+    function section1() {
+        point = frame.createSVGPoint();
+        var bubble = SVG("g")
+
+        for (y = 0; y < 40; y++) {
+            for (x = 0; x < 40; x++) {
+                let cell = new SVGCell("x:"+x+" y:"+y, 10)
+                r = Math.floor(Math.random() * 255)
+                g = Math.floor(Math.random() * 255)
+                b = Math.floor(Math.random() * 255)
+                cell.setColor("rgba("+r+","+b+","+g+", 0.5)")
+                cell.move(x, y)
+                cell.svg.addEventListener('mouseover', function (e) {
+                    showTooltip(e, cell.id)
+                });
+                bubble.appendChild(cell.svg)
+            }
+        }
+        bubble.setAttribute("transform","scale("+300/410+","+300/410+")")
+        frame.appendChild(bubble)
+
+    }
+
+    section1()
+</script>

@@ -1,3 +1,14 @@
+<style>
+#tooltip {
+  background: cornsilk;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+}
+    </style>
+    
+
+
 <h1>SVG Ploygon </h1>
 <p></p>
 
@@ -6,6 +17,8 @@
 
 
     <div class="row">
+        <div id="tooltip" display="none" style="position: absolute; display: none;"></div>
+
         <div class="col-sm-4 bgDemo">
             <svg id="svg01" width="300" height="300" style="border-style: solid;"></svg>
         </div>
@@ -45,16 +58,29 @@ frame.appendChild(bubble)
 
 
 <script>
+
+function showTooltip(evt, text) {
+  let tooltip = document.getElementById("tooltip");
+  tooltip.innerHTML = text;
+  tooltip.style.display = "block";
+  tooltip.style.left = evt.pageX + 10 + 'px';
+  tooltip.style.top = evt.pageY + 10 + 'px';
+}
+
+function hideTooltip() {
+  var tooltip = document.getElementById("tooltip");
+  tooltip.style.display = "none";
+}
     function SVG(elementName) {
         return document.createElementNS('http://www.w3.org/2000/svg', elementName);
     }
-
+    var poly = SVG("polygon")
     function section1() {
         var frame = document.getElementById("svg01");
         var bubble = SVG("g")
-       var poly = SVG("polygon")
        poly.setAttribute("fill","blue")
        poly.setAttribute("stroke","none")
+       poly.setAttribute('id','a')
         array = [[0,0],[0,60],[60,60],[60,0]]
         for(value of array){
             point = frame.createSVGPoint();
@@ -62,10 +88,21 @@ frame.appendChild(bubble)
             point.y = value[1]
             poly.points.appendItem(point);
         }
+        poly.addEventListener('mouseover', function(e) {
+            //e.currentTarget.setAttribute('fill', '#ff00cc');
+            showTooltip(e, e.target.id)
+        });        
+        poly.addEventListener('mouseout', function(e) {
+            //e.currentTarget.setAttribute('fill', '#ff00cc');
+            hideTooltip()
+        });
+        
         bubble.appendChild(poly)
-        bubble.setAttribute("transform", "translate(" + 20 + "," + 20 + ")");
+        
         frame.appendChild(bubble)
     }
 
     section1()
+    poly.setAttribute("fill","red")
+    poly.setAttribute("transform", "translate(" + 20 + "," + 20 + ") scale(0.5,0.5)");
 </script>

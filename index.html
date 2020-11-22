@@ -86,6 +86,15 @@
                     <a class="dropdown-item" href="#!comic1">Comic1</a>
                 </div>
             </li>        
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbardrop2" data-toggle="dropdown">
+                    Canvas
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#!canvas1">Canvas1</a>
+                    <a class="dropdown-item" href="#!canvas2">SVGGrid</a>
+                </div>
+            </li>         
         </ul>
     </div>
 </nav>
@@ -109,6 +118,12 @@
             })
             .when("/poly", {
                 templateUrl: "partials/poly.html"
+            })
+            .when("/canvas1", {
+                templateUrl: "partials/canvas/canvas1.html"
+            })
+            .when("/canvas2", {
+                templateUrl: "partials/canvas/canvas2.html"
             })
             .when("/poly2", {
                 templateUrl: "partials/poly2.html"
