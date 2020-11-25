@@ -84,6 +84,9 @@
                 </a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="#!comic1">Comic1</a>
+                    <a class="dropdown-item" href="#!comic2">Comic2</a>
+                    <a class="dropdown-item" href="#!comic4">Comic3</a>
+                    <a class="dropdown-item" href="#!comic3">Comic4</a>
                 </div>
             </li>        
             <li class="nav-item dropdown">
@@ -144,7 +147,16 @@
                 templateUrl: "partials/place1.html"
             })
             .when("/comic1", {
-                templateUrl: "partials/comic1.html"
+                templateUrl: "partials/comic/comic1.html"
+            })
+            .when("/comic2", {
+                templateUrl: "partials/comic/comic2.html"
+            })
+            .when("/comic3", {
+                templateUrl: "partials/comic/comic3.html"
+            })
+            .when("/comic4", {
+                templateUrl: "partials/comic/comic4.html"
             })
             .when("/place2", {
                 templateUrl: "partials/place2.html"

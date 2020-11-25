@@ -1,0 +1,77 @@
+<h1>Figure object</h1>
+
+
+
+
+<div class="container-fluid">
+
+
+    <div class="row">
+        <div class="col-sm-4 bgDemo">
+            <svg id="svg01" width="300" height="300" style="border-style: solid;"></svg>
+        </div>
+        <div class="col-sm-8 bgTextBox">
+            <h4>Figure as a js object</h4>
+            <div id="boxsize">
+            </div>
+            <pre>
+            <code>
+
+            </code>
+        </pre>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<script>
+    function SVG(elementName) {
+        return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+    }
+
+    class Figure {
+        constructor() {
+            this.svg = new SVG("g")
+            var image = new SVG('image');
+            $.get('image.svg', function(contents) {
+    var $tmp = $('svg', contents);
+    image.svg($tmp.html());
+  }, 'xml');
+        }
+    }
+
+    function init() {
+        let frame = document.getElementById("svg01");var bground = SVG("image")
+        var backgroundImage = "nick-nazzaro-desert.png";
+        bground.setAttribute('href', "img/" + backgroundImage);
+        bground.setAttribute("height", "100%")
+        frame.appendChild(bground)
+        let figure = new SVG('g')
+        
+        var head = SVG("image")
+        var headImage = "head_colour_test-02.svg";
+        head.setAttribute('href', "img/" + headImage);
+        head.setAttribute("height", "100%")
+        figure.appendChild(head)
+        var torso = SVG("image")
+        var torsoImage = "torso_colour_test-02.svg";
+        torso.setAttribute('href', "img/" + torsoImage);
+        torso.setAttribute("height", "100%")
+        figure.appendChild(torso)
+        frame.appendChild(figure)
+        figure.setAttribute("transform", "translate(" + 100 + "," + 100 + ") scale(" + 0.5 + "," + 0.5 +")");
+       
+
+    }
+    let frame = document.getElementById("svg01");
+    while (frame.firstChild) {
+        frame.removeChild(frame.firstChild);
+    }
+    init();
+</script>
