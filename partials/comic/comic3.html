@@ -1,4 +1,4 @@
-<h1>SVG speech bubble and JSON figure </h1>
+<h1>SVG image figure object</h1>
 <p>Text can be placed in the text box and the figure can be positioned with the slider</p>
 
 
@@ -49,23 +49,29 @@
 
 
 
-    function process(ct,height) {
+    function process(ct) {
         var head = SVG("image")
         var headImage = "head_colour_test-02.svg";
         head.setAttribute('href', "img/" + headImage);
-        head.setAttribute("height", height)
+        head.setAttribute("height","100%")    
         ct.appendChild(head)
         var torso = SVG("image")
         var torsoImage = "torso_colour_test-02.svg";
         torso.setAttribute('href', "img/" + torsoImage);
-        torso.setAttribute("height", height)
+        torso.setAttribute("height", "100%")
         ct.appendChild(torso)
-        figure.setAttribute("transform", "translate(" + 0 + "," + height/2 + ") scale(" + 0.5 + "," + 0.5 +")");
+        
     }
 
-    function add(ct, svg_canvas, size, xpos) {
-        svg_canvas.appendChild(ct)
-        
+    function add(ct, frame, size, xpos) {
+        frame.appendChild(ct)
+        ct.setAttribute("transform", "translate( 100,100) scale(" +size+ "," + size +")");
+        let ratio = ct.getBoundingClientRect().left/ct.getBoundingClientRect().bottom
+        console.log(ct.getBoundingClientRect().left,ct.getBoundingClientRect().bottom);
+        height = frame.getAttribute("height")
+        let figureWidth = Math.round(height * 0.3 * size * 0.5) 
+        console.log(height , ratio , size,xpos,figureWidth);
+        ct.setAttribute("transform", "translate(" + (xpos-figureWidth) + "," + height/2 + ") scale(" +size+ "," + size +")"); 
     }
 
     function setLine(bubble, fontFamily, bubbleText) {
@@ -138,7 +144,8 @@
 
     function update(txt, pos) {
         section1(txt, parseInt(pos))
-        add(figure, frame, 0.5, parseInt(pos))
+        add(figure,frame,0.5, parseInt(pos))
+        console.log(figure.getBoundingClientRect());
     }
 
 
@@ -150,12 +157,10 @@
         output.innerHTML = this.value;
     }
     let frame = document.getElementById("svg01");
-    console.log(frame.getAttribute("height"))
     while (frame.firstChild) {
         frame.removeChild(frame.firstChild);
     }
     let figure = new SVG("g")
-    process(figure,frame.getAttribute("height"))
-    
+    process(figure,frame)
     update("Text can be placed in the text box and the figure can be positioned with",80); 
 </script>
