@@ -49,18 +49,14 @@
 
 
 
-    function process(ct) {
-        var head = SVG("image")
-        var headImage = "head_colour_test-02.svg";
-        head.setAttribute('href', "img/" + headImage);
-        head.setAttribute("height","100%")    
-        ct.appendChild(head)
-        var torso = SVG("image")
-        var torsoImage = "torso_colour_test-02.svg";
-        torso.setAttribute('href', "img/" + torsoImage);
-        torso.setAttribute("height", "100%")
-        ct.appendChild(torso)
-        
+    function process(ct,files) {
+        for(f in files ){
+            console.log(f);
+            var img = SVG("image")
+            img.setAttribute('href', "img/" + files[f]);
+            img.setAttribute("height","100%")    
+            ct.appendChild(img)
+        } 
     }
 
     function add(ct, frame, size, xpos) {
@@ -86,11 +82,13 @@
     }
 
     function section1(bubbleText, pos) {
-        var bground = SVG("image")
-        var backgroundImage = "nick-nazzaro-desert.png";
-        bground.setAttribute('href', "img/" + backgroundImage);
-        bground.setAttribute("height", "100%")
-        frame.appendChild(bground)
+         var bground = SVG("rect")
+         bground.setAttribute("x",0)
+         bground.setAttribute("y",0)
+         bground.setAttribute("width",300)
+         bground.setAttribute("height",3000)
+         bground.setAttribute("fill","#aaaaff")
+         frame.appendChild(bground)
         let bubble = SVG("g")
         let textGroup = SVG("g")
         let poly = SVG("rect")
@@ -143,24 +141,26 @@
     }
 
     function update(txt, pos) {
-        section1(txt, parseInt(pos))
+    while (frame.firstChild) {
+        frame.removeChild(frame.firstChild);
+    }        section1(txt, parseInt(pos))
         add(figure,frame,0.5, parseInt(pos))
         console.log(figure.getBoundingClientRect());
     }
 
 
-
+    let frame = document.getElementById("svg01");
+    
     var slider = document.getElementById("sld1");
     var output = document.getElementById("pos");
     output.innerHTML = slider.value;
     slider.oninput = function () {
         output.innerHTML = this.value;
     }
-    let frame = document.getElementById("svg01");
-    while (frame.firstChild) {
-        frame.removeChild(frame.firstChild);
-    }
+    characters = {"newmum": {"eyes": {"right": "newmum_eyes_right.svg", "left": "newmum_eyes_left.svg", "happy": "newmum_eyes_happy.svg", "neutral": "newmum_eyes_neutral.svg"}, "mouth": {"neutral": "newmum_mouth_neutral.svg", "happy": "newmum_mouth_happy.svg", "sad": "newmum_mouth_sad.svg"}, "torso": {"neutral": "newmum_torso_neutral.svg", "armscrossed": "newmum_torso_armscrossed.svg"}, "head": {"neutral": "newmum_head_neutral.svg"}}}
+  
     let figure = new SVG("g")
-    process(figure)
+    files = [characters.newmum.eyes.right,characters.newmum.mouth.happy,characters.newmum.torso.armscrossed,characters.newmum.head.neutral]
+    process(figure,files)
     update("Text can be placed in the text box and the figure can be positioned with",80); 
 </script>
