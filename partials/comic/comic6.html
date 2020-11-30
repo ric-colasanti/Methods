@@ -1,0 +1,230 @@
+<h1>SVG image figure object</h1>
+<p>Text can be placed in the text box and the figure can be positioned with the slider</p>
+<p>V02</p>
+
+
+<div class="container-fluid">
+
+
+    <div class="row">
+        <div class="col-sm-12 bgDemo">
+            <svg id="svg01" width="800" height="600" style="border-style: solid;"></svg>
+            <br>
+            <br>
+            <br>
+            <div class="form-group">
+
+                <input type="range" min="50" max="200" value="80" class="slider" id="sld1">
+                <p>Position : <span id="pos">80</span></p>
+            </div>
+            <button type="button" class="btn btn-success"
+                onclick="update(document.getElementById('sld1').value)">Write</button>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+<script>
+
+
+class Charater {
+    static SVG(elementName) {
+        return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+    }
+    constructor(discriptor) {
+        this.descriptor = discriptor;
+        this.svg = Charater.SVG('g')
+
+        this.head = SVG("image")
+        this.head.setAttribute('href', "img/" + this.descriptor.parts.head.neutral);
+        this.head.setAttribute("height", "100%")
+        this.svg.appendChild(this.head)
+
+        this.eyes = SVG("image")
+        this.eyes.setAttribute('href', "img/" + this.descriptor.parts.eyes.neutral);
+        this.eyes.setAttribute("height", "100%")
+        this.svg.appendChild(this.eyes)
+
+        this.mouth = SVG("image")
+        this.mouth.setAttribute('href', "img/" + this.descriptor.parts.mouth.neutral);
+        this.mouth.setAttribute("height", "100%")
+        this.svg.appendChild(this.mouth)
+
+        this.torso = SVG("image")
+        this.torso.setAttribute('href', "img/" + this.descriptor.parts.torso.neutral);
+        this.torso.setAttribute("height", "100%")
+        this.svg.appendChild(this.torso)
+    }
+
+    changeTorso(type) {
+        this.torso.setAttribute('href', "img/" + this.descriptor.parts.torso[type]);
+    }
+
+    changeHead(type) {
+        this.head.setAttribute('href', "img/" + this.descriptor.parts.head[type]);
+    }
+
+    changeMouth(type) {
+        this.mouth.setAttribute('href', "img/" + this.descriptor.parts.mouth[type]);
+    }
+
+    changeEyes(type) {
+        this.eyes.setAttribute('href', "img/" + this.descriptor.parts.eyes[type]);
+    }
+
+    add(frame, size, xpos) {
+        this.frame = frame
+        this.size = size
+        this.xpos = xpos
+        frame.appendChild(this.svg)
+        this.height = frame.getAttribute("height")
+        this.svg.setAttribute("transform", "translate(" + xpos + "," + (this.height - (this.height * this.size)) + ") scale(" + this.size + "," + this.size + ")");
+    }
+
+    move(xpos) {
+        let height = this.frame.getAttribute("height")
+        this.xpos = xpos
+        this.svg.setAttribute("transform", "translate(" + xpos + "," + (this.height - (this.height * this.size)) + ") scale(" + this.size + "," + this.size + ")");
+
+    }
+
+}
+
+class SpeechBubble {
+
+    constructor(text) {
+        console.log(text)
+        this.xpos = 0;
+        this.ypos = 0;
+        this.next = null;
+        this.text = text;
+        console.log("here 2.1");
+        var words = text.split(" ")
+        console.log(words)
+        var lines = []
+        var l = 0
+        var count = 0
+        while (count < words.length) {
+            var line = ""
+            while ((line.length < 20) && (count < words.length)) {
+                line = line + words[count] + " ";
+                count++;
+                console.log(line);
+            }
+            lines[l] = line
+            l++
+        }
+        this.group = SVG("g")
+        var frame = SVG("rect")
+        var height = 10
+        frame.setAttribute("stroke", "black")
+        frame.setAttribute("x", 0)
+        frame.setAttribute("y", 0)
+        frame.setAttribute("rx", 10)
+        frame.setAttribute("ry", 10)
+        frame.setAttribute("stroke-width", 1)
+        frame.setAttribute("width", 200)
+        frame.setAttribute("fill", "#ffff")
+        this.group.appendChild(frame)
+        var yPos = 20
+        for (l in lines) {
+            var speech = SVG("text")
+            speech.setAttribute("font-family", "sans-serif")
+            speech.setAttribute("font-size", "12px")
+            speech.setAttribute("x", 10)
+            speech.setAttribute("y", yPos)
+            var textNode = document.createTextNode(lines[l]);
+            speech.appendChild(textNode)
+            yPos += 20
+            this.group.appendChild(speech)
+            height += 20
+        }
+        frame.setAttribute("height", height)
+
+    }
+
+    clear = function () {
+        elm = this.group
+        if (elm != null) {
+            while (elm.firstChild) {
+                elm.removeChild(elm.firstChild);
+            }
+        }
+    }
+
+}
+
+
+
+
+    function submitText(frame,text) {
+        var pos = 10
+        console.log("here1");
+        var speechBubble = new SpeechBubble(text)
+        console.log("Here 2");
+        frame.appendChild(speechBubble.group)
+        var xPos = 160
+        speechBubble.group.setAttribute("transform", "translate(" + xPos + "," + pos + ")")
+        pos += speechBubble.group.getBBox().height + 20
+    }
+
+
+
+
+
+
+    function SVG(elementName) {
+        return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+    }
+
+
+    function update(pos) {
+        character.move(pos)
+    }
+
+
+    let frame = document.getElementById("svg01");
+
+    var slider = document.getElementById("sld1");
+    var output = document.getElementById("pos");
+    output.innerHTML = slider.value;
+    slider.oninput = function () {
+        output.innerHTML = this.value;
+    }
+
+    let character = new Charater({
+        "name": "newmum",
+        "parts": {
+            "eyes": {
+                "right": "newmum_eyes_right.svg",
+                "left": "newmum_eyes_left.svg",
+                "happy": "newmum_eyes_happy.svg",
+                "neutral": "newmum_eyes_neutral.svg"
+            },
+            "mouth": {
+                "neutral": "newmum_mouth_neutral.svg",
+                "happy": "newmum_mouth_happy.svg",
+                "sad": "newmum_mouth_sad.svg"
+            },
+            "torso": {
+                "neutral": "newmum_torso_neutral.svg",
+                "armscrossed": "newmum_torso_armscrossed.svg"
+            },
+            "head": {
+                "neutral": "newmum_head_neutral.svg"
+            }
+        }
+    })
+
+    character.add(frame, 0.8, parseInt(0))
+    character.changeTorso("armscrossed")
+    character.changeMouth("happy")
+    character.changeEyes("right")
+    submitText(frame,"This should be in a speach bubble and be the same side of the frame as the figure")
+    //update(80); 
+</script>

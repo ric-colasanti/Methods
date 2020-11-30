@@ -1,6 +1,6 @@
 <h1>SVG image figure object</h1>
 <p>Text can be placed in the text box and the figure can be positioned with the slider</p>
-
+<p>V01</p>
 
 
 <div class="container-fluid">
@@ -87,7 +87,7 @@
          bground.setAttribute("y",0)
          bground.setAttribute("width",300)
          bground.setAttribute("height",3000)
-         bground.setAttribute("fill","#aaaaff")
+         bground.setAttribute("fill","#ffffff")
          frame.appendChild(bground)
         let bubble = SVG("g")
         let textGroup = SVG("g")
@@ -157,10 +157,10 @@
     slider.oninput = function () {
         output.innerHTML = this.value;
     }
-    characters = {"newmum": {"eyes": {"right": "newmum_eyes_right.svg", "left": "newmum_eyes_left.svg", "happy": "newmum_eyes_happy.svg", "neutral": "newmum_eyes_neutral.svg"}, "mouth": {"neutral": "newmum_mouth_neutral.svg", "happy": "newmum_mouth_happy.svg", "sad": "newmum_mouth_sad.svg"}, "torso": {"neutral": "newmum_torso_neutral.svg", "armscrossed": "newmum_torso_armscrossed.svg"}, "head": {"neutral": "newmum_head_neutral.svg"}}}
+    characters = {"name":"newmum","parts": {"eyes": {"right": "newmum_eyes_right.svg", "left": "newmum_eyes_left.svg", "happy": "newmum_eyes_happy.svg", "neutral": "newmum_eyes_neutral.svg"}, "mouth": {"neutral": "newmum_mouth_neutral.svg", "happy": "newmum_mouth_happy.svg", "sad": "newmum_mouth_sad.svg"}, "torso": {"neutral": "newmum_torso_neutral.svg", "armscrossed": "newmum_torso_armscrossed.svg"}, "head": {"neutral": "newmum_head_neutral.svg"}}}
   
     let figure = new SVG("g")
-    files = [characters.newmum.eyes.right,characters.newmum.mouth.happy,characters.newmum.torso.armscrossed,characters.newmum.head.neutral]
+    files = [characters.parts.eyes.neutral,characters.parts.mouth.neutral,characters.parts.torso.neutral,characters.parts.head.neutral]
     process(figure,files)
     update("Text can be placed in the text box and the figure can be positioned with",80); 
 </script>
