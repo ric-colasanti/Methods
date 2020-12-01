@@ -11,8 +11,8 @@ sue,pat
 sue"Hi I'm Sue"
 pat"And I'm her exact twin, Pat"
 sue"We are so alike it is a bit creepy"
-pat"And we are transparent"
-sue"Which is why there is no background"
+pat"And we are transparent":crossarms
+sue"Which is why there is no background":happy:eyesleft
             </textarea>
             <button class="btn btn-primary" onclick="submitText('svg01','textarea1') ">Submit</button>
 
@@ -117,10 +117,10 @@ sue"Which is why there is no background"
                         }
                         speechBubble.group.setAttribute("transform", "translate(" + xPos + "," + pos + ")")
                         pos += speechBubble.group.getBBox().height + 20
-                        //expressions = comic[i].split(":")
-                        //for (e in expressions) {
-                        //    robots[key].bot.expression(expressions[e]);
-                        //}
+                        expressions = comic[i].split(":")
+                        for (e in expressions) {
+                            characters[key].charater.expression(expressions[e]);
+                        }
                     }
                 }
             }

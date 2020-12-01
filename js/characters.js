@@ -64,6 +64,26 @@ class Charater {
 
     }
 
+    expression = function (expression) {
+        //this.toString.push(expression)
+        switch (expression) {
+            case "happy":
+                this.changeMouth("happy");
+                break;
+            case "eyesleft":
+                this.changeEyes("left");
+                break;
+            case "eyesright":
+                this.changeEyes("left");
+                break;
+            case "sad":
+                this.changeMouth("sad");
+                break;
+            case "crossarms":
+                this.changeTorso("armscrossed");
+                break;
+        }
+    }
 }
 
 class SpeechBubble {
@@ -129,4 +149,3 @@ class SpeechBubble {
     }
 
 }
-
