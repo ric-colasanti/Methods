@@ -1,3 +1,8 @@
+function SVG(elementName) {
+    return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+}
+
+
 class Charater {
     static SVG(elementName) {
         return document.createElementNS('http://www.w3.org/2000/svg', elementName);
@@ -62,21 +67,25 @@ class Charater {
 }
 
 class SpeechBubble {
+
     constructor(text) {
-        //console.log(robot.id,robot.bodyColor)
+        //console.log(text)
         this.xpos = 0;
         this.ypos = 0;
         this.next = null;
         this.text = text;
-        words = text.split(" ")
+        //console.log("here 2.1");
+        var words = text.split(" ")
+        //console.log(words)
         var lines = []
         var l = 0
         var count = 0
         while (count < words.length) {
-            line = ""
+            var line = ""
             while ((line.length < 20) && (count < words.length)) {
                 line = line + words[count] + " ";
                 count++;
+                //console.log(line);
             }
             lines[l] = line
             l++
@@ -95,7 +104,7 @@ class SpeechBubble {
         this.group.appendChild(frame)
         var yPos = 20
         for (l in lines) {
-            speech = SVG("text")
+            var speech = SVG("text")
             speech.setAttribute("font-family", "sans-serif")
             speech.setAttribute("font-size", "12px")
             speech.setAttribute("x", 10)
@@ -109,6 +118,7 @@ class SpeechBubble {
         frame.setAttribute("height", height)
 
     }
+
     clear = function () {
         elm = this.group
         if (elm != null) {
@@ -119,3 +129,4 @@ class SpeechBubble {
     }
 
 }
+

@@ -1,0 +1,129 @@
+<div class="container-fluid">
+
+
+    <div class="row">
+        <div class="col-sm-8 bgDemo">
+            <svg id="svg01" width="700" height="500" style="border-style: solid;"></svg>
+        </div>
+        <div class="col-sm-4" style="background-color: gainsboro; padding-top: 20px;">
+            <textarea id="textarea1" rows="12" cols="32">Background here none yet
+sue,pat
+sue"Hi I'm Sue"
+pat"And I'm her exact twin, Pat"
+sue"We are so alike it is a bit creepy"
+pat"And we are transparent"
+sue"Which is why there is no background"
+            </textarea>
+            <button class="btn btn-primary" onclick="submitText('svg01','textarea1') ">Submit</button>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<script src="js/characters.js"></script>
+<script>
+
+    function submitText(svgId, textId) {
+        var frame = document.getElementById(svgId);
+        var width = frame.getAttribute("width") 
+        console.log(width);
+        var textAreas = document.getElementById(textId);
+        console.log(textAreas.value)
+        var comic = textAreas.value.split('\n')
+        var characters = {
+            "pat": {"charater":new Charater({
+                "name": "newmum",
+                "parts": {
+                    "eyes": {
+                        "right": "newmum_eyes_right.svg",
+                        "left": "newmum_eyes_left.svg",
+                        "happy": "newmum_eyes_happy.svg",
+                        "neutral": "newmum_eyes_neutral.svg"
+                    },
+                    "mouth": {
+                        "neutral": "newmum_mouth_neutral.svg",
+                        "happy": "newmum_mouth_happy.svg",
+                        "sad": "newmum_mouth_sad.svg"
+                    },
+                    "torso": {
+                        "neutral": "newmum_torso_neutral.svg",
+                        "armscrossed": "newmum_torso_armscrossed.svg"
+                    },
+                    "head": {
+                        "neutral": "newmum_head_neutral.svg"
+                    }
+                }
+            }),"order":0},
+            "sue": {"charater":new Charater({
+                "name": "newmum",
+                "parts": {
+                    "eyes": {
+                        "right": "newmum_eyes_right.svg",
+                        "left": "newmum_eyes_left.svg",
+                        "happy": "newmum_eyes_happy.svg",
+                        "neutral": "newmum_eyes_neutral.svg"
+                    },
+                    "mouth": {
+                        "neutral": "newmum_mouth_neutral.svg",
+                        "happy": "newmum_mouth_happy.svg",
+                        "sad": "newmum_mouth_sad.svg"
+                    },
+                    "torso": {
+                        "neutral": "newmum_torso_neutral.svg",
+                        "armscrossed": "newmum_torso_armscrossed.svg"
+                    },
+                    "head": {
+                        "neutral": "newmum_head_neutral.svg"
+                    }
+                }
+            }),"order":0}
+        }
+
+
+        // Speech and expressions
+        if (comic.length > 1) {
+            chars = comic[1].split(",")
+            var pos = 10
+            var charaterPos = 10
+            var c = 0
+            for (c = 0; c < chars.length; c++) {
+                var key = chars[c].trim()
+                characters[key].order = c;
+                //console.log(key)
+                characters[key].charater.add(frame,0.8,charaterPos)
+                charaterPos+=width-180
+            }
+            console.log("Comic length ",comic.length);
+            if (comic.length > 2) {
+                for (i = 2; i < comic.length; i++) {
+                    console.log(comic[i]);
+                    scomic = comic[i].split('"');
+                    var key = scomic[0].trim()
+                    console.log(key)
+                    if (characters[key] != undefined) {
+                        //console.log(scomic[1])
+                        var speechBubble = new SpeechBubble(scomic[1])
+                        frame.appendChild(speechBubble.group)
+                        var xPos = 160
+                        if (characters[key].order == 1) {
+                            xPos = 315
+                        }
+                        speechBubble.group.setAttribute("transform", "translate(" + xPos + "," + pos + ")")
+                        pos += speechBubble.group.getBBox().height + 20
+                        //expressions = comic[i].split(":")
+                        //for (e in expressions) {
+                        //    robots[key].bot.expression(expressions[e]);
+                        //}
+                    }
+                }
+            }
+        }
+        
+    }
+
+    submitText("svg01","textarea1");
+</script>
