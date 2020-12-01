@@ -29,6 +29,9 @@ sue"Which is why there is no background"
 
     function submitText(svgId, textId) {
         var frame = document.getElementById(svgId);
+        while (frame.firstChild) {
+            frame.removeChild(frame.firstChild);
+        }
         var width = frame.getAttribute("width") 
         console.log(width);
         var textAreas = document.getElementById(textId);
