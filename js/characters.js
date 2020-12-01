@@ -74,7 +74,7 @@ class Charater {
                 this.changeEyes("left");
                 break;
             case "eyesright":
-                this.changeEyes("left");
+                this.changeEyes("right");
                 break;
             case "sad":
                 this.changeMouth("sad");
