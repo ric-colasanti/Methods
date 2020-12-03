@@ -1,3 +1,23 @@
+<style>
+    .menu-top{
+        position: absolute;
+        opacity: 0.9;  /* for demo purpose  */
+        top: 0;
+        z-index: 9;
+        margin: 0px;
+        width: 250px;
+        height:200px;
+        left:0px; 
+        background-color: #111;
+        color:white;
+        overflow-x: hidden;
+        font-size: 20PX;
+        visibility: hidden;/* for demo purpose  */
+    }
+
+</style>
+
+
 <div class="container-fluid">
 
 
@@ -22,7 +42,12 @@ sue"Which is why there is no background":happy:eyesright
 
 </div>
 
-
+<div id="menu" class="menu-top">
+    <ul>
+        <li id="smile">Smile</li>     
+        <li>Cross</li>     
+    </ul>
+  </div>
 
 <script src="js/characters.js"></script>
 <script>
