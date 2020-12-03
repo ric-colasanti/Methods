@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        
+        <style>
+    #tooltip {
+        background: cornsilk;
+        border: 1px solid black;
+        border-radius: 5px;
+        padding: 5px;
+    }
+    
+    
+    * {
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial, san-serif;
+}
+
+.title{
+    text-align:center;
+    font-size:50px;
+}
+
+.row{
+    width:90%;
+    padding: 20px;
+    margin:auto;
+}
+
+.row::after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+.column25{
+    width:25%;
+    float:left;
+    padding:20px;
+}
+
+
+.column75{
+    width:75%;
+    float:left;
+    padding:20px;
+}
+
+
+.content{
+    width:80%;
+    margin:auto;
+    background-color:#ffaaaa;
+    height:800px;
+}
+
+.text-block{
+    text-align:center;
+    background-color:#aaffaa;
+    font-size:30px;
+    padding:20px;
+    border:solid;
+    border-color:#aaaaaa;
+}
+</style>
+        
+        
+    </head>
+    <body>
+        
+        <div class="row">
+            <div class="column25">
+                <p>Run CSR</p>
+                Resource:<br>
+                <input id="stress"><br>
+                Disturbance:<br> 
+                <input id="disturbance"><br>
+                Iterations:<br> 
+                <input id="iterations"><br>
+                <br>
+                <button id="run" onclick="run(0)">Run</button>
+                <br>
+                <br>
+                Iteration:
+                <div id="counter"></div>
+            </div>
+            <div class="column75">
+                <svg id="svg01" width="500" height="500"></svg>
+            </div>
+        </div>
+                
+        
+        <br>
+        
+        <div id="tooltip" display="none" style="position: absolute; display: none;"></div>
+        <script>
+            var csrColors=["SaddleBrown","rgb(0,0,255)","rgb(0,255,0)","rgb(255,0,0)","rgb(0,255,255)","rgb(255,0,255)","rgb(255,255,0)","rgb(191,191,191)"]
+       var  count = 0 
+        var  grid = []
+        var cells=[]
+        function run(c){
+            if (c == 0){
+                count=0
+                grid = []
+            }
+            document.getElementById("counter").innerHTML = count+1
+            var stress = document.getElementById("stress").value;
+            var disturbance = document.getElementById("disturbance").value;
+            var iterations = document.getElementById("iterations").value;  
+            var url=  "http://79.72.122.86/csrca/csrs/"
+            var type = "POST"
+            var data =  JSON.stringify({"stress":Number(stress),"disturbance":Number(disturbance),"iterations":2,"grid":grid})
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    count=c+1
+                    grid = JSON.parse(this.responseText).grid
+                    if((count <2)&&(cells.length<1)){
+                        section1(grid,iterations)
+                    }else{
+                        update(grid,iterations)
+                    }
+                    
+                }
+            };
+            xhttp.open(type,url,true);
+            xhttp.setRequestHeader('Content-Type', 'application/json');
+            xhttp.send(data);              
+        }    
+    
+        function showTooltip(evt, text) {
+            let tooltip = document.getElementById("tooltip");
+            tooltip.innerHTML = text;
+            tooltip.style.display = "block";
+            tooltip.style.left = evt.pageX + 10 + 'px';
+            tooltip.style.top = evt.pageY + 10 + 'px';
+        }
+
+    function hideTooltip() {
+        var tooltip = document.getElementById("tooltip");
+        tooltip.style.display = "none";
+    }
+
+    function SVG(elementName) {
+        return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+    }
+
+    class SVGCell {
+        constructor(id, size) {
+            this.xPos = 0;
+            this.yPos = 0;
+            this.svg = SVG("rect")
+            this.size = size
+            this.id = id
+            this.svg.setAttribute("x",this.xPos)
+            this.svg.setAttribute("y",this.yPos)
+            this.svg.setAttribute("width",this.size)
+            this.svg.setAttribute("height",this.size)
+            this.svg.addEventListener('mouseout', function (e) {
+                //e.currentTarget.setAttribute('fill', '#ff00cc');
+                hideTooltip()
+            });
+        }
+
+        setColor(color) {
+            this.svg.setAttribute("fill", color)
+        }
+        move(x, y) {
+            this.xPos = x
+            this.yPos = y
+            this.svg.setAttribute("transform", "translate(" + x * this.size + "," + y * this.size + ")");
+        }
+    }
+    var frame = document.getElementById("svg01");
+        
+    function update(grid,iterations){
+        for (y = 1; y < 65; y++) {
+            for (x = 1; x < 65; x++) {
+                let r = grid[x][y]
+                
+                cells[x-1][y-1].setColor(csrColors[r])
+            }
+        } 
+        if (count<iterations){
+            run(count)
+        }       
+    }    
+    
+    function section1(grid,iterations) {
+        point = frame.createSVGPoint();
+        var bubble = SVG("g")
+        for (y = 1; y < 65; y++) {
+            var row =[]
+            for (x = 1; x < 65; x++) {
+                let cell = new SVGCell("x:"+x+" y:"+y, 10)
+                row.push(cell)
+                let r = grid[x][y]
+
+                cell.setColor(csrColors[r])
+                cell.move(x, y)
+                cell.svg.addEventListener('mouseover', function (e) {
+                    showTooltip(e, cell.id)
+                });
+                bubble.appendChild(cell.svg)
+            }
+            cells.push(row)
+        }
+        console.log(cells[1][1])
+        bubble.setAttribute("transform","scale("+500/660+","+500/660+")")
+        frame.appendChild(bubble)
+        if (count<iterations){
+            run(count)
+        } 
+    }
+
+    
+    
+     
+        </script>
+    </body>
+</html>
