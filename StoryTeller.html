@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@1,700&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-3">Your story</h1>
+            <p class="lead">Drawing upon your experiences </p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6" id="colmain">
+                <canvas id="canvasmain" style="border-style: solid; border-width: 1px;"></canvas>
+            </div>
+            <div class="col-sm-6" id="colchoice" style="background-color: lightskyblue;">
+                <canvas id="canvaschoice" style="border-style: solid; border-width: 1px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        let colChoice = document.getElementById('colchoice')
+        let canvasChoice = document.getElementById('canvaschoice');
+        canvasChoice.setAttribute("width", colChoice.clientWidth - 25)
+        canvasChoice.setAttribute("height", Math.floor(canvasChoice.clientWidth * 0.75))
+        let ctxChoice = canvasChoice.getContext('2d');
+
+        let colMain = document.getElementById('colmain')
+        let canvasMain = document.getElementById('canvasmain');
+        canvasMain.setAttribute("width", colMain.clientWidth - 25)
+        canvasMain.setAttribute("height", Math.floor(canvasMain.clientWidth * 0.75))
+        let ctxMain = canvasChoice.getContext('2d');
+
+        function loadImages(imageFiles, images = []) {
+            if (imageFiles.length == 0) {
+                init(images)
+            } else {
+                let image = new Image()
+                image.src = imageFiles.shift();
+                image.onload = function () {
+                    images.push(image);
+                    loadImages(imageFiles, images)
+                };
+            }
+        }
+
+
+        function init(images) {
+            console.log(images.length);
+            c = 2
+            console.log(images[c].width,images[c].height);
+            let size = Math.floor((colMain.clientWidth-25)/5)
+         
+         for (y = 0; y < 3; y++) {
+                 for (x = 0; x < 6; x++) {
+             ctxChoice.drawImage(images[c], (550 * x) + 140, (y * 600) + 50, 500, 500, x * size, y*size, size, size)
+                 }
+             }
+
+        }
+        loadImages(["img/womanexpression.png","img/womanexpression2.png", "img/manexpression.png"])
+    </script>
+
+
+</body>
+
+</html>

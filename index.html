@@ -99,6 +99,8 @@
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="#!canvas1">Canvas1</a>
                     <a class="dropdown-item" href="#!canvas2">SVGGrid</a>
+                    <a class="dropdown-item" href="#!canvas3">Canvas image</a>
+                    <a class="dropdown-item" href="#!canvas4">Canvas part</a>
                 </div>
             </li>         
         </ul>
@@ -130,6 +132,12 @@
             })
             .when("/canvas2", {
                 templateUrl: "partials/canvas/canvas2.html"
+            })
+            .when("/canvas3", {
+                templateUrl: "partials/canvas/canvas3.html"
+            })
+            .when("/canvas4", {
+                templateUrl: "partials/canvas/canvas4.html"
             })
             .when("/poly2", {
                 templateUrl: "partials/poly2.html"

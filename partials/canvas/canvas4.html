@@ -1,0 +1,58 @@
+<style>
+#myDIV {
+
+  height: 250px;
+  overflow: auto;
+}
+
+
+</style>
+
+
+
+<h1>Canvas 4</h1>
+
+<div class="container-fluid">
+
+
+    <div class="row">
+        <div id="myDIV">
+            <div id ="content">
+
+            <canvas id="canvas" width="720" height="340" style="border-style: solid;"></canvas>
+            </div>
+       </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<script>
+let image = new Image();
+image.src = "img/womanexpression.png";
+image.onload = function() {
+    init();
+};
+
+let canvas = document.querySelector('canvas');
+let ctx = canvas.getContext('2d');
+
+function init() {
+    console.log(canvas.width,image.width,image.height,canvas.width/image.width)
+    //ctx.drawImage(image,0,0,image.width,image.height,0,0,canvas.width,Math.round(canvas.height*(image.height/image.width)))
+    c = 0
+    for(y=0;y<3;y++){ 
+        for(x=0;x<5;x++){
+            ctx.drawImage(image,(310*x)+50,(y*345)+50,300,300,c*46,0,46,46)
+            c++
+        }
+    }
+}
+
+    
+</script>
