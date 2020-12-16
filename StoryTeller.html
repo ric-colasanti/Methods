@@ -16,13 +16,26 @@
             <p class="lead">Drawing upon your experiences </p>
         </div>
     </div>
+    <div class="spinner-border" style="width: 40px; height: 40px;" id="loading";">
+        <span class="sr-only">Loading...</span>
+    </div>
+    
     <div class="container">
-        <div class="row">
+        <div class="row" id="loaded" style="visibility:hidden">
             <div class="col-sm-6" id="colmain">
                 <canvas id="canvasmain" style="border-style: solid; border-width: 1px;"></canvas>
             </div>
-            <div class="col-sm-6" id="colchoice" style="background-color: lightskyblue;">
-                <canvas id="canvaschoice" style="border-style: solid; border-width: 1px;"></canvas>
+
+            <div class="col-sm-6" id="colchoice" >
+                <p>First character</p>
+
+                <canvas id="canvasheadchoice0" style="border-style: solid; border-width: 1px;"></canvas>
+                <canvas id="canvaschoice0" style="border-style: solid; border-width: 1px;"></canvas>
+
+                <p>Second character</p>
+
+                <canvas id="canvasheadchoice1" style="border-style: solid; border-width: 1px;"></canvas>
+                <canvas id="canvaschoice1" style="border-style: solid; border-width: 1px;"></canvas>
             </div>
         </div>
     </div>
@@ -30,45 +43,138 @@
 
     <script>
         let colChoice = document.getElementById('colchoice')
-        let canvasChoice = document.getElementById('canvaschoice');
-        canvasChoice.setAttribute("width", colChoice.clientWidth - 25)
-        canvasChoice.setAttribute("height", Math.floor(canvasChoice.clientWidth * 0.75))
-        let ctxChoice = canvasChoice.getContext('2d');
-
+        let canvasChoice0 = document.getElementById('canvaschoice0');
+        let canvasChoice1 = document.getElementById('canvaschoice1');
         let colMain = document.getElementById('colmain')
         let canvasMain = document.getElementById('canvasmain');
+        let canvasHeadChoice0 = document.getElementById('canvasheadchoice0');
+        let canvasHeadChoice1 = document.getElementById('canvasheadchoice1');
+
+        let size = Math.floor((colChoice.clientWidth - 25) / 5)
+        let images = []
+        let choice = [[null,null,null],[null,null,null]]
+
         canvasMain.setAttribute("width", colMain.clientWidth - 25)
         canvasMain.setAttribute("height", Math.floor(canvasMain.clientWidth * 0.75))
-        let ctxMain = canvasChoice.getContext('2d');
+        let ctxMain = canvasMain.getContext('2d');
 
-        function loadImages(imageFiles, images = []) {
+
+        canvasChoice0.addEventListener("click", getClickPosition0)
+        canvasChoice0.setAttribute("width", colChoice.clientWidth - 25)
+        canvasChoice0.setAttribute("height", Math.floor(canvasChoice0.clientWidth * 0.75))
+        let ctxChoice0 = canvasChoice0.getContext('2d');
+
+        canvasChoice1.addEventListener("click", getClickPosition1)
+        canvasChoice1.setAttribute("width", colChoice.clientWidth - 25)
+        canvasChoice1.setAttribute("height", Math.floor(canvasChoice1.clientWidth * 0.75))
+        let ctxChoice1 = canvasChoice1.getContext('2d');
+
+
+
+        canvasHeadChoice0.addEventListener("click", getHeadClickPosition0)
+        canvasHeadChoice0.setAttribute("width", colChoice.clientWidth - 25)
+        canvasHeadChoice0.setAttribute("height", size)
+        let ctxHeadChoice0 = canvasHeadChoice0.getContext('2d');
+
+        canvasHeadChoice1.addEventListener("click", getHeadClickPosition1)
+        canvasHeadChoice1.setAttribute("width", colChoice.clientWidth - 25)
+        canvasHeadChoice1.setAttribute("height", size)
+        let ctxHeadChoice1 = canvasHeadChoice1.getContext('2d');
+
+
+
+
+        function getClickPosition0(e) {
+            var xPosition = e.offsetX;
+            var yPosition = e.offsetY;
+            let x = Math.floor(xPosition / size)
+            let y = Math.floor(yPosition / size);
+            choice[0][1] = x
+            choice[0][2] = y
+            drawFace()
+        }
+
+        function getClickPosition1(e) {
+            var xPosition = e.offsetX;
+            var yPosition = e.offsetY;
+            let x = Math.floor(xPosition / size)
+            let y = Math.floor(yPosition / size);
+            choice[1][1] = x
+            choice[1][2] = y
+            drawFace()
+        }
+
+        function getHeadClickPosition0(e) {
+            var xPosition = e.offsetX;
+            var c = Math.floor(xPosition / size)
+            drawChoices(ctxChoice0,0, c)
+        }
+
+        function getHeadClickPosition1(e) {
+            var xPosition = e.offsetX;
+            var c = Math.floor(xPosition / size)
+            drawChoices(ctxChoice1, 1,c)
+        }
+
+        function loadImages(imageFiles, ) {
             if (imageFiles.length == 0) {
-                init(images)
+                init()
             } else {
                 let image = new Image()
                 image.src = imageFiles.shift();
                 image.onload = function () {
                     images.push(image);
-                    loadImages(imageFiles, images)
+                    loadImages(imageFiles)
                 };
             }
         }
 
+        function drawFace() {
+            var size = Math.floor(canvasMain.clientHeight / 2.5)
+            ctxMain.clearRect(0, 0, canvasMain.clientWidth, canvasMain.clientHeight);
+            ctxMain.drawImage(images[2],0,0,images[2].width,images[2].height,0,0,canvasMain.clientWidth, canvasMain.clientHeight)        
+            for (c = 0; c < choice.length; c++) {
+                if (choice[c][2] != null) {
+                    offset = c * (canvasMain.clientWidth - size - 10)
+                    offset = offset + 10
+                    img = choice[c][0]
+                    x = choice[c][1]
+                    y = choice[c][2]
+                    console.log("here",c,img,x,y);
+                    ctxMain.drawImage(images[img], (562 * x) + 140, (y * 607) + 50, 500, 500, offset, canvasMain
+                        .clientHeight - size, size, size)
 
-        function init(images) {
-            console.log(images.length);
-            c = 2
-            console.log(images[c].width,images[c].height);
-            let size = Math.floor((colMain.clientWidth-25)/5)
-         
-         for (y = 0; y < 3; y++) {
-                 for (x = 0; x < 6; x++) {
-             ctxChoice.drawImage(images[c], (550 * x) + 140, (y * 600) + 50, 500, 500, x * size, y*size, size, size)
-                 }
-             }
-
+                }
+            }
         }
-        loadImages(["img/womanexpression.png","img/womanexpression2.png", "img/manexpression.png"])
+
+        function drawChoices(ctxChoice,x, c) {
+            choice[x][0]=c
+            ctxChoice.clearRect(0, 0, canvasChoice0.clientWidth, canvasChoice0.clientHeight);
+            for (y = 0; y < 3; y++) {
+                for (x = 0; x < 6; x++) {
+                    ctxChoice.drawImage(images[c], (560 * x) + 140, (y * 600) + 50, 500, 500, x * size, y * size,
+                        size,
+                        size)
+                }
+            }
+        }
+
+
+        function init() {
+            for (i = 0; i < images.length-1; i++) {
+                ctxHeadChoice0.drawImage(images[i], (560 * i) + 140, (0) + 50, 500, 500, i * size, 0, size, size)
+                ctxHeadChoice1.drawImage(images[i], (560 * i) + 140, (0) + 50, 500, 500, i * size, 0, size, size)
+            }
+            a = document.getElementById('loading')
+            a.style.visibility = "hidden"; 
+
+            b=document.getElementById('loaded')
+            b.style.visibility = "visible"; 
+            
+        }
+
+        loadImages(["img/womanexpression2.png", "img/manexpression.png","img/bed.jpg"])
     </script>
 
 
