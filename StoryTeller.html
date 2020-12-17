@@ -27,15 +27,18 @@
             </div>
 
             <div class="col-sm-6" id="colchoice" >
+                <p>Background</p>
+                <canvas id="canvasbackground" style="border-style: solid; border-width: 1px;"></canvas>
+                
                 <p>First character</p>
-
                 <canvas id="canvasheadchoice0" style="border-style: solid; border-width: 1px;"></canvas>
                 <canvas id="canvaschoice0" style="border-style: solid; border-width: 1px;"></canvas>
+                <textarea class="form-control" rows="5" id="textcharacter0"></textarea>
 
                 <p>Second character</p>
-
                 <canvas id="canvasheadchoice1" style="border-style: solid; border-width: 1px;"></canvas>
                 <canvas id="canvaschoice1" style="border-style: solid; border-width: 1px;"></canvas>
+                <textarea class="form-control" rows="5" id="textcharacter1"></textarea>
             </div>
         </div>
     </div>
@@ -45,6 +48,9 @@
         let colChoice = document.getElementById('colchoice')
         let canvasChoice0 = document.getElementById('canvaschoice0');
         let canvasChoice1 = document.getElementById('canvaschoice1');
+        let textcharacter0 = document.getElementById("textcharacter0")
+        let textcharacter1 = document.getElementById("textcharacter1")
+        let canvasBackground = document.getElementById('canvasbackground');
         let colMain = document.getElementById('colmain')
         let canvasMain = document.getElementById('canvasmain');
         let canvasHeadChoice0 = document.getElementById('canvasheadchoice0');
@@ -53,6 +59,7 @@
         let size = Math.floor((colChoice.clientWidth - 25) / 5)
         let images = []
         let choice = [[null,null,null],[null,null,null]]
+        let bgnd = 0
 
         canvasMain.setAttribute("width", colMain.clientWidth - 25)
         canvasMain.setAttribute("height", Math.floor(canvasMain.clientWidth * 0.75))
@@ -62,11 +69,13 @@
         canvasChoice0.addEventListener("click", getClickPosition0)
         canvasChoice0.setAttribute("width", colChoice.clientWidth - 25)
         canvasChoice0.setAttribute("height", Math.floor(canvasChoice0.clientWidth * 0.75))
+        textcharacter0.setAttribute("width", colChoice.clientWidth - 25)
         let ctxChoice0 = canvasChoice0.getContext('2d');
 
         canvasChoice1.addEventListener("click", getClickPosition1)
         canvasChoice1.setAttribute("width", colChoice.clientWidth - 25)
         canvasChoice1.setAttribute("height", Math.floor(canvasChoice1.clientWidth * 0.75))
+        textcharacter1.setAttribute("width", colChoice.clientWidth - 25)
         let ctxChoice1 = canvasChoice1.getContext('2d');
 
 
@@ -80,6 +89,11 @@
         canvasHeadChoice1.setAttribute("width", colChoice.clientWidth - 25)
         canvasHeadChoice1.setAttribute("height", size)
         let ctxHeadChoice1 = canvasHeadChoice1.getContext('2d');
+
+        canvasBackground.addEventListener("click", getBackgroundClickPosition)
+        canvasBackground.setAttribute("width", colChoice.clientWidth - 25)
+        canvasBackground.setAttribute("height", size)
+        let ctxBackgroundChoice = canvasBackground.getContext('2d');
 
 
 
@@ -116,6 +130,13 @@
             drawChoices(ctxChoice1, 1,c)
         }
 
+        function getBackgroundClickPosition(e) {
+            var xPosition = e.offsetX;
+            bgnd = Math.floor(xPosition / size)+2
+            console.log(bgnd);
+            drawFace()
+        }
+
         function loadImages(imageFiles, ) {
             if (imageFiles.length == 0) {
                 init()
@@ -132,7 +153,10 @@
         function drawFace() {
             var size = Math.floor(canvasMain.clientHeight / 2.5)
             ctxMain.clearRect(0, 0, canvasMain.clientWidth, canvasMain.clientHeight);
-            ctxMain.drawImage(images[2],0,0,images[2].width,images[2].height,0,0,canvasMain.clientWidth, canvasMain.clientHeight)        
+            if(bgnd>0){
+                ctxMain.drawImage(images[bgnd],0,0,images[bgnd].width,images[bgnd].height,0,0,canvasMain.clientWidth, canvasMain.clientHeight)        
+            }
+            
             for (c = 0; c < choice.length; c++) {
                 if (choice[c][2] != null) {
                     offset = c * (canvasMain.clientWidth - size - 10)
@@ -146,6 +170,7 @@
 
                 }
             }
+            //drawBubble(ctxMain)
         }
 
         function drawChoices(ctxChoice,x, c) {
@@ -160,12 +185,69 @@
             }
         }
 
+        function drawBubble(ctx) {
+
+   
+     var size = Math.floor(canvasMain.clientHeight / 2.5)
+     x=size/2
+     y=(canvasMain.clientHeight - size)-125       
+    // Quadratric curves example
+    // ctx.beginPath();
+    // ctx.moveTo(75+x, 25+y);
+    // ctx.strokeStyle = '#ff0000';
+    // ctx.quadraticCurveTo(25+x, 25+y, 25+x, 62.5+y);
+    // ctx.stroke();
+    // ctx.beginPath();
+    // ctx.moveTo(25+x, 62.5+y);
+    //ctx.strokeStyle = '#00ff00';
+    //ctx.quadraticCurveTo(25+x, 100+y, 50+x, 100+y);
+    //ctx.stroke();
+    // ctx.beginPath();
+    // ctx.moveTo(50+x, 100+y);
+    // ctx.strokeStyle = '#0000ff';
+    // ctx.quadraticCurveTo(50+x, 120+y, 30+x, 125+y);
+    // ctx.stroke();
+    // ctx.beginPath();
+    // ctx.moveTo(30+x, 125+y);
+    // ctx.strokeStyle = '#0000ff';
+    // ctx.quadraticCurveTo(60+x, 120+y, 65+x, 100+y);
+    // ctx.stroke();    
+    // ctx.beginPath();
+    // ctx.moveTo(65+x, 100+y);
+    // ctx.strokeStyle = '#ff00ff';
+    // ctx.quadraticCurveTo(125+x, 100+y, 125+x, 62.5+y);
+    // ctx.stroke();
+    // ctx.beginPath();
+    // ctx.moveTo(125+x, 62.5+y);
+    // ctx.strokeStyle = '#000000';
+    // ctx.quadraticCurveTo(125+x, 25+y, 75+x, 25+y);
+    // ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(50+x, 100+y);
+    ctx.strokeStyle = '#0000ff';
+    ctx.quadraticCurveTo(50+x, 120+y, 30+x, 125+y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(30+x, 125+y);
+    ctx.strokeStyle = '#0000ff';
+    ctx.quadraticCurveTo(60+x, 120+y, 65+x, 100+y);
+    ctx.stroke();           
+
+
+  }
+
+
 
         function init() {
-            for (i = 0; i < images.length-1; i++) {
+            for (i = 0; i < 2; i++) {
                 ctxHeadChoice0.drawImage(images[i], (560 * i) + 140, (0) + 50, 500, 500, i * size, 0, size, size)
                 ctxHeadChoice1.drawImage(images[i], (560 * i) + 140, (0) + 50, 500, 500, i * size, 0, size, size)
             }
+            for (i=2;i<4;i++){
+                ctxBackgroundChoice.drawImage(images[i],0,0,images[i].width,images[i].height,size*(i-2),0,size,size) 
+            }
+            //drawBubble(ctxMain)
             a = document.getElementById('loading')
             a.style.visibility = "hidden"; 
 
@@ -174,7 +256,7 @@
             
         }
 
-        loadImages(["img/womanexpression2.png", "img/manexpression.png","img/bed.jpg"])
+        loadImages(["img/womanexpression2.png", "img/manexpression.png","img/bed.jpg","img/living.jpg"])
     </script>
 
 
