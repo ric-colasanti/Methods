@@ -174,8 +174,10 @@
 
                 }
             }
-            speechBubble(ctxMain,10, 10, 180, 80, Math.floor(size/2)+10, canvasMain.clientHeight-size+10, 25, "This is  text")
-            
+            text = document.getElementById('textcharacter0').value
+            speechBubble(ctxMain, 10, 10, Math.floor(size / 2) + 10, canvasMain.clientHeight - size + 10, 25,
+                text)
+
         }
 
         function drawChoices(ctxChoice, x, c) {
@@ -190,27 +192,33 @@
             }
         }
 
-        function speechBubble(ctx, x, y, w, h, ax, ay, c, text) {
-            ctx.beginPath()
-            ctx.moveTo(x + c, y)
-            ctx.quadraticCurveTo(x, y, x, y + c)
-            ctx.lineTo(x, y + h - c)
-            ctx.quadraticCurveTo(x, y + h, x + c, y + h)
-            ctx.quadraticCurveTo(ax + 20, ay - 20, ax, ay)
-            ctx.quadraticCurveTo(ax + 20, ay - 20, x + 2 * c, y + h)
-            ctx.lineTo(x + w - c, y + h)
-            ctx.quadraticCurveTo(x + w, y + h, x + w, y + h - c)
-            ctx.lineTo(x + w, y + c)
-            ctx.quadraticCurveTo(x + w, y, x + w - c, y)
-            ctx.lineTo(x + c, y)
-            ctx.fillStyle = 'white';
-            ctx.fill()
-            ctx.lineWidth = 2
-            ctx.stroke()
-            ctx.lineWidth = 1
-            ctx.font = '18px sans';
-            ctx.fillStyle = 'black';
-            ctx.fillText(text, x + 20, y + 20 + 9);
+        function speechBubble(ctx, x, y, ax, ay, c, text) {
+            if (text.length > 0) {
+                ctx.font = '18px sans';
+                w = ctx.measureText(text).width + 40
+                h = 50
+                ctx.beginPath()
+                ctx.moveTo(x + c, y)
+                ctx.quadraticCurveTo(x, y, x, y + c)
+                ctx.lineTo(x, y + h - c)
+                ctx.quadraticCurveTo(x, y + h, x + c, y + h)
+                ctx.quadraticCurveTo(ax + 20, ay - 20, ax, ay)
+                ctx.quadraticCurveTo(ax + 20, ay - 20, x + 2 * c, y + h)
+                ctx.lineTo(x + w - c, y + h)
+                ctx.quadraticCurveTo(x + w, y + h, x + w, y + h - c)
+                ctx.lineTo(x + w, y + c)
+                ctx.quadraticCurveTo(x + w, y, x + w - c, y)
+                ctx.lineTo(x + c, y)
+                ctx.fillStyle = 'white';
+                ctx.fill()
+                ctx.lineWidth = 2
+                ctx.stroke()
+                ctx.lineWidth = 1
+                
+                ctx.fillStyle = 'black';
+                ctx.fillText(text, x + 20, y + 20 + 9);
+
+            }
         }
 
 
