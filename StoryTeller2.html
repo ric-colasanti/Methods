@@ -170,7 +170,7 @@
 
                 }
             }
- 
+            //drawBubble(ctxMain)
         }
 
         function drawChoices(ctxChoice,x, c) {
@@ -185,6 +185,82 @@
             }
         }
 
+        function drawBubble(ctx) {
+
+   
+//      var size = Math.floor(canvasMain.clientHeight / 2.5)
+//      x=0//size/2
+//      y=0//(canvasMain.clientHeight - size)-125       
+//    // Quadratric curves example
+
+//     ctx.beginPath();
+//     ctx.moveTo(25+x, 62.5+y);
+//     ctx.strokeStyle = '#00ff00';
+//     ctx.quadraticCurveTo(25+x, 100+y, 50+x, 100+y);
+//     ctx.stroke();
+//     ctx.beginPath();
+//     ctx.moveTo(50+x, 100+y);
+//     ctx.strokeStyle = '#0000ff';
+//     ctx.quadraticCurveTo(50+x, 120+y, 30+x, 125+y);
+//     ctx.stroke();
+    
+
+;
+
+ancoreX=20
+    ancoreY=280
+    a=175
+    b=125
+    w=70
+    h=70
+    // ctx.beginPath();
+    // ctx.moveTo(a, b);
+    // ctx.strokeStyle = '#000000';
+    // ctx.quadraticCurveTo(a, b+20, ancoreX, ancoreY);
+    // ctx.moveTo(ancoreX,ancoreY);
+    // ctx.quadraticCurveTo(a+10, b+20, a+15, b);
+    // ctx.moveTo(a-25, b-37);
+    // ctx.quadraticCurveTo(a-25, b-37, a-25, b-37-h);
+    // ctx.moveTo(a-25, b-37);
+    // ctx.quadraticCurveTo(a-25, b, a, b);
+    // ctx.moveTo(a+75+w, b-37-h);
+    // ctx.quadraticCurveTo(a+75+w, b-75-h, a+25+w, b-75-h);
+    // ctx.moveTo(a+75+w, b-37-h);
+    // ctx.quadraticCurveTo(a+75+w, b-37+h,a+75+w, b-37-h);
+    // ctx.moveTo(a+15+w, b);
+    // ctx.quadraticCurveTo(a+75+w, b, a+75+w, b-37);
+    // ctx.moveTo(a+15+w, b);
+    // ctx.quadraticCurveTo(a+15+w, b, a+15, b);
+    // ctx.moveTo(a+25, b-75-h);
+    // ctx.quadraticCurveTo(a-25, b-75-h, a-25, b-37-h);
+    // ctx.moveTo(a+25, b-75-h);
+    // ctx.quadraticCurveTo(a+25, b-75-h, a+25+w, b-75-h);
+    
+    // ctx.stroke();
+    //ctx.fill()
+
+
+    ctx.beginPath();
+    ctx.fillStyle = '#120000'
+    ctx.moveTo(a, b);
+    ctx.quadraticCurveTo(a-50, b, a-50, b+37);
+    ctx.quadraticCurveTo(a-50, b+75, a-25, b+75);
+    ctx.quadraticCurveTo(a-25, b+95, ancoreX, ancoreY);
+    ctx.quadraticCurveTo(a-15, b+95, a-10, b+75);
+    ctx.quadraticCurveTo(a+50, b+75, a+50, b+37);
+    ctx.quadraticCurveTo(a+50, b, a, b);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(a, b);
+    ctx.quadraticCurveTo(a-50, b, a-50, b+37);
+    ctx.quadraticCurveTo(a-50, b+75, a-25, b+75);
+    ctx.quadraticCurveTo(a-25, b+95, ancoreX, ancoreY);
+    ctx.quadraticCurveTo(a-15, b+95, a-10, b+75);
+    ctx.quadraticCurveTo(a+50, b+75, a+50, b+37);
+    ctx.quadraticCurveTo(a+50, b, a, b);
+    ctx.stroke();
+  }
+
 
 
         function init() {
@@ -195,7 +271,7 @@
             for (i=2;i<4;i++){
                 ctxBackgroundChoice.drawImage(images[i],0,0,images[i].width,images[i].height,size*(i-2),0,size,size) 
             }
-
+            drawBubble(ctxMain)
             a = document.getElementById('loading')
             a.style.visibility = "hidden"; 
 
