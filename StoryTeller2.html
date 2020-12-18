@@ -16,271 +16,140 @@
             <p class="lead">Drawing upon your experiences </p>
         </div>
     </div>
-    <div class="spinner-border" style="width: 40px; height: 40px;" id="loading";">
-        <span class="sr-only">Loading...</span>
-    </div>
-    
+
     <div class="container">
-        <div class="row" id="loaded" style="visibility:hidden">
+        <div class="row" id="loaded">
             <div class="col-sm-6" id="colmain">
                 <canvas id="canvasmain" style="border-style: solid; border-width: 1px;"></canvas>
             </div>
-
-            <div class="col-sm-6" id="colchoice" >
-                <p>Background</p>
-                <canvas id="canvasbackground" style="border-style: solid; border-width: 1px;"></canvas>
-                
-                <p>First character</p>
-                <canvas id="canvasheadchoice0" style="border-style: solid; border-width: 1px;"></canvas>
-                <canvas id="canvaschoice0" style="border-style: solid; border-width: 1px;"></canvas>
-                <textarea class="form-control" rows="5" id="textcharacter0"></textarea>
-
-                <p>Second character</p>
-                <canvas id="canvasheadchoice1" style="border-style: solid; border-width: 1px;"></canvas>
-                <canvas id="canvaschoice1" style="border-style: solid; border-width: 1px;"></canvas>
-                <textarea class="form-control" rows="5" id="textcharacter1"></textarea>
-            </div>
         </div>
+
     </div>
 
 
     <script>
-        let colChoice = document.getElementById('colchoice')
-        let canvasChoice0 = document.getElementById('canvaschoice0');
-        let canvasChoice1 = document.getElementById('canvaschoice1');
-        let textcharacter0 = document.getElementById("textcharacter0")
-        let textcharacter1 = document.getElementById("textcharacter1")
-        let canvasBackground = document.getElementById('canvasbackground');
         let colMain = document.getElementById('colmain')
         let canvasMain = document.getElementById('canvasmain');
-        let canvasHeadChoice0 = document.getElementById('canvasheadchoice0');
-        let canvasHeadChoice1 = document.getElementById('canvasheadchoice1');
 
-        let size = Math.floor((colChoice.clientWidth - 25) / 5)
-        let images = []
-        let choice = [[null,null,null],[null,null,null]]
-        let bgnd = 0
 
         canvasMain.setAttribute("width", colMain.clientWidth - 25)
         canvasMain.setAttribute("height", Math.floor(canvasMain.clientWidth * 0.75))
         let ctxMain = canvasMain.getContext('2d');
 
-
-        canvasChoice0.addEventListener("click", getClickPosition0)
-        canvasChoice0.setAttribute("width", colChoice.clientWidth - 25)
-        canvasChoice0.setAttribute("height", Math.floor(canvasChoice0.clientWidth * 0.75))
-        textcharacter0.setAttribute("width", colChoice.clientWidth - 25)
-        let ctxChoice0 = canvasChoice0.getContext('2d');
-
-        canvasChoice1.addEventListener("click", getClickPosition1)
-        canvasChoice1.setAttribute("width", colChoice.clientWidth - 25)
-        canvasChoice1.setAttribute("height", Math.floor(canvasChoice1.clientWidth * 0.75))
-        textcharacter1.setAttribute("width", colChoice.clientWidth - 25)
-        let ctxChoice1 = canvasChoice1.getContext('2d');
-
-
-
-        canvasHeadChoice0.addEventListener("click", getHeadClickPosition0)
-        canvasHeadChoice0.setAttribute("width", colChoice.clientWidth - 25)
-        canvasHeadChoice0.setAttribute("height", size)
-        let ctxHeadChoice0 = canvasHeadChoice0.getContext('2d');
-
-        canvasHeadChoice1.addEventListener("click", getHeadClickPosition1)
-        canvasHeadChoice1.setAttribute("width", colChoice.clientWidth - 25)
-        canvasHeadChoice1.setAttribute("height", size)
-        let ctxHeadChoice1 = canvasHeadChoice1.getContext('2d');
-
-        canvasBackground.addEventListener("click", getBackgroundClickPosition)
-        canvasBackground.setAttribute("width", colChoice.clientWidth - 25)
-        canvasBackground.setAttribute("height", size)
-        let ctxBackgroundChoice = canvasBackground.getContext('2d');
-
-
-
-
-        function getClickPosition0(e) {
-            var xPosition = e.offsetX;
-            var yPosition = e.offsetY;
-            let x = Math.floor(xPosition / size)
-            let y = Math.floor(yPosition / size);
-            choice[0][1] = x
-            choice[0][2] = y
-            drawFace()
-        }
-
-        function getClickPosition1(e) {
-            var xPosition = e.offsetX;
-            var yPosition = e.offsetY;
-            let x = Math.floor(xPosition / size)
-            let y = Math.floor(yPosition / size);
-            choice[1][1] = x
-            choice[1][2] = y
-            drawFace()
-        }
-
-        function getHeadClickPosition0(e) {
-            var xPosition = e.offsetX;
-            var c = Math.floor(xPosition / size)
-            drawChoices(ctxChoice0,0, c)
-        }
-
-        function getHeadClickPosition1(e) {
-            var xPosition = e.offsetX;
-            var c = Math.floor(xPosition / size)
-            drawChoices(ctxChoice1, 1,c)
-        }
-
-        function getBackgroundClickPosition(e) {
-            var xPosition = e.offsetX;
-            bgnd = Math.floor(xPosition / size)+2
-            console.log(bgnd);
-            drawFace()
-        }
-
-        function loadImages(imageFiles, ) {
-            if (imageFiles.length == 0) {
-                init()
-            } else {
-                let image = new Image()
-                image.src = imageFiles.shift();
-                image.onload = function () {
-                    images.push(image);
-                    loadImages(imageFiles)
-                };
-            }
-        }
-
-        function drawFace() {
-            var size = Math.floor(canvasMain.clientHeight / 2.5)
-            ctxMain.clearRect(0, 0, canvasMain.clientWidth, canvasMain.clientHeight);
-            if(bgnd>0){
-                ctxMain.drawImage(images[bgnd],0,0,images[bgnd].width,images[bgnd].height,0,0,canvasMain.clientWidth, canvasMain.clientHeight)        
-            }
-            
-            for (c = 0; c < choice.length; c++) {
-                if (choice[c][2] != null) {
-                    offset = c * (canvasMain.clientWidth - size - 10)
-                    offset = offset + 10
-                    img = choice[c][0]
-                    x = choice[c][1]
-                    y = choice[c][2]
-                    console.log("here",c,img,x,y);
-                    ctxMain.drawImage(images[img], (562 * x) + 140, (y * 607) + 50, 500, 500, offset, canvasMain
-                        .clientHeight - size, size, size)
-
-                }
-            }
-            //drawBubble(ctxMain)
-        }
-
-        function drawChoices(ctxChoice,x, c) {
-            choice[x][0]=c
-            ctxChoice.clearRect(0, 0, canvasChoice0.clientWidth, canvasChoice0.clientHeight);
-            for (y = 0; y < 3; y++) {
-                for (x = 0; x < 6; x++) {
-                    ctxChoice.drawImage(images[c], (560 * x) + 140, (y * 600) + 50, 500, 500, x * size, y * size,
-                        size,
-                        size)
-                }
-            }
-        }
-
         function drawBubble(ctx) {
 
-   
-//      var size = Math.floor(canvasMain.clientHeight / 2.5)
-//      x=0//size/2
-//      y=0//(canvasMain.clientHeight - size)-125       
-//    // Quadratric curves example
 
-//     ctx.beginPath();
-//     ctx.moveTo(25+x, 62.5+y);
-//     ctx.strokeStyle = '#00ff00';
-//     ctx.quadraticCurveTo(25+x, 100+y, 50+x, 100+y);
-//     ctx.stroke();
-//     ctx.beginPath();
-//     ctx.moveTo(50+x, 100+y);
-//     ctx.strokeStyle = '#0000ff';
-//     ctx.quadraticCurveTo(50+x, 120+y, 30+x, 125+y);
-//     ctx.stroke();
-    
+            //      var size = Math.floor(canvasMain.clientHeight / 2.5)
+            //      x=0//size/2
+            //      y=0//(canvasMain.clientHeight - size)-125       
+            //    // Quadratric curves example
 
-;
-
-ancoreX=20
-    ancoreY=280
-    a=175
-    b=125
-    w=70
-    h=70
-    // ctx.beginPath();
-    // ctx.moveTo(a, b);
-    // ctx.strokeStyle = '#000000';
-    // ctx.quadraticCurveTo(a, b+20, ancoreX, ancoreY);
-    // ctx.moveTo(ancoreX,ancoreY);
-    // ctx.quadraticCurveTo(a+10, b+20, a+15, b);
-    // ctx.moveTo(a-25, b-37);
-    // ctx.quadraticCurveTo(a-25, b-37, a-25, b-37-h);
-    // ctx.moveTo(a-25, b-37);
-    // ctx.quadraticCurveTo(a-25, b, a, b);
-    // ctx.moveTo(a+75+w, b-37-h);
-    // ctx.quadraticCurveTo(a+75+w, b-75-h, a+25+w, b-75-h);
-    // ctx.moveTo(a+75+w, b-37-h);
-    // ctx.quadraticCurveTo(a+75+w, b-37+h,a+75+w, b-37-h);
-    // ctx.moveTo(a+15+w, b);
-    // ctx.quadraticCurveTo(a+75+w, b, a+75+w, b-37);
-    // ctx.moveTo(a+15+w, b);
-    // ctx.quadraticCurveTo(a+15+w, b, a+15, b);
-    // ctx.moveTo(a+25, b-75-h);
-    // ctx.quadraticCurveTo(a-25, b-75-h, a-25, b-37-h);
-    // ctx.moveTo(a+25, b-75-h);
-    // ctx.quadraticCurveTo(a+25, b-75-h, a+25+w, b-75-h);
-    
-    // ctx.stroke();
-    //ctx.fill()
+            //     ctx.beginPath();
+            //     ctx.moveTo(25+x, 62.5+y);
+            //     ctx.strokeStyle = '#00ff00';
+            //     ctx.quadraticCurveTo(25+x, 100+y, 50+x, 100+y);
+            //     ctx.stroke();
+            //     ctx.beginPath();
+            //     ctx.moveTo(50+x, 100+y);
+            //     ctx.strokeStyle = '#0000ff';
+            //     ctx.quadraticCurveTo(50+x, 120+y, 30+x, 125+y);
+            //     ctx.stroke();
 
 
-    ctx.beginPath();
-    ctx.fillStyle = '#120000'
-    ctx.moveTo(a, b);
-    ctx.quadraticCurveTo(a-50, b, a-50, b+37);
-    ctx.quadraticCurveTo(a-50, b+75, a-25, b+75);
-    ctx.quadraticCurveTo(a-25, b+95, ancoreX, ancoreY);
-    ctx.quadraticCurveTo(a-15, b+95, a-10, b+75);
-    ctx.quadraticCurveTo(a+50, b+75, a+50, b+37);
-    ctx.quadraticCurveTo(a+50, b, a, b);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(a, b);
-    ctx.quadraticCurveTo(a-50, b, a-50, b+37);
-    ctx.quadraticCurveTo(a-50, b+75, a-25, b+75);
-    ctx.quadraticCurveTo(a-25, b+95, ancoreX, ancoreY);
-    ctx.quadraticCurveTo(a-15, b+95, a-10, b+75);
-    ctx.quadraticCurveTo(a+50, b+75, a+50, b+37);
-    ctx.quadraticCurveTo(a+50, b, a, b);
-    ctx.stroke();
-  }
+            ;
 
+            ancoreX = 20
+            ancoreY = 280
+            a = 175
+            b = 125
+            w = 70
+            h = 70
+            // ctx.beginPath();
+            // ctx.moveTo(a, b);
+            // ctx.strokeStyle = '#000000';
+            // ctx.quadraticCurveTo(a, b+20, ancoreX, ancoreY);
+            // ctx.moveTo(ancoreX,ancoreY);
+            // ctx.quadraticCurveTo(a+10, b+20, a+15, b);
+            // ctx.moveTo(a-25, b-37);
+            // ctx.quadraticCurveTo(a-25, b-37, a-25, b-37-h);
+            // ctx.moveTo(a-25, b-37);
+            // ctx.quadraticCurveTo(a-25, b, a, b);
+            // ctx.moveTo(a+75+w, b-37-h);
+            // ctx.quadraticCurveTo(a+75+w, b-75-h, a+25+w, b-75-h);
+            // ctx.moveTo(a+75+w, b-37-h);
+            // ctx.quadraticCurveTo(a+75+w, b-37+h,a+75+w, b-37-h);
+            // ctx.moveTo(a+15+w, b);
+            // ctx.quadraticCurveTo(a+75+w, b, a+75+w, b-37);
+            // ctx.moveTo(a+15+w, b);
+            // ctx.quadraticCurveTo(a+15+w, b, a+15, b);
+            // ctx.moveTo(a+25, b-75-h);
+            // ctx.quadraticCurveTo(a-25, b-75-h, a-25, b-37-h);
+            // ctx.moveTo(a+25, b-75-h);
+            // ctx.quadraticCurveTo(a+25, b-75-h, a+25+w, b-75-h);
 
+            // ctx.stroke();
+            //ctx.fill()
+            function speechBubble(ctx, x, y, w, h, ax, ay, c, text) {
 
-        function init() {
-            for (i = 0; i < 2; i++) {
-                ctxHeadChoice0.drawImage(images[i], (560 * i) + 140, (0) + 50, 500, 500, i * size, 0, size, size)
-                ctxHeadChoice1.drawImage(images[i], (560 * i) + 140, (0) + 50, 500, 500, i * size, 0, size, size)
+                ctx.beginPath()
+                ctx.moveTo(x + c, y)
+                ctx.quadraticCurveTo(x, y, x, y + c)
+                ctx.lineTo(x, y + h - c)
+                ctx.quadraticCurveTo(x, y + h, x + c, y + h)
+                ctx.quadraticCurveTo(ax + 20, ay - 20, ax, ay)
+                ctx.quadraticCurveTo(ax + 20, ay - 20, x + 2 * c, y + h)
+                ctx.lineTo(x + w - c, y + h)
+                ctx.quadraticCurveTo(x + w, y + h, x + w, y + h - c)
+                ctx.lineTo(x + w, y + c)
+                ctx.quadraticCurveTo(x + w, y, x + w - c, y)
+                ctx.lineTo(x + c, y)
+                ctx.fillStyle = 'white';
+                ctx.fill()
+                ctx.lineWidth = 2
+                ctx.stroke()
+                ctx.lineWidth = 1
+                ctx.font = '18px sans';
+                ctx.fillStyle = 'black';
+                ctx.fillText(text, x + 20, y + 20 + 9);
             }
-            for (i=2;i<4;i++){
-                ctxBackgroundChoice.drawImage(images[i],0,0,images[i].width,images[i].height,size*(i-2),0,size,size) 
-            }
-            drawBubble(ctxMain)
-            a = document.getElementById('loading')
-            a.style.visibility = "hidden"; 
 
-            b=document.getElementById('loaded')
-            b.style.visibility = "visible"; 
+            speechBubble(ctxMain,10, 10, 180, 120, 50, 180, 25, "This is  text")
+            /**
             
+            ctx.quadraticCurveTo(100,120,120,120)
+            
+            ctx.quadraticCurveTo(220,120,220,100)
+            ctx.lineTo(220,60)
+            ctx.quadraticCurveTo(220,40,200,40)
+            ctx.lineTo(120,40)
+            
+            ctx.lineTo(100,100)
+            
+             ctx.fillStyle = '#120000'
+             **/
+            // ctx.moveTo(a, b);
+            // ctx.quadraticCurveTo(a-50, b, a-50, b+37);
+            // ctx.quadraticCurveTo(a-50, b+75, a-25, b+75);
+            // ctx.quadraticCurveTo(a-25, b+95, ancoreX, ancoreY);
+            // ctx.quadraticCurveTo(a-15, b+95, a-10, b+75);
+            // ctx.quadraticCurveTo(a+50, b+75, a+50, b+37);
+            // ctx.quadraticCurveTo(a+50, b, a, b);
+            // ctx.fill();
+            // ctx.beginPath();
+            // ctx.moveTo(a, b);
+            // ctx.quadraticCurveTo(a-50, b, a-50, b+37);
+            // ctx.quadraticCurveTo(a-50, b+75, a-25, b+75);
+            // ctx.quadraticCurveTo(a-25, b+95, ancoreX, ancoreY);
+            // ctx.quadraticCurveTo(a-15, b+95, a-10, b+75);
+            // ctx.quadraticCurveTo(a+50, b+75, a+50, b+37);
+            // ctx.quadraticCurveTo(a+50, b, a, b);
+            // ctx.stroke();
+
         }
 
-        loadImages(["img/womanexpression2.png", "img/manexpression.png","img/bed.jpg","img/living.jpg"])
+
+
+        drawBubble(ctxMain)
     </script>
 
 
