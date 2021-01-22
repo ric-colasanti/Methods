@@ -1,0 +1,24 @@
+.path-jumbo{
+    background-color: aqua;
+    background-image: url("background.jpeg");
+    background-size: cover;
+    color:aliceblue;
+    border-radius: 0px;
+}
+
+.path-navbar{
+    background-color: olive !important;
+    font-family: 'Architects Daughter', cursive;
+}
+
+.path-main h1, h2, h3, h4{
+    font-family: 'Architects Daughter', cursive;
+}
+.path-main h2{
+    color:coral;
+}
+
+.path-main p{
+    color:mediumblue;
+}
+ 

@@ -21,31 +21,7 @@
         <div class="col-sm-4 bgDemo">
             <svg id="svg01" width="300" height="300" style="border-style: solid;"></svg>
         </div>
-        <div class="col-sm-8 bgTextBox">
-            <h4>Add polygon </h4>
-            <div id="boxsize">
-            </div>
-            <pre>
-            <code>
-var frame = document.getElementById("svg01");
-var bubble = SVG("g")
-var poly = SVG("polygon")
-poly.setAttribute("fill","none")
-poly.setAttribute("stroke","black")
-array = [[0,0],[0,60],[60,60],[60,0]]
-for(value of array){
-    point = frame.createSVGPoint();
-    point.x = value[0];
-    point.y = value[1]
-    poly.points.appendItem(point);
-}
-bubble.appendChild(poly)
-bubble.setAttribute("transform", "translate(" + 20 + "," + 20 + ")");
-frame.appendChild(bubble)
-
-            </code>
-        </pre>
-        </div>
+        
     </div>
 
     <div id="tooltip" display="none" style="position: absolute; display: none;"></div>
@@ -102,13 +78,16 @@ frame.appendChild(bubble)
         }
     }
     var frame = document.getElementById("svg01");
-        
+    var size = 65
+    var scale = 10
+    var grid =[]
     function section1() {
         point = frame.createSVGPoint();
         var bubble = SVG("g")
 
-        for (y = 0; y < 40; y++) {
-            for (x = 0; x < 40; x++) {
+        for (y = 0; y < 65; y++) {
+            grid.push([])
+            for (x = 0; x < 65; x++) {
                 let cell = new SVGCell("x:"+x+" y:"+y, 10)
                 r = Math.floor(Math.random() * 255)
                 g = Math.floor(Math.random() * 255)
@@ -119,9 +98,10 @@ frame.appendChild(bubble)
                     showTooltip(e, cell.id)
                 });
                 bubble.appendChild(cell.svg)
+                grid[y].push(cell)
             }
         }
-        bubble.setAttribute("transform","scale("+300/410+","+300/410+")")
+        bubble.setAttribute("transform","scale("+frame.getAttribute("width")/(size*scale)+","+frame.getAttribute("width")/(size*scale)+")")
         frame.appendChild(bubble)
 
     }

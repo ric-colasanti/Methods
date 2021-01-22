@@ -33,7 +33,7 @@
                 <p>First character</p>
                 <canvas id="canvasheadchoice0" style="border-style: solid; border-width: 1px;"></canvas>
                 <canvas id="canvaschoice0" style="border-style: solid; border-width: 1px;"></canvas>
-                <textarea class="form-control" rows="5" id="textcharacter0"></textarea>
+                <textarea class="form-control" rows="5" id="textcharacter0"  oninput="drawFace();"></textarea>
 
                 <p>Second character</p>
                 <canvas id="canvasheadchoice1" style="border-style: solid; border-width: 1px;"></canvas>
@@ -98,8 +98,7 @@
         canvasBackground.setAttribute("height", size)
         let ctxBackgroundChoice = canvasBackground.getContext('2d');
 
-
-
+        
 
         function getClickPosition0(e) {
             var xPosition = e.offsetX;
