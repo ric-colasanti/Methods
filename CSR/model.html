@@ -19,31 +19,22 @@
 
 
 
-    <h1>CSR CA</h1>
-    <p></p>
+   
+    <div class="container">
+        <h1>CSR CA</h1>
+        <p></p>
+    
 
-
-    <div class="container-fluid">
-
-
-        <div class="row">
-
-            <div class="col-sm-8 ">
-                <svg id="svg01" width="300" height="300" style="border-style: solid;"></svg>
-            </div>
-            <div class="col-sm-4 ">
-                <label id = "roughnessLabel" for="roughness" class="form-label">Roughness 0.0 </label><br>
-                <input type="range" onchange="roughnessRange()" class="form-range" min="-10" max="10" id="roughness">
-                <br>
-                <button type="button" class="btn btn-success" onclick="run()">Run</button>
-            </div>
-
-
-        </div>
-
-        <div id="tooltip" display="none" style="position: absolute; display: none;"></div>
-
+        <svg id="svg01" width="600" height="600" ></svg><br><br> <label id="roughnessLabel"
+            for="roughness" class="form-label">Roughness 0.0 </label><br>
+        <input type="range" onchange="roughnessRange()" class="form-range" min="-10" max="10" id="roughness">
+        <br>
+        <button type="button" class="btn btn-success" onclick="set()">Set</button>
     </div>
+
+    <div id="tooltip" display="none" style="position: absolute; display: none;"></div>
+
+
 
 
 
@@ -148,6 +139,7 @@
                 grid.push([])
                 for (x = 0; x < 65; x++) {
                     let cell = new SVGCell("x:" + x + " y:" + y, 10)
+                    cell.setColor("rgba(" + 200 + "," + 200 + "," + 200 + ", 0.5)")
                     cell.move(x, y)
                     cell.svg.addEventListener('mouseover', function (e) {
                         showTooltip(e, cell.id)
@@ -161,8 +153,8 @@
             frame.appendChild(bubble)
         }
 
-        function run() {
-            roughness = document.getElementById("roughness").value/10
+        function set() {
+            roughness = document.getElementById("roughness").value / 10
             var terrain = landscape(roughness);
             for (y = 0; y < 65; y++) {
                 grid.push([])
@@ -178,9 +170,9 @@
             }
         }
 
-        function roughnessRange(){
-            roughness = document.getElementById("roughness").value/10
-            document.getElementById("roughnessLabel").innerHTML = "Roughness: "+ roughness           
+        function roughnessRange() {
+            roughness = document.getElementById("roughness").value / 10
+            document.getElementById("roughnessLabel").innerHTML = "Roughness: " + roughness
         }
 
         var frame = document.getElementById("svg01");
