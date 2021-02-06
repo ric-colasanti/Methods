@@ -135,9 +135,9 @@
             point = frame.createSVGPoint();
             var bubble = SVG("g")
 
-            for (y = 0; y < 65; y++) {
+            for (y = 0; y < 64; y++) {
                 grid.push([])
-                for (x = 0; x < 65; x++) {
+                for (x = 0; x < 64; x++) {
                     let cell = new SVGCell("x:" + x + " y:" + y, 10)
                     cell.setColor("rgba(" + 200 + "," + 200 + "," + 200 + ", 0.5)")
                     cell.move(x, y)
@@ -156,9 +156,9 @@
         function set() {
             roughness = document.getElementById("roughness").value / 10
             var terrain = landscape(roughness);
-            for (y = 0; y < 65; y++) {
+            for (y = 0; y < 64; y++) {
                 grid.push([])
-                for (x = 0; x < 65; x++) {
+                for (x = 0; x < 64; x++) {
                     let cell = grid[x][y];
                     if (terrain[x][y] > 0) {
                         cell.setColor("rgba(" + 255 + "," + 0 + "," + 0 + ", 0.5)")
