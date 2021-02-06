@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <style>
+        #tooltip {
+            background: cornsilk;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 5px;
+        }
+    </style>
+
+
+
+
+    <div class="container">
+        <h1>CSR CA</h1>
+        <p></p>
+
+
+        <svg id="svg01" width="600" height="600"></svg><br><br> <label id="roughnessLabel" for="roughness"
+            class="form-label">Roughness 0.0 </label><br>
+        <input type="range" oninput="roughnessRange()" class="form-range" min="-10" max="10" id="roughness">
+        <br>
+        <button type="button" class="btn btn-success" onclick="set()">Set</button>
+    </div>
+
+    <div id="tooltip" display="none" style="position: absolute; display: none;"></div>
+
+
+
+
+
+
+
+
+    <script>
+        function landscape(roughness) {
+            levels = 7
+            size = 2 ** (levels - 1)
+            height = new Array(size + 1);
+
+
+            for (var i = 0; i < height.length; i++) {
+                height[i] = new Array(size + 1);
+            }
+
+
+            for (lev = 0; lev < levels; lev++) {
+                step = Math.floor(size / 2 ** lev)
+
+                for (y = 0; y < size + 1; y += step) {
+                    jumpover = 0
+                    if (lev > 0) {
+                        jumpover = 1 - Math.floor(y / step) % 2
+                    }
+                    start = step * jumpover
+                    stop = size + 1
+                    stepsize = step * (1 + jumpover)
+                    for (x = start; x < stop; x += stepsize) {
+                        pointer = 3
+                        if (lev > 0) {
+                            pointer = 1 - Math.floor(x / step) % 2 + 2 * jumpover
+                        }
+                        yref = step * (1 - Math.floor(pointer / 2))
+                        xref = step * (1 - pointer % 2)
+                        corner1 = height[y - yref][x - xref]
+                        corner2 = height[y + yref][x + xref]
+                        average = (corner1 + corner2) / 2.0
+                        variation = (Math.pow(step, roughness)) * (Math.random() - 0.5)
+                        height[y][x] = 0
+                        if (lev > 0) {
+                            height[y][x] = average + variation
+                        }
+                    }
+                }
+            }
+            return height
+        }
+
+
+
+
+
+
+
+
+        class Counter {
+            constructor() {
+                this.tnow = 0
+                this.tnext = 1
+            }
+            update() {
+                this.tnow = (this.tnow + 1) % 2
+                this.tnext = (this.tnext + 1) % 2
+            }
+        }
+
+        class Cell {
+            constructor(this, x, y, counter) {
+                this.neighbors = []
+                this.xPos = x
+                this.yPos = y
+                this.resource = 0
+                this.disturbance = 0
+                this.occupants = [null, null]
+                this.counter = counter
+            }
+            getResource(flex) {
+                n = this.resource + flex
+                if (n < 0) {
+                    return 0
+                }
+                if (n > 1.0) {
+                    return 1.0
+                }
+                return n
+            }
+            getDisturbance(flex) {
+                n = this.disturbance + flex
+                if (n < 0) {
+                    return 0
+                }
+                if (n > 1.0) {
+                    return 1.0
+                }
+                return n
+            }
+
+            addNeighbor(cell) {
+                this.neighbors.append(cell)
+            }
+
+            occupant() {
+                return this.occupants[this.counter.tnow]
+            }
+
+
+            die(){
+                this.occupants[this.counter.tnext] = null
+                this.occupants[this.counter.tnow] = null
+            }
+            setOccupant( occupant){
+                this.occupants[this.counter.tnext] = occupant
+            }
+
+            addOccupant(occupant){
+                this.occupants[this.counter.tnow] = occupant
+                this.occupants[this.counter.tnext] = occupant
+            }
+
+           empty(){
+                if (this.occupants[this.counter.tnext] == None){
+                return true
+            }
+            return false
+           }
+
+            occupied(){
+                if(this.occupants[this.counter.tnow] == None){
+                return false
+                }
+            return true
+            }
+
+
+            count(){
+                if( this.occupant == None){
+                return
+                }
+                this.occupant.count += 1
+            }
+
+
+            maintain(sflex, dflex){
+                if (this.occupant() == None){
+                    this.die()
+                    return 0
+                }
+            
+            if (Math.random() < this.getDisturbance(dflex)){
+                this.die()
+                return 0
+            }
+            if ((Math.random() > this.getResource(sflex)) &&(Math.random() > this.occupant.tissue)){
+                this.die()
+            return 0
+            }
+            this.setOccupant(this.occupant())
+            return 1
+        }
+
+
+
+            growth(sflex, seedrain, plantTypes){
+                if(this.getResource(sflex) > Math.random()){
+                rnd.shuffle(this.neighbours)
+            for i in range(3):
+                if (this.neighbours[i].occupied):
+                    if (rnd.random() < this.neighbours[i].occupant.grow):
+                        this.occupant = this.neighbours[i].occupant
+            break;
+
+            if this.empty:
+                rnd.shuffle(this.neighbours)
+            for i in range(8):
+                if (this.neighbours[i].occupied):
+                    if (rnd.random() < this.neighbours[i].occupant.seed):
+                        this.occupant = this.neighbours[i].occupant
+            break;
+            if this.empty:
+                if rnd.random() < seedrain:
+                this.occupant = plantTypes[rnd.randint(1, len(plantTypes) - 1)]
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+            function showTooltip(evt, text) {
+                let tooltip = document.getElementById("tooltip");
+                tooltip.innerHTML = text;
+                tooltip.style.display = "block";
+                tooltip.style.left = evt.pageX + 10 + 'px';
+                tooltip.style.top = evt.pageY + 10 + 'px';
+            }
+
+            function hideTooltip() {
+                var tooltip = document.getElementById("tooltip");
+                tooltip.style.display = "none";
+            }
+
+            function SVG(elementName) {
+                return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+            }
+
+            class SVGCell {
+                constructor(id, size) {
+                    this.xPos = 0;
+                    this.yPos = 0;
+                    this.svg = SVG("rect")
+                    this.size = size
+                    this.id = id
+                    this.svg.setAttribute("x", this.xPos)
+                    this.svg.setAttribute("y", this.yPos)
+                    this.svg.setAttribute("width", this.size)
+                    this.svg.setAttribute("height", this.size)
+                    this.svg.addEventListener('mouseout', function (e) {
+                        //e.currentTarget.setAttribute('fill', '#ff00cc');
+                        hideTooltip()
+                    });
+                }
+
+                setColor(color) {
+                    this.svg.setAttribute("fill", color)
+                }
+                move(x, y) {
+                    this.xPos = x
+                    this.yPos = y
+                    this.svg.setAttribute("transform", "translate(" + x * this.size + "," + y * this.size +
+                        ")");
+                }
+            }
+
+
+
+            function init() {
+                point = frame.createSVGPoint();
+                var bubble = SVG("g")
+
+                for (y = 0; y < 64; y++) {
+                    grid.push([])
+                    for (x = 0; x < 64; x++) {
+                        let cell = new SVGCell("x:" + x + " y:" + y, 10)
+                        cell.setColor("rgba(" + 200 + "," + 200 + "," + 200 + ", 0.5)")
+                        cell.move(x, y)
+                        cell.svg.addEventListener('mouseover', function (e) {
+                            showTooltip(e, cell.id)
+                        });
+                        bubble.appendChild(cell.svg)
+                        grid[y].push(cell)
+                    }
+                }
+                bubble.setAttribute("transform", "scale(" + frame.getAttribute("width") / (size * scale) + "," +
+                    frame
+                    .getAttribute("width") / (size * scale) + ")")
+                frame.appendChild(bubble)
+            }
+
+            function set() {
+                roughness = document.getElementById("roughness").value / 10
+                var terrain = landscape(roughness);
+                for (y = 0; y < 64; y++) {
+                    grid.push([])
+                    for (x = 0; x < 64; x++) {
+                        let cell = grid[x][y];
+                        if (terrain[x][y] > 0) {
+                            cell.setColor("rgba(" + 255 + "," + 0 + "," + 0 + ", 0.5)")
+                        } else {
+                            cell.setColor("rgba(" + 0 + "," + 0 + "," + 255 + ", 0.5)")
+                        }
+
+                    }
+                }
+            }
+
+            function roughnessRange() {
+                roughness = document.getElementById("roughness").value / 10
+                document.getElementById("roughnessLabel").innerHTML = "Roughness: " + roughness
+            }
+
+            var frame = document.getElementById("svg01");
+            var size = 65
+            var scale = 10
+            var grid = []
+            init()
+    </script>
+</body>
+
+</html>

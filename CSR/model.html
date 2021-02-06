@@ -19,15 +19,15 @@
 
 
 
-   
+
     <div class="container">
         <h1>CSR CA</h1>
         <p></p>
-    
 
-        <svg id="svg01" width="600" height="600" ></svg><br><br> <label id="roughnessLabel"
-            for="roughness" class="form-label">Roughness 0.0 </label><br>
-        <input type="range"  oninput="roughnessRange()" class="form-range" min="-10" max="10" id="roughness">
+
+        <svg id="svg01" width="600" height="600"></svg><br><br> <label id="roughnessLabel" for="roughness"
+            class="form-label">Roughness 0.0 </label><br>
+        <input type="range" oninput="roughnessRange()" class="form-range" min="-10" max="10" id="roughness">
         <br>
         <button type="button" class="btn btn-success" onclick="set()">Set</button>
     </div>
@@ -82,8 +82,29 @@
                     }
                 }
             }
+            count = 0
+            for (y = 0; y < size; y++) {
+                for (x = 0; x < size; x++) {
+                    count += height[x][y]
+                }
+            }
+            m = count / (size * size)
+            for (y = 0; y < size; y++) {
+                for (x = 0; x < size; x++) {
+                    if (height[x][y] < m) {
+                        height[x][y] = -1
+                    } else {
+                        height[x][y] = 1
+                    }
+                }
+            }
             return height
         }
+
+
+
+
+
 
         function showTooltip(evt, text) {
             let tooltip = document.getElementById("tooltip");
