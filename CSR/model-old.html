@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <style>
+        #tooltip {
+            background: cornsilk;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 5px;
+        }
+    </style>
+
+
+
+
+    <div class="container">
+        <h1>CSR CA</h1>
+        <p></p>
+
+
+        <svg id="svg01" width="600" height="600"></svg><br><br> <label id="roughnessLabel" for="roughness"
+            class="form-label">Roughness 0.0 </label><br>
+        <input type="range" oninput="roughnessRange()" class="form-range" min="-10" max="10" id="roughness">
+        <br>
+        <button type="button" class="btn btn-success" onclick="set()">Set</button>
+    </div>
+
+    <div id="tooltip" display="none" style="position: absolute; display: none;"></div>
+
+
+
+
+
+
+
+
+    <script>
+        function randomInt(val) {
+            return Math.floor(Math.random() * val)
+        }
+
+        function randomList(len) {
+            let seed = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+            let myArray = [];
+            let i = 0
+            for (i = 0; i < len; i++) {
+                myArray.push(seed.splice(randomInt(seed.length), 1));
+            }
+            return myArray
+        }
+
+        function landscape(roughness) {
+            levels = 7
+            size = 2 ** (levels - 1)
+            height = new Array(size + 1);
+
+
+            for (var i = 0; i < height.length; i++) {
+                height[i] = new Array(size + 1);
+            }
+
+
+            for (lev = 0; lev < levels; lev++) {
+                step = Math.floor(size / 2 ** lev)
+
+                for (y = 0; y < size + 1; y += step) {
+                    jumpOver = 0
+                    if (lev > 0) {
+                        jumpOver = 1 - Math.floor(y / step) % 2
+                    }
+                    start = step * jumpOver
+                    stop = size + 1
+                    stepSize = step * (1 + jumpOver)
+                    for (x = start; x < stop; x += stepSize) {
+                        pointer = 3
+                        if (lev > 0) {
+                            pointer = 1 - Math.floor(x / step) % 2 + 2 * jumpOver
+                        }
+                        yref = step * (1 - Math.floor(pointer / 2))
+                        xref = step * (1 - pointer % 2)
+                        corner1 = height[y - yref][x - xref]
+                        corner2 = height[y + yref][x + xref]
+                        average = (corner1 + corner2) / 2.0
+                        variation = (Math.pow(step, roughness)) * (Math.random() - 0.5)
+                        height[y][x] = 0
+                        if (lev > 0) {
+                            height[y][x] = average + variation
+                        }
+                    }
+                }
+            }
+            return height
+        }
+
+
+
+        class FunctionalType {
+            constructor(grow, tissue, seed) {
+                this.grow = grow
+                this.tissue = tissue
+                this.seed = seed
+                this.count = 0
+            }
+        }
+
+
+
+        class Counter {
+            constructor() {
+                this.tnow = 0
+                this.tnext = 1
+            }
+            update(){
+                this.tnow = (this.tnow + 1) % 2
+                this.tnext = (this.tnext + 1) % 2
+            }
+        }
+
+        class Cell {
+            constructor(x, y, counter) {
+                this.neighbors = []
+                this.xPos = x
+                this.yPos = y
+                this.resource = 0
+                this.disturbance = 0
+                this.occupants = [null, null]
+                this.counter = counter
+            }
+            getResource(flex) {
+                n = this.resource + flex
+                if (n < 0) {
+                    return 0
+                }
+                if (n > 1.0) {
+                    return 1.0
+                }
+                return n
+            }
+            getDisturbance(flex) {
+                n = this.disturbance + flex
+                if (n < 0) {
+                    return 0
+                }
+                if (n > 1.0) {
+                    return 1.0
+                }
+                return n
+            }
+
+            addNeighbor(cell) {
+                this.neighbors.append(cell)
+            }
+
+            occupant() {
+                return this.occupants[this.counter.tnow]
+            }
+
+
+            die() {
+                this.occupants[this.counter.tnext] = null
+                this.occupants[this.counter.tnow] = null
+            }
+            setOccupant(occupant) {
+                this.occupants[this.counter.tnext] = occupant
+            }
+
+            addOccupant(occupant) {
+                this.occupants[this.counter.tnow] = occupant
+                this.occupants[this.counter.tnext] = occupant
+            }
+
+            empty() {
+                if (this.occupants[this.counter.tnext] == None) {
+                    return true
+                }
+                return false
+            }
+
+            occupied() {
+                if (this.occupants[this.counter.tnow] == None) {
+                    return false
+                }
+                return true
+            }
+
+
+            count() {
+                if (this.occupant == None) {
+                    return
+                }
+                this.occupant.count += 1
+            }
+
+
+            maintain(sflex, dflex) {
+                if (this.occupant() == None) {
+                    this.die()
+                    return 0
+                }
+
+                if (Math.random() < this.getDisturbance(dflex)) {
+                    this.die()
+                    return 0
+                }
+                if ((Math.random() > this.getResource(sflex)) && (Math.random() > this.occupant.tissue)) {
+                    this.die()
+                    return 0
+                }
+                this.setOccupant(this.occupant())
+                return 1
+            }
+            growth(sflex, seedRain, plantTypes) {
+                if (this.getResource(sflex) > Math.random()) {
+                    let rndList = randomList(this.neighbors.length)
+                    for (j = 0; j < 3; j++) {
+                        i = rndList[j]
+                        if (this.neighbors[i].occupied()) {
+                            if (Math.random() < this.neighbors[i].occupant.grow()) {
+                                this.occupant = this.neighbors[i].occupant
+                                break;
+                            }
+                        }
+                    }
+
+
+
+                    if (this.empty()) {
+                        let rndList = randomList(this.neighbors.length)
+                        for (j = 0; j < 8; j++) {
+                            i = rndList[j]
+                            if (this.neighbors[i].occupied()) {
+                                if (Math.random() < this.neighbors[i].occupant.seed()) {
+                                    this.occupant = this.neighbors[i].occupant
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (this.empty()) {
+                        if (Math.random() < seedRain) {
+                            this.occupant = plantTypes[randomInt(plantTypes.length)]
+                        }
+                    }
+                }
+            }
+        }
+
+        class experement{
+            constructor( plantTypes,size){        
+                this.cells = []
+                this.size = size
+                this.fTypes = plantTypes
+                this.id=0
+            }
+            setUp(resource, disturbance, fracd, spaceFlex,seedRain,species ){
+                this.cells = []
+                this.counter = Counter()
+                this.seedRain = seedRain
+                this.species = species
+        
+        for i in range(self.size*self.size):
+            self.cells.append(Cell(int(i/self.size),(i%self.size),self.counter))
+        for cell in self.cells:
+            for  y in range(cell.yPos-1,cell.yPos+2):
+                for  x in range(cell.xPos-1,cell.xPos+2):
+                    x=self.bounds(x)
+                    y=self.bounds(y)
+                    pos = y*self.size+x
+                    cell.addNeighbour(self.cells[pos])
+        if spaceFlex !=0:
+            self.frac = landscape(fracd)
+            if rnd.random()<0.5:
+                ares = -spaceFlex
+                bres = spaceFlex
+            else:
+                ares = spaceFlex
+                bres = -spaceFlex
+            if rnd.random()<0.5:
+                adist = -spaceFlex
+                bdist = spaceFlex
+            else:
+                adist = spaceFlex
+                bdist = -spaceFlex            
+            
+            for cell in self.cells:
+                x = cell.xPos
+                y = cell.yPos
+                if self.frac[x][y]>0:
+                    cell.resource = resource + ares
+                    cell.disturbance = disturbance +adist
+                else:
+                    cell.resource = resource +bres
+                    cell.disturbance = disturbance + bdist 
+                          
+        else:
+            for cell in self.cells:
+                cell.resource = resource
+                cell.disturbance = disturbance 
+            
+        cellOrder = [i for i in range(self.size*self.size)] 
+        rnd.shuffle(cellOrder)
+        self.types=[]
+        for i in range(1,len(self.ftypes[0])):
+            self.types.append(FunctionalType(self.ftypes[0][i],self.ftypes[1][i],self.ftypes[2][i]))
+
+
+        chunk = int(len(cellOrder)/len(self.types))
+
+        count = 0
+        for j in range(len(self.types)):
+            for i in range(chunk):
+                p= cellOrder[count]
+                self.cells[p].addOccupant(self.types[j])
+                count+=1
+)
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        function showTooltip(evt, text) {
+            let tooltip = document.getElementById("tooltip");
+            tooltip.innerHTML = text;
+            tooltip.style.display = "block";
+            tooltip.style.left = evt.pageX + 10 + 'px';
+            tooltip.style.top = evt.pageY + 10 + 'px';
+        }
+
+        function hideTooltip() {
+            var tooltip = document.getElementById("tooltip");
+            tooltip.style.display = "none";
+        }
+
+        function SVG(elementName) {
+            return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+        }
+
+        class SVGCell {
+            constructor(id, size) {
+                this.xPos = 0;
+                this.yPos = 0;
+                this.svg = SVG("rect")
+                this.size = size
+                this.id = id
+                this.svg.setAttribute("x", this.xPos)
+                this.svg.setAttribute("y", this.yPos)
+                this.svg.setAttribute("width", this.size)
+                this.svg.setAttribute("height", this.size)
+                this.svg.addEventListener('mouseout', function (e) {
+                    //e.currentTarget.setAttribute('fill', '#ff00cc');
+                    hideTooltip()
+                });
+            }
+
+            setColor(color) {
+                this.svg.setAttribute("fill", color)
+            }
+            move(x, y) {
+                this.xPos = x
+                this.yPos = y
+                this.svg.setAttribute("transform", "translate(" + x * this.size + "," + y * this
+                    .size +
+                    ")");
+            }
+        }
+
+
+
+        function init() {
+            point = frame.createSVGPoint();
+            var bubble = SVG("g")
+
+            for (y = 0; y < 64; y++) {
+                grid.push([])
+                for (x = 0; x < 64; x++) {
+                    let cell = new SVGCell("x:" + x + " y:" + y, 10)
+                    cell.setColor("rgba(" + 200 + "," + 200 + "," + 200 + ", 0.5)")
+                    cell.move(x, y)
+                    cell.svg.addEventListener('mouseover', function (e) {
+                        showTooltip(e, cell.id)
+                    });
+                    bubble.appendChild(cell.svg)
+                    grid[y].push(cell)
+                }
+            }
+            bubble.setAttribute("transform", "scale(" + frame.getAttribute("width") / (size *
+                    scale) + "," +
+                frame
+                .getAttribute("width") / (size * scale) + ")")
+            frame.appendChild(bubble)
+        }
+
+        function set() {
+            roughness = document.getElementById("roughness").value / 10
+            var terrain = landscape(roughness);
+            for (y = 0; y < 64; y++) {
+                grid.push([])
+                for (x = 0; x < 64; x++) {
+                    let cell = grid[x][y];
+                    if (terrain[x][y] > 0) {
+                        cell.setColor("rgba(" + 255 + "," + 0 + "," + 0 + ", 0.5)")
+                    } else {
+                        cell.setColor("rgba(" + 0 + "," + 0 + "," + 255 + ", 0.5)")
+                    }
+
+                }
+            }
+        }
+
+        function roughnessRange() {
+            roughness = document.getElementById("roughness").value / 10
+            document.getElementById("roughnessLabel").innerHTML = "Roughness: " + roughness
+        }
+
+        var frame = document.getElementById("svg01");
+        var size = 65
+        var scale = 10
+        var grid = []
+        init()
+    </script>
+</body>
+
+</html>
