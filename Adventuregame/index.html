@@ -22,36 +22,70 @@
         .highlight pre {
             white-space: pre-wrap;
         }
-        .nav-item{
+
+        .nav-item {
             cursor: pointer;
         }
+        .terminal{
+            color: greenyellow   !important;
+            background-color: rgb(48, 48, 48) !important;
+        }
+ 
     </style>
 </head>
 
-<body ng-app="rlcApp">
+<body>
 
-<nav class="navbar navbar-expand-md bgTextBox navbar-light">
-    <!-- Brand -->
-    <a class="navbar-brand" href="#/!">Adventure game </a>
+    <nav class="navbar navbar-expand-md bgTextBox navbar-light">
+        <!-- Brand -->
+        <a class="navbar-brand" href="#/!">Adventure game </a>
 
-    <!-- Toggler/collapsibe Button -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+        <!-- Toggler/collapsibe Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <!-- Navbar links -->
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav">
-        </ul>
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+            </ul>
+        </div>
+    </nav>
+    <br>
+    <div class="container">
+            <h2>Adventure game</h2>
+
+            <p>This is a recreation of "The little book of adventure game programming in JAVA" by Huw Collingbourne, but written in Javascript</p>
+            <h3>Parser class</h3> 
+            <p>For our text adventure game to interact with the outside world we kneed to pare text commands</p>   
+        
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="">
+                  </label>
+                  <textarea class="form-control terminal" name="output" id="output" rows="20" onkeyup="keypress(event,this)" disabled></textarea>
+                  <textarea class="form-control terminal" name="command" id="command" rows="3" onkeyup="keypress(event,this,output = 'output')"></textarea>
+                </div>
+            </div>
+
+
+            <div class="col-sm-8 bgTextBox">
+                <h4>Parser Class</h4>
+                <pre>
+                <code>
+var positionInfo = frame.getBoundingClientRect();
+
+                </code>
+            </pre>
+            </div>
+        </div>
     </div>
-</nav>
-<br>
-<div class="container">
-    
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
 
 </body>
 
