@@ -25,11 +25,13 @@
         <p></p>
 
 
-        <svg id="svg01" width="600" height="600"></svg><br><br> <label id="roughnessLabel" for="roughness"
+        <svg id="svg01" width="300" height="300"></svg><br><br> <label id="roughnessLabel" for="roughness"
             class="form-label">Roughness 0.0 </label><br>
         <input type="range" oninput="roughnessRange()" class="form-range" min="-10" max="10" id="roughness">
         <br>
         <button type="button" class="btn btn-success" onclick="set()">Set</button>
+        <br><br>
+        <button type="button" class="btn btn-success" onclick="iterate()">Step</button>
     </div>
 
     <div id="tooltip" display="none" style="position: absolute; display: none;"></div>
@@ -82,252 +84,243 @@
                     }
                 }
             }
+            count = 0
+            for (y = 0; y < size; y++) {
+                for (x = 0; x < size; x++) {
+                    count += height[x][y]
+                }
+            }
+            m = count / (size * size)
+            for (y = 0; y < size; y++) {
+                for (x = 0; x < size; x++) {
+                    if (height[x][y] < m) {
+                        height[x][y] = -1
+                    } else {
+                        height[x][y] = 1
+                    }
+                }
+            }
             return height
         }
 
 
-
-
-
-
-
-
-        class Counter {
-            constructor() {
-                this.tnow = 0
-                this.tnext = 1
+        class PlantType {
+            constructor(color) {
+                this.color = color;
             }
-            update() {
-                this.tnow = (this.tnow + 1) % 2
-                this.tnext = (this.tnext + 1) % 2
+        }
+
+        class Plant {
+            constructor(plantType, home) {
+                this.plantType = plantType;
+                this.home = home;
             }
+
         }
 
         class Cell {
-            constructor(this, x, y, counter) {
-                this.neighbors = []
+            static tNow = 0;
+            static tNext = 1;
+
+
+            static update(){
+                this.tNext =(this.tNext + 1) % 2;
+                this.tNow = (this.tNow + 1) % 2;
+            }
+            
+            constructor(xPos, yPos) {
+                this.xPos = xPos;
+                this.yPos = yPos;
+                this.occupant = [null, null]
+                this.neighbors = [];
+            }
+            addNeighbor(neighbor) {
+                this.neighbors.push(neighbor);
+            }
+            addOccupant(plant) {
+                this.occupant[this.tNext] = neighbor
+            }
+            grow() {
+                let cPlant = this.occupant[this.tNow] 
+                if ( cPlant!= null) {
+                    for (let i = 0; i < this.neighbors.length; i++) {
+                        let nPlant = this.neighbors[i].occupant[this.tNext]
+                        if ( nPlant== null) {
+                            tnPlant = new Plant(cPlant.plantType)
+                        }
+                    }
+                }
+            }
+            getColor(){
+                if(this.occupant[this.tNow]==null){
+                    return null;
+                }
+                return this.occupant[this.tNow].plantType.color;
+            }
+        }
+
+        class Experiment {
+            constructor(size) {
+                this.size = size;
+                this.grid = []
+                for (let y = 0; y < this.size; y++) {
+                    this.grid.push([]);
+                    for (let x = 0; x < this.size; x++) {
+                        this.grid[y].push(new Cell(x, y));
+                    }
+                }
+                
+                for (let y = 0; y < this.size; y++) {
+                    for (let x = 0; x < this.size; x++) {
+                        for (let yy = y - 1; yy <= y + 1; yy++) {
+                            for (let xx = x - 1; xx <= x + 1; xx++) {
+                                let nx = this.bounds(xx);
+                                let ny = this.bounds(yy);
+                                this.grid[x][y].addNeighbor(this.grid[nx][ny]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            init() {
+                let aPlantType = new PlantType("#00ff00");
+                this.grid[this.size/2][this.size/2].occupant[Cell.tNow]=new Plant(aPlantType)
+            }
+            iterate(){
+                for (let y = 0; y < this.size; y++) {
+                    for (let x = 0; x < this.size; x++) {
+                        this.grid[x][y].grow();
+                    }
+                }    
+                Cell.update();            
+            }
+            getColor(x,y){
+                return this.grid[x][y].getColor();
+            }
+            bounds(n) {
+                if (n >= this.size) {
+                    return 0;
+                }
+                if (n < 0) {
+                    return this.size-1;
+                }
+                return n
+            }
+        }
+
+        function showTooltip(evt, text) {
+            let tooltip = document.getElementById("tooltip");
+            tooltip.innerHTML = text;
+            tooltip.style.display = "block";
+            tooltip.style.left = evt.pageX + 10 + 'px';
+            tooltip.style.top = evt.pageY + 10 + 'px';
+        }
+
+        function hideTooltip() {
+            var tooltip = document.getElementById("tooltip");
+            tooltip.style.display = "none";
+        }
+
+        function SVG(elementName) {
+            return document.createElementNS('http://www.w3.org/2000/svg', elementName);
+        }
+
+        class SVGCell {
+            constructor(id, size) {
+                this.xPos = 0;
+                this.yPos = 0;
+                this.svg = SVG("rect")
+                this.size = size
+                this.id = id
+                this.svg.setAttribute("x", this.xPos)
+                this.svg.setAttribute("y", this.yPos)
+                this.svg.setAttribute("width", this.size)
+                this.svg.setAttribute("height", this.size)
+                this.svg.addEventListener('mouseout', function (e) {
+                    //e.currentTarget.setAttribute('fill', '#ff00cc');
+                    hideTooltip()
+                });
+            }
+
+            setColor(color) {
+                this.svg.setAttribute("fill", color)
+            }
+            move(x, y) {
                 this.xPos = x
                 this.yPos = y
-                this.resource = 0
-                this.disturbance = 0
-                this.occupants = [null, null]
-                this.counter = counter
+                this.svg.setAttribute("transform", "translate(" + x * this.size + "," + y * this.size + ")");
             }
-            getResource(flex) {
-                n = this.resource + flex
-                if (n < 0) {
-                    return 0
-                }
-                if (n > 1.0) {
-                    return 1.0
-                }
-                return n
-            }
-            getDisturbance(flex) {
-                n = this.disturbance + flex
-                if (n < 0) {
-                    return 0
-                }
-                if (n > 1.0) {
-                    return 1.0
-                }
-                return n
-            }
-
-            addNeighbor(cell) {
-                this.neighbors.append(cell)
-            }
-
-            occupant() {
-                return this.occupants[this.counter.tnow]
-            }
-
-
-            die(){
-                this.occupants[this.counter.tnext] = null
-                this.occupants[this.counter.tnow] = null
-            }
-            setOccupant( occupant){
-                this.occupants[this.counter.tnext] = occupant
-            }
-
-            addOccupant(occupant){
-                this.occupants[this.counter.tnow] = occupant
-                this.occupants[this.counter.tnext] = occupant
-            }
-
-           empty(){
-                if (this.occupants[this.counter.tnext] == None){
-                return true
-            }
-            return false
-           }
-
-            occupied(){
-                if(this.occupants[this.counter.tnow] == None){
-                return false
-                }
-            return true
-            }
-
-
-            count(){
-                if( this.occupant == None){
-                return
-                }
-                this.occupant.count += 1
-            }
-
-
-            maintain(sflex, dflex){
-                if (this.occupant() == None){
-                    this.die()
-                    return 0
-                }
-            
-            if (Math.random() < this.getDisturbance(dflex)){
-                this.die()
-                return 0
-            }
-            if ((Math.random() > this.getResource(sflex)) &&(Math.random() > this.occupant.tissue)){
-                this.die()
-            return 0
-            }
-            this.setOccupant(this.occupant())
-            return 1
         }
 
 
-
-            growth(sflex, seedrain, plantTypes){
-                if(this.getResource(sflex) > Math.random()){
-                rnd.shuffle(this.neighbours)
-            for i in range(3):
-                if (this.neighbours[i].occupied):
-                    if (rnd.random() < this.neighbours[i].occupant.grow):
-                        this.occupant = this.neighbours[i].occupant
-            break;
-
-            if this.empty:
-                rnd.shuffle(this.neighbours)
-            for i in range(8):
-                if (this.neighbours[i].occupied):
-                    if (rnd.random() < this.neighbours[i].occupant.seed):
-                        this.occupant = this.neighbours[i].occupant
-            break;
-            if this.empty:
-                if rnd.random() < seedrain:
-                this.occupant = plantTypes[rnd.randint(1, len(plantTypes) - 1)]
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-            function showTooltip(evt, text) {
-                let tooltip = document.getElementById("tooltip");
-                tooltip.innerHTML = text;
-                tooltip.style.display = "block";
-                tooltip.style.left = evt.pageX + 10 + 'px';
-                tooltip.style.top = evt.pageY + 10 + 'px';
-            }
-
-            function hideTooltip() {
-                var tooltip = document.getElementById("tooltip");
-                tooltip.style.display = "none";
-            }
-
-            function SVG(elementName) {
-                return document.createElementNS('http://www.w3.org/2000/svg', elementName);
-            }
-
-            class SVGCell {
-                constructor(id, size) {
-                    this.xPos = 0;
-                    this.yPos = 0;
-                    this.svg = SVG("rect")
-                    this.size = size
-                    this.id = id
-                    this.svg.setAttribute("x", this.xPos)
-                    this.svg.setAttribute("y", this.yPos)
-                    this.svg.setAttribute("width", this.size)
-                    this.svg.setAttribute("height", this.size)
-                    this.svg.addEventListener('mouseout', function (e) {
-                        //e.currentTarget.setAttribute('fill', '#ff00cc');
-                        hideTooltip()
+        var experiment = new Experiment(64)
+        experiment.init()
+        function init() {
+            point = frame.createSVGPoint();
+            var bubble = SVG("g")
+            
+            for (y = 0; y < 64; y++) {
+                grid.push([])
+                for (x = 0; x < 64; x++) {
+                    let cell = new SVGCell("x:" + x + " y:" + y, 10)
+                    cell.setColor("rgba(" + 200 + "," + 200 + "," + 200 + ", 0.5)")
+                    cell.move(x, y)
+                    cell.svg.addEventListener('mouseover', function (e) {
+                        showTooltip(e, cell.id)
                     });
-                }
-
-                setColor(color) {
-                    this.svg.setAttribute("fill", color)
-                }
-                move(x, y) {
-                    this.xPos = x
-                    this.yPos = y
-                    this.svg.setAttribute("transform", "translate(" + x * this.size + "," + y * this.size +
-                        ")");
+                    bubble.appendChild(cell.svg)
+                    grid[y].push(cell)
                 }
             }
+            bubble.setAttribute("transform", "scale(" + frame.getAttribute("width") / (size * scale) + "," + frame
+                .getAttribute("width") / (size * scale) + ")")
+            frame.appendChild(bubble)
+        }
 
-
-
-            function init() {
-                point = frame.createSVGPoint();
-                var bubble = SVG("g")
-
-                for (y = 0; y < 64; y++) {
-                    grid.push([])
-                    for (x = 0; x < 64; x++) {
-                        let cell = new SVGCell("x:" + x + " y:" + y, 10)
-                        cell.setColor("rgba(" + 200 + "," + 200 + "," + 200 + ", 0.5)")
-                        cell.move(x, y)
-                        cell.svg.addEventListener('mouseover', function (e) {
-                            showTooltip(e, cell.id)
-                        });
-                        bubble.appendChild(cell.svg)
-                        grid[y].push(cell)
+        function set() {
+            roughness = document.getElementById("roughness").value / 10
+            var terrain = landscape(roughness);
+            for (y = 0; y < 64; y++) {
+                grid.push([])
+                for (x = 0; x < 64; x++) {
+                    let cell = grid[x][y];
+                    if (terrain[x][y] > 0) {
+                        cell.setColor("rgba(" + 255 + "," + 0 + "," + 0 + ", 0.5)")
+                    } else {
+                        cell.setColor("rgba(" + 0 + "," + 0 + "," + 255 + ", 0.5)")
                     }
+
                 }
-                bubble.setAttribute("transform", "scale(" + frame.getAttribute("width") / (size * scale) + "," +
-                    frame
-                    .getAttribute("width") / (size * scale) + ")")
-                frame.appendChild(bubble)
             }
+        }
 
-            function set() {
-                roughness = document.getElementById("roughness").value / 10
-                var terrain = landscape(roughness);
-                for (y = 0; y < 64; y++) {
-                    grid.push([])
-                    for (x = 0; x < 64; x++) {
-                        let cell = grid[x][y];
-                        if (terrain[x][y] > 0) {
-                            cell.setColor("rgba(" + 255 + "," + 0 + "," + 0 + ", 0.5)")
-                        } else {
-                            cell.setColor("rgba(" + 0 + "," + 0 + "," + 255 + ", 0.5)")
-                        }
 
+        function iterate() {
+            experiment.iterate()
+            for (y = 0; y < 64; y++) {
+                grid.push([])
+                for (x = 0; x < 64; x++) {
+                    let cell = grid[x][y];
+                    col = experiment.getColor(x,y);
+                    if(col!=null){
+                        cell.setColor()
                     }
+                    
                 }
             }
+        }
 
-            function roughnessRange() {
-                roughness = document.getElementById("roughness").value / 10
-                document.getElementById("roughnessLabel").innerHTML = "Roughness: " + roughness
-            }
+        function roughnessRange() {
+            roughness = document.getElementById("roughness").value / 10
+            document.getElementById("roughnessLabel").innerHTML = "Roughness: " + roughness
+        }
 
-            var frame = document.getElementById("svg01");
-            var size = 65
-            var scale = 10
-            var grid = []
-            init()
+        var frame = document.getElementById("svg01");
+        var size = 65
+        var scale = 10
+        var grid = []
+        init()
     </script>
 </body>
 
