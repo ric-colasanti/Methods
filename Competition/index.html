@@ -45,23 +45,9 @@
 
     <div id="head"></div>
     <div class="container">
-        <h2>Adventure game</h2>
-
-        <p>This is a recreation of "The little book of adventure game programming in JAVA" by Huw Collingbourne, but
-            written in Javascript</p>
-        <h3>Parser class</h3>
-        <p>For our text adventure game to interact with the outside world we kneed to parse text commands</p>
-
+        <h2>CA Canvas</h2>
         <div class="row">
             <div class="col-sm-4">
-                <div class="form-group">
-                    <label for="">
-                    </label>
-                    <textarea class="form-control terminal" name="output" id="output" rows="20"
-                        onkeyup="keypress(event,this)" disabled></textarea>
-                    <textarea class="form-control terminal" name="command" id="command" rows="3"
-                        onkeyup="keypress(event,this,output = 'output')"></textarea>
-                </div>
             </div>
 
 
@@ -69,45 +55,6 @@
                 <h4>Parser Class</h4>
                 <pre>
                 <code>
-
-class Parser{
-    constructor(nouns,verbs){
-        this.nouns = nouns;
-        this.verbs = verbs;
-    }
-    parse(input){
-        input = input.replace(/[\n\r]+/g, '').trim();// remove cr
-        let words = input.split(/\ +/) // regex with more than one space
-        let lWords = words.map(w=>{return w.toLowerCase()})
-        if(words.length!=2){
-            return{msg:"must have two words",verb:"",noun:""};
-        }
-        let verb =  this.verbs.indexOf(lWords[0])
-        let noun =  this.nouns.indexOf(lWords[1])
-        if(verb ==-1){
-            return{msg:"not in verbs",verb:lWords[0],noun:lWords[1]};    
-        }
-        if(noun == -1){
-            return{msg:"not in nouns",verb:lWords[0],noun:lWords[1]};    
-        }
-        return{msg:"ok",verb:this.verbs[verb],noun:this.nouns[noun]};
-    }
-}
-
-
-class Game{
-    constructor(){
-        let nouns = ["box","folder","north","south","east","west"]
-        let verbs = ["go","move","take","drop"]
-        this.parser = new Parser(nouns,verbs)
-    }
-    parse(words){
-        let result = this.parser.parse(words);
-        console.log(result);
-    }
-}
-
-var game = new Game();
 
                 </code>
             </pre>

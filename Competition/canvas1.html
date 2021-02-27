@@ -1,68 +1,97 @@
-<h1>Canvas 1</h1>
-<p>Drawing to an offscreen canvas and then copy to main canvas</p>
+<!DOCTYPE html>
+<html lang="en">
+
+<div id="head"></div>
+<title>Adventure game</title>
+<meta charset="utf-8">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/glider.png">
+<link rel="shortcut icon" href="img/glider.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+</style>
+</head>
+
+<body>
+
+    <div id="head"></div>
+    <div class="container">
+        <h2>CA Canvas</h2>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="col-sm-4 bgDemo">
+                    <canvas id="canvas" width="340" height="340" ></canvas>
+                </div>
+            </div>
 
 
-<div class="container-fluid">
+            <div class="col-sm-8 bgTextBox">
+                <h4>CACanvas Class</h4>
+                <pre>
+                <code>
+class CACanvas{
+    constructor(size,cSize){
+        this.size = size;
+        this.cSize = cSize;
+        this.buffer = document.createElement("canvas");
+        this.buffer.width = this.size*this.cSize;
+        this.buffer.height = this.size*this.cSize;
+        this.ctx = this.buffer.getContext("2d");
+    }
 
+    draw(x,y,cellColor){
+        this.ctx.beginPath();
+        this.ctx.rect(x*this.cSize,y*this.cSize,this.cSize,this.cSize)
+        this.ctx.fillStyle = cellColor;
+        this.ctx.fill();  
+    }
 
-    <div class="row">
-        <div class="col-sm-4 bgDemo">
-            <canvas id="canvas" width="340" height="340" style="border-style: solid;"></canvas>
-        </div>
-        <div class="col-sm-8 bgTextBox">
-            <h4>Offscreen canvas</h4>
-            <pre>
-            <code>
-var c = document.getElementById("canvas");
-var hidden_canvas = document.createElement("canvas");
-hidden_canvas.width = 600;
-hidden_canvas.height =600
-var ctx = hidden_canvas.getContext("2d");  
-ctx.beginPath();
-ctx.rect(20, 20, 100, 100);
-ctx.rect(320, 320, 100, 100);
-ctx.stroke();
-ctx.beginPath();
-var r = 50
-ctx.arc(320+r,320+r,r, 0, 2 * Math.PI);
-ctx.fillStyle = "red";
-ctx.fill();
-ctx.stroke();
-var visible_canvas = document.getElementById("canvas");
-var vctx = visible_canvas.getContext("2d");
-vctx.drawImage(hidden_canvas,0,0,ctx.canvas.width,ctx.canvas.height,0,0,vctx.canvas.width, vctx.canvas.height);
-            </code>
-        </pre>
+    update(canvasID){
+        var visible_canvas = document.getElementById(canvasID);
+        var vctx = visible_canvas.getContext("2d");
+        vctx.drawImage(this.buffer, 0, 0, this.ctx.canvas.width, this.ctx.canvas.height, 0, 0, vctx.canvas.width, vctx.canvas.height); 
+    }
+}
+
+                </code>
+            </pre>
+            </div>
         </div>
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/load.js"></script>
 
-</div>
+    <script>
+        var cSize=10
+        var size = 64
 
 
+        var count = 0
+        var caCanvas = new CACanvas(size,cSize)
+        draw = function(){
+            count++;
+        for(var x=0;x<size;x++){
+            for(var y=0; y<size; y++){
+                var r = Math.floor(Math.random() * 255);
+                var g = Math.floor(Math.random() * 255);
+                var b = Math.floor(Math.random() * 255);
+                var col = "rgb(" + r + "," + g + "," + b + ")";
+                caCanvas.draw(x,y,col);
+            }
+        }
+        caCanvas.update("canvas");
+        if(count<100){
+            window.requestAnimationFrame(draw);
+        }
+    }    
+    draw(); 
+    </script>
 
+</body>
 
-
-
-<script>
-    var c = document.getElementById("canvas");
-    var hidden_canvas = document.createElement("canvas");
-    hidden_canvas.width = 600;
-    hidden_canvas.height = 600
-    var ctx = hidden_canvas.getContext("2d");
-    ctx.beginPath();
-    ctx.fillStyle = "red";
-    ctx.rect(20, 20, 100, 100);
-    ctx.rect(320, 320, 100, 100);
-    ctx.stroke();
-    ctx.beginPath();
-    var r = 50
-    ctx.arc(320 + r, 320 + r, r, 0, 2 * Math.PI);
-    ctx.fillStyle = "red";
-    ctx.fill();
-    ctx.stroke();
-    var visible_canvas = document.getElementById("canvas");
-    var vctx = visible_canvas.getContext("2d");
-    vctx.drawImage(hidden_canvas, 0, 0, ctx.canvas.width, ctx.canvas.height, 0, 0, vctx.canvas.width, vctx.canvas
-        .height);
-</script>
+</html>
