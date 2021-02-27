@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<div id="head"></div>
+<title>Adventure game</title>
+<meta charset="utf-8">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/glider.png">
+<link rel="shortcut icon" href="img/glider.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+    .bgTextBox {
+        background-color: rgb(241, 241, 241);
+        padding: 10px;
+    }
+
+    .bgDemo {
+        border-style: solid;
+        border-width: 0.5px;
+        padding: 10px;
+    }
+
+    .highlight pre {
+        white-space: pre-wrap;
+    }
+
+    .nav-item {
+        cursor: pointer;
+    }
+
+    .terminal {
+        font-family: 'Press Start 2P', cursive;
+        /*font-family: 'VT323', monospace;*/
+        color: greenyellow !important;
+        background-color: rgb(48, 48, 48) !important;
+        font-size: 1.0ex;
+    }
+</style>
+</head>
+
+<body>
+
+    <div id="head"></div>
+    <div class="container">
+        <h2>Adventure game</h2>
+
+        <p>This is a recreation of "The little book of adventure game programming in JAVA" by Huw Collingbourne, but
+            written in Javascript</p>
+        <h3>Parser class</h3>
+        <p>For our text adventure game to interact with the outside world we kneed to parse text commands</p>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="">
+                    </label>
+                    <textarea class="form-control terminal" name="output" id="output" rows="20"
+                        onkeyup="keypress(event,this)" disabled></textarea>
+                    <textarea class="form-control terminal" name="command" id="command" rows="3"
+                        onkeyup="keypress(event,this,output = 'output')"></textarea>
+                </div>
+            </div>
+
+
+            <div class="col-sm-8 bgTextBox">
+                <h4>Parser Class</h4>
+                <pre>
+                <code>
+
+class Parser{
+    constructor(nouns,verbs){
+        this.nouns = nouns;
+        this.verbs = verbs;
+    }
+    parse(input){
+        input = input.replace(/[\n\r]+/g, '').trim();// remove cr
+        let words = input.split(/\ +/) // regex with more than one space
+        let lWords = words.map(w=>{return w.toLowerCase()})
+        if(words.length!=2){
+            return{msg:"must have two words",verb:"",noun:""};
+        }
+        let verb =  this.verbs.indexOf(lWords[0])
+        let noun =  this.nouns.indexOf(lWords[1])
+        if(verb ==-1){
+            return{msg:"not in verbs",verb:lWords[0],noun:lWords[1]};    
+        }
+        if(noun == -1){
+            return{msg:"not in nouns",verb:lWords[0],noun:lWords[1]};    
+        }
+        return{msg:"ok",verb:this.verbs[verb],noun:this.nouns[noun]};
+    }
+}
+
+
+class Game{
+    constructor(){
+        let nouns = ["box","folder","north","south","east","west"]
+        let verbs = ["go","move","take","drop"]
+        this.parser = new Parser(nouns,verbs)
+    }
+    parse(words){
+        let result = this.parser.parse(words);
+        console.log(result);
+    }
+}
+
+var game = new Game();
+
+                </code>
+            </pre>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/load.js"></script>
+    
+</body>
+
+</html>
