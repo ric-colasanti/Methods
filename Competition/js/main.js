@@ -16,8 +16,8 @@ class CACanvas{
     }
 
     update(canvasID){
-        var visible_canvas = document.getElementById(canvasID);
-        var vctx = visible_canvas.getContext("2d");
+        let visible_canvas = document.getElementById(canvasID);
+        let vctx = visible_canvas.getContext("2d");
         vctx.drawImage(this.buffer, 0, 0, this.ctx.canvas.width, this.ctx.canvas.height, 0, 0, vctx.canvas.width, vctx.canvas.height); 
     }
 }
@@ -27,13 +27,9 @@ class Cell {
     static tNext = 1;
 
     static update(){
-        console.log(Cell.tNow,Cell.tNext)
-        Cell.tNow=(Cell.tNow+1)%2
-        Cell.tNext=(Cell.tNext+1)%2
-        console.log(Cell.tNow,Cell.tNext)
-
+        Cell.tNow=(Cell.tNow+1)%2;
+        Cell.tNext=(Cell.tNext+1)%2;
     }
-
 
     constructor(xPos,yPos) {
         this.xPos = xPos;
@@ -51,14 +47,11 @@ class Cell {
         this.neighbors.push(cell);
     }
     diffuse(){
-       // console.log(this.xPos,this.yPos,this.neighbors)
         let def = this._resource[Cell.tNow]/this.neighbors.length;
         this._resource[Cell.tNow] = 0.0
         for(let i =0; i<this.neighbors.length;i++){
-            console.log(this.neighbors[i].xPos,this.neighbors[i].yPos);
-            this.neighbors[i]._resource[Cell.tNext]=1.0;
+            this.neighbors[i]._resource[Cell.tNext]+=def;
         }
-        console.log()
     }
 }
 
@@ -83,15 +76,14 @@ class Grid{
             for(let yy= y-1;yy<=y+1;yy++ ) {
                 for (let xx = x-1; xx <= x+1; xx++) {
                     let pos = this.pos(this.bounds(yy),this.bounds(xx));
-                    //console.log(x,y,xx,yy," ",this.bounds(xx),this.bounds(yy)," ",pos," ",this.cells[pos].xPos,this.cells[pos].yPos)
                     cell.addNeighbour(this.cells[pos])
                 }
             }
-            //console.log()
         }
+        this.cells[this.pos(32,32)].setResource(300)
     }
     pos(xPos,yPos){
-        return yPos*this.size+xPos;
+        return (yPos*this.size)+xPos;
     }
     bounds(v){
         if(v<0){
@@ -106,10 +98,9 @@ class Grid{
         return this.cells[this.pos(xPos,yPos)].resource();
     }
     iterate(){
-        for (let i = 0; i < this.size; i++) {
+        for (let i = 0; i < this.cells.length; i++) {
             this.cells[i].diffuse()
         }
-        console.log()
         Cell.update();
     }
 }
