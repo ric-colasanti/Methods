@@ -68,27 +68,30 @@ class CACanvas{
 
 <script>
     var cSize=10
-    var size = 64
+    var size = 8
 
 
     var count = 0
     var caCanvas = new CACanvas(size,cSize)
-
+    var grid = new Grid(size);
+    
     draw = function(){
-        count++;
+
+        grid.iterate();
         for(var x=0;x<size;x++){
             for(var y=0; y<size; y++){
-                var r = Math.floor(Math.random() * 255);
-                var g = Math.floor(Math.random() * 255);
-                var b = Math.floor(Math.random() * 255);
+                var r = 0;
+                var g = Math.floor(grid.resource(x,y) * 255);
+                var b = 0;
                 var col = "rgb(" + r + "," + g + "," + b + ")";
                 caCanvas.draw(x,y,col);
             }
         }
         caCanvas.update("canvas");
-        if(count<100){
+        if(count<4){
             window.requestAnimationFrame(draw);
         }
+        count++;
     }
     draw();
 </script>
