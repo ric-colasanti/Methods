@@ -83,21 +83,22 @@ class CACanvas{
         for(var x=0;x<size;x++){
             for(var y=0; y<size; y++){
                 var r = 0;
-                sum+=grid.resource(x,y)
+                sum+=grid.getAllResource(x,y)
                 var g = Math.floor(grid.resource(x,y) * 255);
                 var b = 0;
                 var col = "rgb(" + r + "," + g + "," + b + ")";
-                caCanvas.draw(x,y,col);
+                caCanvas.draw(x,y,col,grid.occupant(x,y),"#ffff00");
             }
         }
         caCanvas.update("canvas");
-        if(count<1500){
+        if(count<1000){
             window.requestAnimationFrame(draw);
         }
         count++;
         document.getElementById("iterations").innerText="Iteration :"+count + "   Resourece:"+sum
     }
     draw();
+
 </script>
 
 </body>

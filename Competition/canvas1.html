@@ -78,11 +78,11 @@ class CACanvas{
         count++;
         for(var x=0;x<size;x++){
             for(var y=0; y<size; y++){
-                var r = Math.floor(Math.random() * 255);
-                var g = Math.floor(Math.random() * 255);
-                var b = Math.floor(Math.random() * 255);
+                var r = rndInt( 255);
+                var g = rndInt( 255);
+                var b = rndInt( 255);
                 var col = "rgb(" + r + "," + g + "," + b + ")";
-                caCanvas.draw(x,y,col);
+                caCanvas.draw(x,y,col,true,"#ff0000");
             }
         }
         caCanvas.update("canvas");
