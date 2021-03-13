@@ -37,6 +37,12 @@
             <br>
             <input type="range" oninput="disturbanceRange()" class="form-range" value="0" min="0" max="100" id="disturbance">
             <br>
+            <label id="seedrainLabel" for="seedrain" class="form-label">Seedrain 0.0 </label>
+            <br>
+            <input type="range" oninput="seedrainRange()" class="form-range" value="0" min="0" max="10" id="seedrain">
+            <br>
+
+
             <button id="startStop" type="button" class="btn btn-success" onclick="run()">Start</button>
         </div>
     </div>
@@ -79,6 +85,7 @@
     let size = 64
     let resource=1.0;
     let disturbance=0.0;
+    let seedrain = 0.0
     let iterations=500;
 
     let caCanvas = new CACanvas(size, cSize)
@@ -93,7 +100,12 @@
         for (let x = 0; x < size; x++) {
             for (let y = 0; y < size; y++) {
                 let col = grid.getColor(x, y)
-                caCanvas.draw(x, y, col, false, "");
+                if(col === "rgb(0,0,0)"){
+                    caCanvas.draw(x, y, "#ffffff", false,col);
+                }else{
+                    caCanvas.draw(x, y, "#ffffff", true,col);
+                }
+
             }
         }
         caCanvas.update("canvas");
@@ -116,6 +128,10 @@
         disturbance = document.getElementById("disturbance").value / 100
         document.getElementById("disturbanceLabel").innerHTML = "Disturbance: " + disturbance;
     }
+    function seedrainRange() {
+        seedrain = document.getElementById("seedrain").value / 100
+        document.getElementById("seedrainLabel").innerHTML = "Seedrain: " + seedrain;
+    }
 
     function run(){
         if(running){
@@ -123,22 +139,28 @@
             document.getElementById("startStop").innerHTML="Start"
             document.getElementById('startStop').classList.add('btn-success');
             document.getElementById('startStop').classList.remove('btn-danger');
+            document.getElementById("disturbance").disabled = false;
+            document.getElementById("resource").disabled = false;
+            document.getElementById("seedrain").disabled = false;
 
         }else{
             running = true;
             document.getElementById("startStop").innerHTML="Stop"
             document.getElementById('startStop').classList.add('btn-danger');
             document.getElementById('startStop').classList.remove('btn-success');
+            document.getElementById("disturbance").disabled = true;
+            document.getElementById("resource").disabled = true;
+            document.getElementById("seedrain").disabled = true;
             count=0;
             console.log(resource)
-            grid.setup(resource, disturbance);
+            grid.setup(resource, disturbance,seedrain);
             iterate()
         }
 
     }
     document.getElementById("disturbance").value= 0.0
     document.getElementById("resource").value = 100.0
-
+    document.getElementById("seedrain").value = 0.0
 
 </script>
 

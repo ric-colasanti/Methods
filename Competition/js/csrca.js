@@ -205,7 +205,7 @@ class Cell {
             // test for growth from seed rain
             if (this.occupant[Cell.tNext]===null){
                 if(rndLt(seedRain)){
-                    this.occupant[Cell.tNext]=plantTypes[randomInt(plantTypes.length)];
+                    this.occupant[Cell.tNext]=plantTypes[rndInt(plantTypes.length)];
                 }
             }
 
@@ -244,9 +244,10 @@ class Experiment {
         return i;
     }
 
-    setup(resource, disturbance){
+    setup(resource, disturbance,seedrain){
         // clear cells for new experiment
         this.cells = [];
+        this.seedrain = seedrain;
         let t = this.size**2;
         for(let p=0; p<t;p++){
             let xyPos = this.getXYPos(p);
@@ -278,7 +279,7 @@ class Experiment {
         }
         for(let p=0; p<t;p++) {
             let cell = this.cells[p];
-            cell.growth(0,0,0,this.plantTypes);
+            cell.growth(0,0,this.seedrain,this.plantTypes);
         }
         Cell.update();
     }

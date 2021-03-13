@@ -99,9 +99,12 @@ class CACanvas{
         if(circle===true){
             let offset = Math.floor(this.cSize/2);
             this.ctx.beginPath();
-            this.ctx.arc(x*this.cSize+offset,y*this.cSize+offset,offset-2,0, 2 * Math.PI)
+            this.ctx.arc(x*this.cSize+offset,y*this.cSize+offset,offset-1,0, 2 * Math.PI)
             this.ctx.fillStyle = circleColor;
             this.ctx.fill();
+            this.ctx.strokeStyle = '#000000';
+            this.ctx.stroke();
+
         }
     }
 
