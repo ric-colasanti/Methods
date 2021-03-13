@@ -22,20 +22,22 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="col-sm-4 bgDemo">
-                <canvas id="canvas" width="340" height="340" ></canvas>
+                <canvas id="canvas" width="340" height="340" style="border-style: solid; border-width: 0.2px;"></canvas>
             </div>
-            <div id="iterations"></div>
+            <div id="iterations">Iteration :</div>
         </div>
 
 
         <div class="col-sm-8 bgTextBox">
-            <h4>Node Class</h4>
-            <pre>
-                <code>
-
-
-                </code>
-            </pre>
+            <label id="resourceLabel" for="resource" class="form-label">Resource 1.0 </label>
+            <br>
+            <input type="range" oninput="resourceRange()" class="form-range" value="10" min="0" max="100" id="resource">
+            <br>
+            <label id="disturbanceLabel" for="disturbance" class="form-label">Disturbance 0.0 </label>
+            <br>
+            <input type="range" oninput="disturbanceRange()" class="form-range" value="0" min="0" max="100" id="disturbance">
+            <br>
+            <button id="startStop" type="button" class="btn btn-success" onclick="run()">Start</button>
         </div>
     </div>
 </div>
@@ -75,15 +77,19 @@
 
     let cSize = 10
     let size = 64
-
+    let resource=1.0;
+    let disturbance=0.0;
+    let iterations=500;
 
     let caCanvas = new CACanvas(size, cSize)
     let grid = new Experiment(size, plantTypes, cols)
-    grid.setup(1.0, 0.0);
+    //draw()
+    let running = false;
+
+
     //console.log(grid)
     let count = 0;
-    iterate = function () {
-        grid.iterate()
+    function draw(){
         for (let x = 0; x < size; x++) {
             for (let y = 0; y < size; y++) {
                 let col = grid.getColor(x, y)
@@ -91,18 +97,53 @@
             }
         }
         caCanvas.update("canvas");
-        if (count < 200) {
+    }
+    let iterate = function () {
+        grid.iterate()
+        draw();
+        if (running) {
             window.requestAnimationFrame(iterate);
         }
         count++;
+        document.getElementById("iterations").innerText="Iteration :"+count
     }
-    iterate();
+    function resourceRange() {
+        resource = document.getElementById("resource").value / 100
+        document.getElementById("resourceLabel").innerHTML = "Resource: " + resource;
+    }
+
+    function disturbanceRange() {
+        disturbance = document.getElementById("disturbance").value / 100
+        document.getElementById("disturbanceLabel").innerHTML = "Disturbance: " + disturbance;
+    }
+
+    function run(){
+        if(running){
+            running = false;
+            document.getElementById("startStop").innerHTML="Start"
+            document.getElementById('startStop').classList.add('btn-success');
+            document.getElementById('startStop').classList.remove('btn-danger');
+
+        }else{
+            running = true;
+            document.getElementById("startStop").innerHTML="Stop"
+            document.getElementById('startStop').classList.add('btn-danger');
+            document.getElementById('startStop').classList.remove('btn-success');
+            count=0;
+            console.log(resource)
+            grid.setup(resource, 0.0);
+            iterate()
+        }
+
+    }
+    document.getElementById("disturbance").value= 0.0
+    document.getElementById("resource").value = 100.0
+
 
 </script>
 
-</script>
+
 
 </body>
 
 </html>
-

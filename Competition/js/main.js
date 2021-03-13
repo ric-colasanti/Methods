@@ -22,6 +22,65 @@ function rndArray(anArray){
     return anArray[rndInt(anArray.length)]
 }
 
+function landscape(roughness) {
+    levels = 7
+    size = 2 ** (levels - 1)
+    height = new Array(size + 1);
+
+
+    for (var i = 0; i < height.length; i++) {
+        height[i] = new Array(size + 1);
+    }
+
+
+    for (lev = 0; lev < levels; lev++) {
+        step = Math.floor(size / 2 ** lev)
+
+        for (y = 0; y < size + 1; y += step) {
+            jumpover = 0
+            if (lev > 0) {
+                jumpover = 1 - Math.floor(y / step) % 2
+            }
+            start = step * jumpover
+            stop = size + 1
+            stepsize = step * (1 + jumpover)
+            for (x = start; x < stop; x += stepsize) {
+                pointer = 3
+                if (lev > 0) {
+                    pointer = 1 - Math.floor(x / step) % 2 + 2 * jumpover
+                }
+                yref = step * (1 - Math.floor(pointer / 2))
+                xref = step * (1 - pointer % 2)
+                corner1 = height[y - yref][x - xref]
+                corner2 = height[y + yref][x + xref]
+                average = (corner1 + corner2) / 2.0
+                variation = (Math.pow(step, roughness)) * (Math.random() - 0.5)
+                height[y][x] = 0
+                if (lev > 0) {
+                    height[y][x] = average + variation
+                }
+            }
+        }
+    }
+    count = 0
+    for (y = 0; y < size; y++) {
+        for (x = 0; x < size; x++) {
+            count += height[x][y]
+        }
+    }
+    m = count / (size * size)
+    for (y = 0; y < size; y++) {
+        for (x = 0; x < size; x++) {
+            if (height[x][y] < m) {
+                height[x][y] = -1
+            } else {
+                height[x][y] = 1
+            }
+        }
+    }
+    return height
+}
+
 class CACanvas{
     constructor(size,cSize){
         this.size = size;
