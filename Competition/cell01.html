@@ -17,7 +17,7 @@
 
 <div id="head"></div>
 <div class="container">
-    <h2>CA Canvas</h2>
+    <h2>Emergent CSRCA</h2>
     <div class="row">
         <div class="col-sm-4">
             <div class="col-sm-4 bgDemo">
@@ -28,30 +28,53 @@
 
 
         <div class="col-sm-8 bgTextBox">
-            <h4>CACanvas Class</h4>
+            <h4>Node Class</h4>
             <pre>
                 <code>
-class CACanvas{
-    constructor(size,cSize){
-        this.size = size;
-        this.cSize = cSize;
-        this.buffer = document.createElement("canvas");
-        this.buffer.width = this.size*this.cSize;
-        this.buffer.height = this.size*this.cSize;
-        this.ctx = this.buffer.getContext("2d");
+class Node{
+    constructor(home,parent) {
+        this.home = home;
+        this.parent = parent;
+        this.offspring=[];
+        this._resource = [0,0];
+        this.home.occupant = this;
+    }
+    addResource(value){
+        this._resource[Cell.tNow]+=value;
+    }
+    resource(){
+        return this._resource[Cell.tNow];
+    }
+    growth(){
+        let newNode = null;
+        if(this.offspring.length<2) {
+            if (this._resource[Cell.tNext] > 1.0) {
+                let newHome = this.home.optimumCell(0.0)
+                if (newHome != null) {
+                    this._resource[Cell.tNext]=this._resource[Cell.tNext]-1.0;
+                    newNode = new Node(newHome,this);
+                    this.offspring.push(newNode)
+                }
+            }
+        }
+        return newNode;
     }
 
-    draw(x,y,cellColor){
-        this.ctx.beginPath();
-        this.ctx.rect(x*this.cSize,y*this.cSize,this.cSize,this.cSize)
-        this.ctx.fillStyle = cellColor;
-        this.ctx.fill();  
-    }
+    diffuse(){
 
-    update(canvasID){
-        var visible_canvas = document.getElementById(canvasID);
-        var vctx = visible_canvas.getContext("2d");
-        vctx.drawImage(this.buffer, 0, 0, this.ctx.canvas.width, this.ctx.canvas.height, 0, 0, vctx.canvas.width, vctx.canvas.height); 
+        let count = 0
+        if(this.parent!=null){
+            count =1
+        }
+        let def = this._resource[Cell.tNow]/(this.offspring.length+count+1);
+        this._resource[Cell.tNow] = 0.0;
+        if(count===1){
+            this.parent._resource[Cell.tNext]+=def;
+        }
+        for(let i=0;i<this.offspring.length;i++){
+            this.offspring[i]._resource[Cell.tNext]+=def;
+        }
+        this._resource[Cell.tNext]+=def;
     }
 }
 
@@ -65,6 +88,7 @@ class CACanvas{
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="js/main.js"></script>
+<script src="js/ecsrca01.js"></script>
 <script src="js/load.js"></script>
 
 <script>
@@ -80,18 +104,28 @@ class CACanvas{
 
         grid.iterate();
         let sum = 0
-        for(var x=0;x<size;x++){
-            for(var y=0; y<size; y++){
-                var r = 0;
+        for(let x=0;x<size;x++){
+            for(let y=0; y<size; y++){
+                let r = 0;
                 sum+=grid.getAllResource(x,y)
-                var g = Math.floor(grid.resource(x,y) * 255);
-                var b = 0;
-                var col = "rgb(" + r + "," + g + "," + b + ")";
-                caCanvas.draw(x,y,col,grid.occupant(x,y),"#ffff00");
+                let g = Math.floor(grid.resource(x,y) * 255);
+                let b = 0;
+                let cellCol = "rgb(" + r + "," + g + "," + b + ")";
+                let node = grid.occupant(x,y)
+                if (node!=null){
+                    r = 255;
+                    g = 0;
+                    b = Math.floor(node.resource() * 255);
+                    let nodeCol = "rgb(" + r + "," + g + "," + b + ")";
+                    caCanvas.draw(x,y,cellCol,true,nodeCol);
+                }else{
+                    caCanvas.draw(x,y,cellCol,false,"");
+                }
+
             }
         }
         caCanvas.update("canvas");
-        if(count<1000){
+        if(count<6000){
             window.requestAnimationFrame(draw);
         }
         count++;

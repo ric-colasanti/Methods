@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="canvas" width="340" height="340"></canvas>
+<script src="js/main.js"></script>
+<script src="js/csrca.js"></script>
+<script>
+    let plantTypes = [[0.6, 0.5, 0.467, 0.5, 0.4, 0.367, 0.333, 0.2, 0.3, 0.267, 0.2, 0.2, 0.267, 0.3, 0.2, 0.4, 0.367, 0.2, 0.267],
+        [0.2, 0.2, 0.267, 0.3, 0.2, 0.267, 0.333, 0.2, 0.2, 0.267, 0.3, 0.6, 0.467, 0.5, 0.5, 0.4, 0.367, 0.4, 0.367],
+        [0.2, 0.3, 0.267, 0.2, 0.4, 0.367, 0.333, 0.6, 0.5, 0.467, 0.5, 0.2, 0.267, 0.2, 0.3, 0.2, 0.267, 0.4, 0.367]];
+    cols = [
+        [0, 0, 255],
+        [0, 255, 0],
+        [255, 0, 0],
+        [0, 255, 255],
+        [255, 0, 255],
+        [255, 255, 0],
+        [200, 200, 200],
+        [150, 0, 255],
+        [0, 150, 255],
+        [200, 200, 255],
+        [255, 150, 255],
+        [150, 255, 255],
+        [255, 0, 150],
+        [0, 255, 150],
+        [255, 200, 200],
+        [200, 255, 200],
+        [255, 255, 150],
+        [255, 150, 0],
+        [150, 255, 0]
+    ]
+
+    let cSize = 10
+    let size = 64
+
+
+    let caCanvas = new CACanvas(size, cSize)
+    let grid = new Experiment(size, plantTypes, cols)
+    grid.setup(1.0, 0.0);
+    //console.log(grid)
+    let count = 0;
+    draw = function () {
+        grid.iterate()
+        for (let x = 0; x < size; x++) {
+            for (let y = 0; y < size; y++) {
+                let col = grid.getColor(x, y)
+                caCanvas.draw(x, y, col, false, "");
+            }
+        }
+        caCanvas.update("canvas");
+        if (count < 200) {
+            window.requestAnimationFrame(draw);
+        }
+        count++;
+    }
+    draw();
+
+</script>
+</body>
+</html>

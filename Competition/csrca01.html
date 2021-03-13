@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<div id="head"></div>
+<title>Models</title>
+<meta charset="utf-8">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/glider.png">
+<link rel="shortcut icon" href="img/glider.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+</style>
+</head>
+
+<body>
+
+<div id="head"></div>
+<div class="container">
+    <h2>Emergent CSRCA</h2>
+    <p>Model 0.1</p>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="col-sm-4 bgDemo">
+                <canvas id="canvas" width="340" height="340" ></canvas>
+            </div>
+            <div id="iterations"></div>
+        </div>
+
+
+        <div class="col-sm-8 bgTextBox">
+            <h4>Node Class</h4>
+            <pre>
+                <code>
+
+
+                </code>
+            </pre>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
+
+<script src="js/load.js"></script>
+<script src="js/csrca.js"></script>
+<script>
+    let plantTypes = [[0.6, 0.5, 0.467, 0.5, 0.4, 0.367, 0.333, 0.2, 0.3, 0.267, 0.2, 0.2, 0.267, 0.3, 0.2, 0.4, 0.367, 0.2, 0.267],
+        [0.2, 0.2, 0.267, 0.3, 0.2, 0.267, 0.333, 0.2, 0.2, 0.267, 0.3, 0.6, 0.467, 0.5, 0.5, 0.4, 0.367, 0.4, 0.367],
+        [0.2, 0.3, 0.267, 0.2, 0.4, 0.367, 0.333, 0.6, 0.5, 0.467, 0.5, 0.2, 0.267, 0.2, 0.3, 0.2, 0.267, 0.4, 0.367]];
+    cols = [
+        [0, 0, 255],
+        [0, 255, 0],
+        [255, 0, 0],
+        [0, 255, 255],
+        [255, 0, 255],
+        [255, 255, 0],
+        [200, 200, 200],
+        [150, 0, 255],
+        [0, 150, 255],
+        [200, 200, 255],
+        [255, 150, 255],
+        [150, 255, 255],
+        [255, 0, 150],
+        [0, 255, 150],
+        [255, 200, 200],
+        [200, 255, 200],
+        [255, 255, 150],
+        [255, 150, 0],
+        [150, 255, 0]
+    ]
+
+    let cSize = 10
+    let size = 64
+
+
+    let caCanvas = new CACanvas(size, cSize)
+    let grid = new Experiment(size, plantTypes, cols)
+    grid.setup(1.0, 0.0);
+    //console.log(grid)
+    let count = 0;
+    draw = function () {
+        grid.iterate()
+        for (let x = 0; x < size; x++) {
+            for (let y = 0; y < size; y++) {
+                let col = grid.getColor(x, y)
+                caCanvas.draw(x, y, col, false, "");
+            }
+        }
+        caCanvas.update("canvas");
+        if (count < 200) {
+            window.requestAnimationFrame(draw);
+        }
+        count++;
+    }
+    draw();
+
+</script>
+
+</script>
+
+</body>
+
+</html>
