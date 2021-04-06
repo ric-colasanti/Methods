@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Roswell Runner</title>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="assets/icon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@1,700&display=swap" rel="stylesheet">
+    <style>
+        .bgTextBox {
+            background-color: rgb(241, 241, 241);
+            padding: 10px;
+        }
+
+        .bgDemo {
+            border-style: solid;
+            border-width: 0.5px;
+            padding: 10px;
+        }
+
+        .highlight pre {
+            white-space: pre-wrap;
+        }
+        .nav-item{
+            cursor: pointer;
+        }
+        .alien {
+            font-family: 'Luckiest Guy', cursive;
+        }
+    </style>
+</head>
+
+<body ng-app="rlcApp">
+
+<nav class="navbar navbar-expand-md bgTextBox navbar-light alien">
+    <!-- Brand -->
+    <a class="navbar-brand alien" href="index.html"><img src="assets/icon.png" alt="logo" style="width:40px;"> Roswell Runner </a>
+
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Game</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="code.html">code</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about.html">about</a>
+            </li>
+          </ul>
+    </div>
+</nav>
+<br>
+<div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div id="game-id"></div>
+            </div>
+        </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/phaser@3.50.0/dist/phaser.js"></script>
+<script src="js/game.js"></script>
+</body>
+
+</html>
