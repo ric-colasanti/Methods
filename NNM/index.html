@@ -34,7 +34,7 @@
     .ref{
         position:absolute;
         bottom:0;
-        right:0;
+        left:0;
         font-size: x-small;
         font-style: italic;
     }
@@ -47,7 +47,7 @@
     <div class="container">
         <h2>Network Norm Model</h2>
         <p>
-            A computational model of changes in energy balance and obesity influenced by changes in social networks brought about by unemployment
+            A computational model of changes in energy balance and obesity influenced by the modification of social networks brought about by unemployment
         </p>
         <h5>The Framingham Heart Study</h5>
         <div class="row">
@@ -59,7 +59,7 @@
 
 
             <div class="col-sm-8 bgTextBox">
-                <p>The Framingham Heart Study followed 12,067 people repeatedly from 1971 to 2003. Analysis of the data set by Christakis and Fowler[1]]showed that a person’s chances of becoming obese increased by 57% (95% confidence interval [CI], 6 to 123) if he or she had a friend who became obese in a given interval.</p>
+                <p>The Framingham heart study followed 12,067 people repeatedly from 1971 to 2003. Analysis of the data set by Christakis and Fowler[1]]showed that a person’s chances of becoming obese increased by 57% (95% confidence interval [CI], 6 to 123) if he or she had a friend who became obese in a given interval.</p>
                 <div class="ref">[1] Christakis, Nicholas A., and James H. Fowler. "The spread of obesity in a large social network over 32 years." New England journal of medicine 357.4 (2007): 370-379. <a href="papers/Christakis and Fowler.pdf">Download</a></div>
             </div>
                
@@ -76,11 +76,64 @@
 
             <div class="col-sm-8 bgTextBox">
                 <p>There are two sociological phenomena that can explain the effect of a friends obesity on a person.  <b>homophily</b> and the theory of <b> social influence</b>.</p>
+                <p><b>Homopily</b> is where a person forms a link to another person who is like them.</p>
+                <p><b>Social influence</b> is where a person becomes more like a person they are linked to.</p>
+                <p> The Christakis and Fowler study shows that homopily is a strong influence because  a person’s chances of becoming obese is influenced by a friend who becomes obese. The relative strengths of homophily and social influence will be important factors in the parametrisation of the model</p>
                 
             </div>
                
         </div>
+        <h5>Social networks</h5>
+        <div class="row">
+            
+            <div class="col-sm-4">
+                <img src="img/img3.png" width="100%">
+                
+            </div>
+
+
+            <div class="col-sm-8 bgTextBox">
+                <p>Networks consist of nodes and edges. In the social network of the Framingham heart study described by Christakis and Fowler the nodes are the people in the study and the edges are the relationships between the people. These relationships are friends, family and coworkers. Networks are found throughout nature and society. Despite their apparent random appearance Network theory can be applied to these networks to identify common patterns and behaviours. Using network theory, artificial networks of social interactions can be constructed that have the same important characteristics of real social networks. These artificial networks can then be used in models with the assurance that they will behave in the same way as real social networks found in society.  </p>
+                <div class="ref">Watts, Duncan J., and Steven H. Strogatz. "Collective dynamics of ‘small-world’networks." nature 393.6684 (1998): 440-442.<a href="papers/NAture_Watts_Strogatz.pdf">Download</a></div>
+            </div>
+               
+        </div>
+        <br>
+        <h5>Modeling the influence of social networks and environment on energy balance and obesity</h5>
+        <div class="row">
+            
+            <div class="col-sm-4">
+                <img src="img/img4.png" width="100%">
+                <img src="img/img5.png" width="100%">
+                
+            </div>
+
+
+            <div class="col-sm-8 bgTextBox">
+                <p>Giabbanelli et al[1] applied network theory to generate artificial social networks. They include a simple model of human metabolism and simulated how individuals inﬂuence each other with respect to food and physical activity. They applied their model to both synthetic and real-world populations and demonstrated the importance of the structural properties of the social network of population, at micro-level on the macro-level distribution of body mass and obesity found in the population </p>
+                <div class="ref">[1] Giabbanelli, Philippe J., et al. "Modeling the influence of social networks and environment on energy balance and obesity." Journal of Computational Science 3.1-2 (2012): 17-27..<a href="papers/Modeling the influence of social networks and environment on energy balance and obesity.pdf">Download</a></div>
+            </div>
+               
+        </div>
+        <br>
+        <h4><u>AIM</u></h4>
+        <h5>Changes in social networks brought about by unemployment</h5>
+        <div class="row">
+            
+            <div class="col-sm-4">
+                <img src="img/img6.png" width="100%">
+            </div>
+
+
+            <div class="col-sm-8 bgTextBox">
+                As stated in the section on the Framingham heart study the relationships described by Christakis and Fowler are friends, family and coworkers. Unemployment may result in the restructuring of a person's network structure because of possible removal of interactions with previous co-workers. Giabbanelli et al have demonstrated the importance of the structural properties of the social network on a persons body mass and potential obesity. The aim of this project is to develop the Giabbanelli model so that we can simulate the change energy balance and obesity influenced by the modification of social networks brought about by unemployment.
+            </div>
+               
+        </div>
     </div>
+
+    <br>
+    <br>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
