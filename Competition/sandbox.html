@@ -1,64 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Test</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
+
 <body>
-<canvas id="canvas" width="340" height="340"></canvas>
-<script src="js/main.js"></script>
-<script src="js/csrca.js"></script>
-<script>
-    let plantTypes = [[0.6, 0.5, 0.467, 0.5, 0.4, 0.367, 0.333, 0.2, 0.3, 0.267, 0.2, 0.2, 0.267, 0.3, 0.2, 0.4, 0.367, 0.2, 0.267],
-        [0.2, 0.2, 0.267, 0.3, 0.2, 0.267, 0.333, 0.2, 0.2, 0.267, 0.3, 0.6, 0.467, 0.5, 0.5, 0.4, 0.367, 0.4, 0.367],
-        [0.2, 0.3, 0.267, 0.2, 0.4, 0.367, 0.333, 0.6, 0.5, 0.467, 0.5, 0.2, 0.267, 0.2, 0.3, 0.2, 0.267, 0.4, 0.367]];
-    cols = [
-        [0, 0, 255],
-        [0, 255, 0],
-        [255, 0, 0],
-        [0, 255, 255],
-        [255, 0, 255],
-        [255, 255, 0],
-        [200, 200, 200],
-        [150, 0, 255],
-        [0, 150, 255],
-        [200, 200, 255],
-        [255, 150, 255],
-        [150, 255, 255],
-        [255, 0, 150],
-        [0, 255, 150],
-        [255, 200, 200],
-        [200, 255, 200],
-        [255, 255, 150],
-        [255, 150, 0],
-        [150, 255, 0]
-    ]
+    <button onclick="triggerTransitionAxis()">Trigger transition</button>
+    <div id="my_dataviz"></div </body> <script src="https://d3js.org/d3.v6.js">
+    </script>
+    <script>
+        // set the dimensions and margins of the graph
 
-    let cSize = 10
-    let size = 64
-
-
-    let caCanvas = new CACanvas(size, cSize)
-    let grid = new Experiment(size, plantTypes, cols)
-    grid.setup(1.0, 0.0);
-    //console.log(grid)
-    let count = 0;
-    draw = function () {
-        grid.iterate()
-        for (let x = 0; x < size; x++) {
-            for (let y = 0; y < size; y++) {
-                let col = grid.getColor(x, y)
-                caCanvas.draw(x, y, col, false, "");
+        var data1 = [{
+                t: 0,
+                v: 0.4
+            },
+            {
+                t: 1,
+                v: 0.16
+            },
+            {
+                t: 2,
+                v: 0.8
             }
-        }
-        caCanvas.update("canvas");
-        if (count < 200) {
-            window.requestAnimationFrame(draw);
-        }
-        count++;
-    }
-    draw();
+        ];
+        var t=3
+        const margin = {
+                top: 10,
+                right: 30,
+                bottom: 30,
+                left: 50
+            },
+            width = 460 - margin.left - margin.right,
+            height = 400 - margin.top - margin.bottom;
+        svg = d3.select("#my_dataviz").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
 
-</script>
+        // Create the scale
+        var x = d3.scaleLinear()
+            .domain([0, 10]) // This is what is written on the Axis: from 0 to 100
+            .range([0, width]); // This is where the axis is placed: from 100 px to 800px
+        var xAxis = d3.axisBottom().scale(x);
+
+
+        var y = d3.scaleLinear()
+            .domain([0, 3]) // This is what is written on the Axis: from 0 to 100
+            .range([height, 0]); // This is where the axis is placed: from 100 px to 800px
+        var yAxis = d3.axisLeft().scale(y);
+
+        // Draw the axis
+        svg.append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .attr("class", "myXaxis")
+        svg.append("g")
+            .attr("class", "myYaxis")
+
+        svg.selectAll(".myXaxis").call(xAxis);
+        svg.selectAll(".myYaxis").call(yAxis);
+
+        const u = svg.selectAll(".lineTest")
+            .data([data1], function (d) {
+                return d.t
+            });
+
+        // Updata the line
+        u
+            .join("path")
+            .attr("class", "lineTest")
+            .attr("d", d3.line()
+                .x(function (d) {
+                    return x(d.t);
+                })
+                .y(function (d) {
+                    return y(d.v);
+                }))
+            .attr("fill", "none")
+            .attr("stroke", "steelblue")
+            .attr("stroke-width", 2.5)
+
+        function triggerTransitionAxis() {
+            console.log("here",t)
+            // // Change the scale of the axis
+            // x.domain([0, 100])
+
+            // // Update the axis
+            // svg.select(".myXaxis")
+            //     .call(xAxis)
+            data1.push({
+                't': t,
+                'v': Math.random()
+            })
+            
+            t += 1
+            var select = d3.selectAll(".lineTest")
+                .data([data1], function (d) {
+                    return d.t
+                });
+            select
+            .enter("path")
+                .attr("class", "lineTest")
+                .attr("d", d3.line()
+                    .x(function (d) {
+                        return x(d.t);
+                    })
+                    .y(function (d) {
+                        return y(d.v);
+                    }))
+           
+        }
+    </script>
 </body>
+
 </html>

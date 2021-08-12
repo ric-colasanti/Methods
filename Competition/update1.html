@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <div id="head"></div>
+    <title>Graph</title>
+    <meta charset="utf-8">
+
+    <!-- Load d3.js -->
+
+
+    <!-- Create a div where the graph will take place -->
+
+</head>
+
+<body>
+    <!-- Add 2 buttons -->
+    <button onclick="update(data1)">Dataset 1</button>
+    <button onclick="newData()">Dataset 2</button>
+
+    <!-- Create a div where the graph will take place -->
+    <div id="my_dataviz"></div </body> <script src="https://d3js.org/d3.v6.js">
+    </script>
+    <script>
+        var data1 = [{
+                t: 0,
+                v: 0.4
+            },
+            {
+                t: 1,
+                v: 0.16
+            },
+            {
+                t: 2,
+                v: 0.8
+            }
+        ];
+        var t=3
+
+       function newData(){
+            data1.push({'t':t,'v':Math.random()})
+            update(data1)
+            t+=1
+       }
+
+        // set the dimensions and margins of the graph
+        const margin = {
+                top: 10,
+                right: 30,
+                bottom: 30,
+                left: 50
+            },
+            width = 460 - margin.left - margin.right,
+            height = 400 - margin.top - margin.bottom;
+
+        // append the svg object to the body of the page
+        const svg = d3.select("#my_dataviz")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Initialise a X axis:
+        const x = d3.scaleLinear().range([0, width]);
+        const xAxis = d3.axisBottom().scale(x);
+        svg.append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .attr("class", "myXaxis")
+
+        // Initialize an Y axis
+        const y = d3.scaleLinear().range([height, 0]);
+        const yAxis = d3.axisLeft().scale(y);
+        svg.append("g")
+            .attr("class", "myYaxis")
+
+        // Create a function that takes a dataset as input and update the plot:
+        function update(data) {
+
+            // Create the X axis:
+            x.domain([0, d3.max(data, function (d) {
+                return d.t
+            })]);
+            svg.selectAll(".myXaxis").call(xAxis);
+
+            // create the Y axis
+            y.domain([0, d3.max(data, function (d) {
+                return d.v
+            })]);
+            svg.selectAll(".myYaxis").call(yAxis);
+
+            // Create a update selection: bind to the new data
+            const u = svg.selectAll(".lineTest")
+                .data([data], function (d) {
+                    return d.t
+                });
+
+            // Updata the line
+            u
+                .join("path")
+                .attr("class", "lineTest")
+                .attr("d", d3.line()
+                    .x(function (d) {
+                        return x(d.t);
+                    })
+                    .y(function (d) {
+                        return y(d.v);
+                    }))
+                .attr("fill", "none")
+                .attr("stroke", "steelblue")
+                .attr("stroke-width", 2.5)
+        }
+
+        // At the beginning, I run the update function on the first dataset:
+        update(data1)
+    </script>
+</body>
+
+</html>
