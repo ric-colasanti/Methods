@@ -10,12 +10,12 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@1,700&display=swap" rel="stylesheet">
 <style>
-
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
 
     html {
         scroll-behavior: smooth;
     }
+
     .bgTextBox {
         background-color: rgb(241, 241, 241);
         padding: 10px;
@@ -35,10 +35,10 @@
         cursor: pointer;
     }
 
-    .ref{
-        position:absolute;
-        bottom:0;
-        left:0;
+    .ref {
+        position: absolute;
+        bottom: 0;
+        left: 0;
         font-size: x-small;
         font-style: italic;
     }
@@ -56,156 +56,299 @@
         <br>
         <h2>Network Norm Model</h2>
         <p>
-            A computational model of changes in energy balance and obesity influenced by the modification of social networks brought about by unemployment
+            A computational model of changes in energy balance and obesity influenced by the modification of social
+            networks brought about by unemployment
         </p>
         <h5>The Framingham heart study</h5>
         <div class="row">
-            
+
             <div class="col-sm-4">
                 <img src="img/img1.png" width="100%">
-                
+
             </div>
 
 
             <div class="col-sm-8 bgTextBox">
-                <p>The Framingham heart study followed 12,067 people repeatedly from 1971 to 2003. Analysis of the data set by Christakis and Fowler[1]]showed that a person’s chances of becoming obese increased by 57% (95% confidence interval [CI], 6 to 123) if he or she had a friend who became obese in a given interval.</p>
-                <div class="ref">[1] Christakis, Nicholas A., and James H. Fowler. "The spread of obesity in a large social network over 32 years." New England journal of medicine 357.4 (2007): 370-379. <a href="papers/Christakis and Fowler.pdf">Download</a></div>
+                <p>The Framingham heart study followed 12,067 people repeatedly from 1971 to 2003. Analysis of the data
+                    set by Christakis and Fowler[1]]showed that a person’s chances of becoming obese increased by 57%
+                    (95% confidence interval [CI], 6 to 123) if he or she had a friend who became obese in a given
+                    interval.</p>
+                <div class="ref">[1] Christakis, Nicholas A., and James H. Fowler. "The spread of obesity in a large
+                    social network over 32 years." New England journal of medicine 357.4 (2007): 370-379. <a
+                        href="papers/Christakis and Fowler.pdf">Download</a></div>
             </div>
-               
+
         </div>
         <br>
         <h5>Homophily and the theory of social influence</h5>
         <div class="row">
-            
+
             <div class="col-sm-4">
                 <img src="img/img2.png" width="100%">
-                
+
             </div>
 
 
             <div class="col-sm-8 bgTextBox">
-                <p>There are two sociological phenomena that can explain the effect of a friend's obesity on a person:  <b>homophily</b> and the theory of <b> social influence</b>.</p>
+                <p>There are two sociological phenomena that can explain the effect of a friend's obesity on a person:
+                    <b>homophily</b> and the theory of <b> social influence</b>.</p>
                 <p><b>Homophily</b> is where a person forms a link to another person who is like them.</p>
                 <p><b>Social influence</b> is where a person becomes more like a person they are linked to.</p>
-                <p> The Christakis and Fowler study shows that homophily is a strong influence because  a person’s chances of becoming obese are influenced by a friend who becomes obese. The relative strengths of homophily and social influence will be important factors in the parametrisation of the model</p>
-                
+                <p> The Christakis and Fowler study shows that homophily is a strong influence because a person’s
+                    chances of becoming obese are influenced by a friend who becomes obese. The relative strengths of
+                    homophily and social influence will be important factors in the parametrisation of the model</p>
+
             </div>
-               
+
         </div>
         <h5>Social networks</h5>
         <div class="row">
-            
+
             <div class="col-sm-4">
                 <img src="img/img3.png" width="100%">
-                
+
             </div>
 
 
             <div class="col-sm-8 bgTextBox">
-                <p>Networks consist of nodes and edges. In the social network of the Framingham heart study described by Christakis and Fowler the nodes are the people in the study and the edges are the relationships between the people. These relationships are friends, family and coworkers. Networks are found throughout nature and society. Despite their apparent random appearance <b>network theory</b> can be applied to these networks to identify common patterns and behaviours. Using network theory, artificial networks of social interactions can be constructed that have the same important characteristics of real social networks. These artificial networks can then be used in models with the assurance that they will behave in the same way as real social networks found in society.  </p>
-                <div class="ref">Watts, Duncan J., and Steven H. Strogatz. "Collective dynamics of ‘small-world’networks." nature 393.6684 (1998): 440-442.<a href="papers/NAture_Watts_Strogatz.pdf">Download</a></div>
+                <p>Networks consist of nodes and edges. In the social network of the Framingham heart study described by
+                    Christakis and Fowler the nodes are the people in the study and the edges are the relationships
+                    between the people. These relationships are friends, family and coworkers. Networks are found
+                    throughout nature and society. Despite their apparent random appearance <b>network theory</b> can be
+                    applied to these networks to identify common patterns and behaviours. Using network theory,
+                    artificial networks of social interactions can be constructed that have the same important
+                    characteristics of real social networks. These artificial networks can then be used in models with
+                    the assurance that they will behave in the same way as real social networks found in society. </p>
+                <div class="ref">Watts, Duncan J., and Steven H. Strogatz. "Collective dynamics of
+                    ‘small-world’networks." nature 393.6684 (1998): 440-442.<a
+                        href="papers/NAture_Watts_Strogatz.pdf">Download</a></div>
             </div>
-               
+
         </div>
         <br>
         <h5>Modeling the influence of social networks and environment on energy balance and obesity</h5>
         <div class="row">
-            
+
             <div class="col-sm-4">
                 <img src="img/img4.png" width="100%">
                 <img src="img/img5.png" width="100%">
-                
+
             </div>
 
 
             <div class="col-sm-8 bgTextBox">
-                <p>Giabbanelli et al[1] applied network theory to generate artificial social networks. They include a simple model of human metabolism and simulated how individuals inﬂuence each other with respect to food consumption and physical activity. They applied their model to both synthetic and real-world populations and demonstrated the importance of the structural properties of the collective social network of the individual on the macro-level distribution of body mass and obesity found in the population </p>
-                <div class="ref">[1] Giabbanelli, Philippe J., et al. "Modeling the influence of social networks and environment on energy balance and obesity." Journal of Computational Science 3.1-2 (2012): 17-27..<a href="papers/Modeling the influence of social networks and environment on energy balance and obesity.pdf">Download</a></div>
+                <p>Giabbanelli et al[1] applied network theory to generate artificial social networks. They include a
+                    simple model of human metabolism and simulated how individuals inﬂuence each other with respect to
+                    food consumption and physical activity. They applied their model to both synthetic and real-world
+                    populations and demonstrated the importance of the structural properties of the collective social
+                    network of the individual on the macro-level distribution of body mass and obesity found in the
+                    population </p>
+                <div class="ref">[1] Giabbanelli, Philippe J., et al. "Modeling the influence of social networks and
+                    environment on energy balance and obesity." Journal of Computational Science 3.1-2 (2012): 17-27..<a
+                        href="papers/Modeling the influence of social networks and environment on energy balance and obesity.pdf">Download</a>
+                </div>
             </div>
-               
+
         </div>
         <br>
         <h4><u>AIM</u></h4>
         <h5>Changes in social networks brought about by unemployment</h5>
         <div class="row">
-            
+
             <div class="col-sm-4">
                 <img src="img/img6.png" width="100%">
             </div>
 
 
             <div class="col-sm-8 bgTextBox">
-                As stated in the section on the Framingham heart study the relationships described by Christakis and Fowler are friends, family and coworkers. Unemployment may result in the modification of a person's network structure because of possible removal of interactions with previous co-workers. Giabbanelli et al have demonstrated the importance of the structural properties of the social network on a person's body mass and potential obesity. The aim of this project is to develop the Giabbanelli model so that we can simulate the change in energy balance and obesity influenced by the modification of social networks brought about by unemployment.
+                As stated in the section on the Framingham heart study the relationships described by Christakis and
+                Fowler are friends, family and coworkers. Unemployment may result in the modification of a person's
+                network structure because of possible removal of interactions with previous co-workers. Giabbanelli et
+                al have demonstrated the importance of the structural properties of the social network on a person's
+                body mass and potential obesity. The aim of this project is to develop the Giabbanelli model so that we
+                can simulate the change in energy balance and obesity influenced by the modification of social networks
+                brought about by unemployment.
             </div>
-               
+
         </div>
         <br>
         <h4><u>Models</u></h4>
         <h5>CoLab</h5>
         <div class="row">
-            
+
             <div class="col-sm-4">
                 <img src="img/img7.png" width="100%">
             </div>
 
 
             <div class="col-sm-8 bgTextBox">
-                <p>We are using Agent Based Models (ABM) in our simulations. ABM are where persons (or agents) in a society are modeled as individuals within a computer program. The behaviour of the complete system emerges from the interaction of the agents with their environment and with each other.</p>
-                <p>We are writing the models in Google's Colab. Colaboratory, or “Colab” for short is a product from Google Research. Colab allows anybody to write and execute arbitrary python code through the browser. More technically, Colab is a hosted Jupyter notebook service that requires no setup to use, while providing free access to computing resources.This means that the model can be run by anyone with a Google account and a Chrome or Edge browser. Nothing needs to be installed on their computer.</p>
-                <p>We are demonstrating the general ABM methodology we will be using with the Body Mass Unemployment model by recreating a number of key sociological ABMs. We have done this to inform our discussions and hence our plans for our main  model.We have started with the very early models 1) Schelling’s segregation model. 2) Axerod's model of the dissemination of culture.</p>
-                <p><b><h6>IMPORTANT!</h6>
-                    You have to have to be signed in to a google account. Colab does not work fully with Firefox browser use Chrome or Edge</b></p>
+                <p>We are using Agent Based Models (ABM) in our simulations. ABM are where persons (or agents) in a
+                    society are modeled as individuals within a computer program. The behaviour of the complete system
+                    emerges from the interaction of the agents with their environment and with each other.</p>
+                <p>We are writing the models in Google's Colab. Colaboratory, or “Colab” for short is a product from
+                    Google Research. Colab allows anybody to write and execute arbitrary python code through the
+                    browser. More technically, Colab is a hosted Jupyter notebook service that requires no setup to use,
+                    while providing free access to computing resources.This means that the model can be run by anyone
+                    with a Google account and a Chrome or Edge browser. Nothing needs to be installed on their computer.
+                </p>
+                <p>We are demonstrating the general ABM methodology we will be using with the Body Mass Unemployment
+                    model by recreating a number of key sociological ABMs. We have done this to inform our discussions
+                    and hence our plans for our main model.We have started with the very early models 1) Schelling’s
+                    segregation model. 2) Axerod's model of the dissemination of culture.</p>
+                <p><b>
+                        <h6>IMPORTANT!</h6>
+                        You have to have to be signed in to a google account. Colab does not work fully with Firefox
+                        browser use Chrome or Edge
+                    </b></p>
             </div>
-               
+
         </div>
         <br>
         <h5>Schelling’s segregation model</h5>
         <div class="row" id="schelling">
-            
+
             <div class="col-sm-4">
                 <img src="img/img8.png" width="100%">
             </div>
 
 
             <div class="col-sm-8 bgTextBox">
-                <p>The economist Thomas Schelling wrote an agent based model to explore how simple rules that describe an agent's preference for housing can give rise to urban segregation. His model exhibited segregation even when individual agents didn't mind having neighbours of a different race or economic background.</p>
-                <p> The Colab model is <a href="https://colab.research.google.com/drive/1sNePJ_l6-7Hj0I9hzCYwJYj2fJA9B1he?usp=sharing">Here</a></p>
+                <p>The economist Thomas Schelling wrote an agent based model to explore how simple rules that describe
+                    an agent's preference for housing can give rise to urban segregation. His model exhibited
+                    segregation even when individual agents didn't mind having neighbours of a different race or
+                    economic background.</p>
+                <p> The Colab model is <a
+                        href="https://colab.research.google.com/drive/1sNePJ_l6-7Hj0I9hzCYwJYj2fJA9B1he?usp=sharing">Here</a>
+                </p>
             </div>
-               
+
         </div>
         <br>
         <h5>Axelrod's model of the dissemination of culture</h5>
         <div class="row" id="axelrod">
-            
+
             <div class="col-sm-4">
                 <img src="img/img9.png" width="100%">
             </div>
 
 
             <div class="col-sm-8 bgTextBox">
-                <p>The Axelrod model is a model of Social influence is where a person becomes more like a person they are linked to. It models the social convergence of culture. Unlike the Schelling model each agent is static in its own cell of a two dimensional matrix. Each agent can see four neighbours/contacts. North East South and West of the cell that it occupies. </p>
-                <p> The Colab model is <a href="https://colab.research.google.com/drive/1KZmKRp1gPNt68gXBlV6Y-y2BCaA6pPcz?usp=sharing">Here</a></p>
+                <p>The Axelrod model is a model of Social influence is where a person becomes more like a person they
+                    are linked to. It models the social convergence of culture. Unlike the Schelling model each agent is
+                    static in its own cell of a two dimensional matrix. Each agent can see four neighbours/contacts.
+                    North East South and West of the cell that it occupies. </p>
+                <p> The Colab model is <a
+                        href="https://colab.research.google.com/drive/1KZmKRp1gPNt68gXBlV6Y-y2BCaA6pPcz?usp=sharing">Here</a>
+                </p>
             </div>
-               
+
         </div>
 
         <br>
         <h5>Network theory with Axerod's model of the dissemination of culture</h5>
         <div class="row" id="axelrodnet">
-            
+
             <div class="col-sm-4">
                 <img src="img/img10.png" width="100%">
             </div>
 
 
             <div class="col-sm-8 bgTextBox">
-                <p>Networks consist of nodes and edges. In social networks nodes are the people in and the edges are the relationships between the people. These relationships are friends, family and coworkers. Networks are found throughout nature and society. Despite their apparent random appearance network theory can be applied to these networks to identify common patterns and behaviours. Using network theory, artificial networks of social interactions can be constructed that have the same important characteristics of real social networks. We are using the Axelrod model as a demonstration of the influence different network structures have on system wide behaviour.</p>
-                <p> The Colab model is <a href="https://colab.research.google.com/drive/1UlvB3giUqT7jXtMiIdIX8sP88242h7TK?usp=sharing">Here</a></p>
+                <p>Networks consist of nodes and edges. In social networks nodes are the people in and the edges are the
+                    relationships between the people. These relationships are friends, family and coworkers. Networks
+                    are found throughout nature and society. Despite their apparent random appearance network theory can
+                    be applied to these networks to identify common patterns and behaviours. Using network theory,
+                    artificial networks of social interactions can be constructed that have the same important
+                    characteristics of real social networks. We are using the Axelrod model as a demonstration of the
+                    influence different network structures have on system wide behaviour.</p>
+                <p> The Colab model is <a
+                        href="https://colab.research.google.com/drive/1UlvB3giUqT7jXtMiIdIX8sP88242h7TK?usp=sharing">Here</a>
+                </p>
             </div>
-               
+
+        </div>
+
+        <br>
+        <h4 id="bibliography"><u>Bibliography</u></h4>
+        <br>
+        <h5>Key papers</h5>
+        <br>
+        <div class="row">
+
+            <div class="col-sm-4">
+                <p>Will, Meike, et al. <b>"Combining social network analysis and agent-based modelling to explore
+                        dynamics of human interaction: A review."</b> Socio-Environmental Systems Modelling 2 (2020):
+                    16325-16325.</p>
+                <a href="papers/Combining social network analysis and agent-based.pdf">Download</a>
+            </div>
+
+
+            <div class="col-sm-8 bgTextBox">
+                <p>This is an excellent introduction to and a review of combining agent based models with network
+                    science models in a sociological context. It mainly deals with the model design guidelines. The best
+                    practices outlined in Box1 of the paper are particularly noteworthy and will drive the design of the
+                    NNM model. Also of note is the introduction which describes the need for ABM network model for
+                    sociological research.</p>
+
+            </div>
+
+        </div>
+        <br>
+        <div class="row">
+
+            <div class="col-sm-4">
+                <p>Morshed, Alexandra B., et al. <b>"A systematic review of system dynamics and agent‐based obesity
+                        models: Evaluating obesity as part of the global syndemic."</b> Obesity Reviews 20 (2019):
+                    161-178..</p>
+                <a
+                    href="papers/A systematic review of system dynamics and agent‐based obesity models_ Evaluating obesity as part of the global syndemic.pdf">Download</a>
+            </div>
+
+
+            <div class="col-sm-8 bgTextBox">
+                <p>This paper is a review of agent based models for modeling obesity. It looks at 30 models published
+                    before July 2018. Its focus is on sociological and metabolic obesity models. Section 3.3
+                    “Mechanisms, interventions and outcomes” is particularly noteworthy as it describes the obesity
+                    models used. This is the part of the NNM model that will require the greatest input from the
+                    partners.</p>
+            </div>
+
+        </div>
+        <br>
+        <div class="row">
+
+            <div class="col-sm-4">
+                <p>Giabbanelli, Philippe J., Boone Tison, and James Keith. <b>"The application of modeling and
+                        simulation to public health: Assessing the quality of Agent-Based Models for obesity."</b>
+                    Simulation Modelling Practice and Theory 108 (2021): 102268.</p>
+                <a href="papers/The application of modeling and simulation to public health_.pdf">Download</a>
+            </div>
+
+
+            <div class="col-sm-8 bgTextBox">
+                <p>This paper is a review of agent based models for modeling obesity. It looks at 30 models published
+                    before July 2018. Its focus is on sociological and metabolic obesity models. Section 3.3
+                    “Mechanisms, interventions and outcomes” is particularly noteworthy as it describes the obesity
+                    models used. This is the part of the NNM model that will require the greatest input from the
+                    partners.</p>
+            </div>
+
+        </div>
+        <br>
+        <h5> General biblography</h5>
+        <div class="row">
+            <ul>
+                <li>Christakis, Nicholas A., and James H. Fowler. "The spread of obesity in a large
+                    social network over 32 years." New England journal of medicine 357.4 (2007): 370-379. <a
+                        href="papers/Christakis and Fowler.pdf">Download</a></li>
+                <li>Giabbanelli, Philippe J., et al. "Modeling the influence of social networks and
+                    environment on energy balance and obesity." Journal of Computational Science 3.1-2 (2012): 17-27..<a
+                        href="papers/Modeling the influence of social networks and environment on energy balance and obesity.pdf">Download</a></li>
+                <li>Watts, Duncan J., and Steven H. Strogatz. "Collective dynamics of ‘small-world’networks." nature
+                    393.6684 (1998): 440-442.<a href="papers/NAture_Watts_Strogatz.pdf">Download</a></li>
+            </ul>
         </div>
     </div>
-
     <br>
     <br>
 
@@ -215,9 +358,9 @@
     <script src="js/main.js"></script>
     <script src="js/load.js"></script>
     <script>
-        loadDoc("head","header.html")
+        loadDoc("head", "header.html")
     </script>
-    
+
 </body>
 
 </html>
