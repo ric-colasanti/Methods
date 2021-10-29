@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@1,700&display=swap" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+
+    <title>Swarm</title>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Swarm</h2>
+        <canvas id="display" width="600px" height="600px" style="border-style: solid; border-width: 1.0px;"></canvas>
+        <br>
+        <button type="button" class="btn btn-primary" onclick="init()">Go</button>
+
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        function init() {
+            const experiment = new Experiment("display",100)
+            let interval = setInterval(function(){
+                i = experiment.update()
+                    if (i>200){
+                        clearInterval(interval)
+                    }
+                
+            },1)
+        }
+    </script>
+
+</body>
+
+</html>/Users/ricardocolasanti/Projects/Methods/Methods/Optimisation2

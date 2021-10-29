@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        var sortData = function () {
+            return function (a, b) {
+                return a.val > b.val
+            }
+        }
+        let dataArray = []
+        for (let i = 0; i < 10; i++) {
+            datum = {}
+            datum.id = i
+            datum.val = Math.random()
+            dataArray.push(datum)
+        }
+        dataArray.sort(sortData())
+        dataArray.forEach(d => {
+            console.log(d.id, d.val);
+        });
+    </script>
+</body>
+
+</html>
