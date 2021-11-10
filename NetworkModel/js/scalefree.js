@@ -40,6 +40,7 @@ var d3ScaleFree = function () {
 
     let zoom = d3.zoom().on("zoom", handleZoom);
     let amin = 0
+
     function handleZoom(e) {
         d3.select("svg g").attr("transform", e.transform);
     }
@@ -132,9 +133,9 @@ var d3ScaleFree = function () {
                 simulation.tick();
             }
         }
-        function draw(){
-            node.transition()
-            .duration(anim)
+
+        function draw() {
+            node
                 .attr("r", (d) => d.size)
                 .attr("cx", function (d) {
                     return d.x;
@@ -142,8 +143,7 @@ var d3ScaleFree = function () {
                 .attr("cy", function (d) {
                     return d.y;
                 });
-            link.transition()
-            .duration(anim)
+            link
                 .attr("x1", function (d) {
                     return d.source.x;
                 })
@@ -194,7 +194,7 @@ var d3ScaleFree = function () {
                 }),
                 (exit) => exit.remove()
             );
-            const link = svg
+        const link = svg
             .selectAll("line")
             .data(data.links, (d) => d.id)
             .join(
@@ -223,6 +223,71 @@ var d3ScaleFree = function () {
             );
     }
 
+    function update3(data) {
+        const node = svg
+            .selectAll("circle")
+            .data(data.nodes, (d) => d.id)
+            .join(
+                (enter) =>
+                enter
+                .append("circle")
+                .attr("r", 0)
+                .attr("r", (d) => d.size)
+                .attr("cx", function (d) {
+                    return d.x;
+                })
+                .attr("cy", function (d) {
+                    return d.y;
+                })
+                .attr("class", function (d) {
+                    return d.linked ? "nodelinked" : "nodesingle";
+                }),
+                (update) =>
+                update
+                .attr("r", (d) => d.size)
+                .transition()
+                .duration(1000)
+                .attr("cx", function (d) {
+                    return d.x;
+                })
+                .attr("cy", function (d) {
+                    return d.y;
+                })
+                .style("fill", function (d) {
+                    return d.linked ? "nodelinked" : "nodesingle";
+                }),
+                (exit) => exit.remove()
+            );
+        const link = svg
+            .selectAll("line")
+            .data(data.links, (d) => d.id)
+            .join(
+                (enter) =>
+                enter
+                .append("line")
+                .attr("class", "link")
+                .style("stroke-width", (d) => d.strength),
+                (update) => update
+                .style("stroke-width", (d) => d.strength)
+                .transition()
+                .duration(1000)
+                .attr("x1", function (d) {
+                    return d.source.x;
+                })
+                .attr("y1", function (d) {
+                    return d.source.y;
+                })
+                .attr("x2", function (d) {
+                    return d.target.x;
+                })
+                .attr("y2", function (d) {
+                    return d.target.y;
+                }),
+                (exit) => exit.remove()
+            );
+    }
+
+
     function addData() {
         let index = data.nodes.length + 1;
         let choiceRnd = data.scalefree[randInt(data.scalefree.length)];
@@ -247,7 +312,7 @@ var d3ScaleFree = function () {
         update2(data);
     };
     document.getElementById("btnChange2").onclick = function () {
-        update(1000);
+        update3(data);
     };
-    update(0);
+    update();
 };
