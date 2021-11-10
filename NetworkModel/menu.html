@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-md bgTextBox navbar-light fixed-top">
+    <!-- Brand -->
+    <span class="navbar-brand" onclick='loadDoc("main","pages/main.html",testfun)' style="cursor: pointer;">ASPIRE Agent Based Mode</span>
+
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar links -->
+   
+        
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbardrop2" data-toggle="dropdown">
+                    Visualisations
+                </a>
+                <div class="dropdown-menu">
+
+                    <a class="nav-link" onclick='loadDoc("main","pages/test.html",testfun)'>Test</a>
+                    <a class="nav-link" onclick='loadDoc("main","pages/d3refresh.html",d3refresh)'>D3 Refresher</a>
+
+                    <a class="nav-link" onclick='loadDoc("main","pages/d3joy.html",d3joy)'>D3 fun</a>
+                    <a class="nav-link" onclick='loadDoc("main","pages/d3graph01.html",d3graph)'>D3 Graph</a>
+                </div>
+            </li>
+<!--
+            <li><a class="nav-link" href="#bibliography">Bibliography</a></li>
+-->
+        </ul>
+    </div>
+</nav>
