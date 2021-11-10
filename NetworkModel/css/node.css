@@ -1,0 +1,11 @@
+.nodelinked{
+    fill: cornflowerblue;
+    stroke: lightgray;
+    stroke-width: 2px;
+}
+
+.nodesingle{
+    fill: lightsalmon;
+    stroke: lightgray;
+    stroke-width: 2px;
+}

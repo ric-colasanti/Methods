@@ -1,4 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+:root {
+    --linked: cornflowerblue;
+    --lone:lightsalmon;
+    --link: #aaaaaa;
+  }
+
 
 html {
     scroll-behavior: smooth;
@@ -35,9 +41,18 @@ a{
     font-style: italic;
 }
 
-pre {
-    background-color:ghostwhite;
-    color: gray;
-    font-family: 'Courier New', Courier, monospace;
+.link{
+    stroke: var(--link)
+}
 
+.nodelinked{
+    fill: var(--linked);
+    stroke: var(--link);
+    stroke-width: 2px;
+}
+
+.nodesingle{
+    fill: var(--lone);
+    stroke: var(--link);
+    stroke-width: 2px;
 }
