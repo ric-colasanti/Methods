@@ -39,7 +39,7 @@ var d3ScaleFree = function () {
     console.log(data);
 
     let zoom = d3.zoom().on("zoom", handleZoom);
-
+    let amin = 0
     function handleZoom(e) {
         d3.select("svg g").attr("transform", e.transform);
     }
@@ -64,7 +64,7 @@ var d3ScaleFree = function () {
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    function update() {
+    function update(anim) {
         // append the svg object to the body of the page
         //document.getElementById("btnChange1").className = "btn btn-secondary";
         //document.getElementById("btnChange1").disabled = true;
@@ -121,6 +121,7 @@ var d3ScaleFree = function () {
             .force("center", d3.forceCenter(width / 2, height / 2))
             .on("tick", ticked)
             .on("end", function () {
+                draw()
                 //document.getElementById("btnChange").disabled = false;
                 //document.getElementById("btnChange").className = "btn btn-primary";
             });
@@ -130,8 +131,10 @@ var d3ScaleFree = function () {
             for (let i = 0; i < 50; i++) {
                 simulation.tick();
             }
+        }
+        function draw(){
             node.transition()
-            .duration(1000)
+            .duration(anim)
                 .attr("r", (d) => d.size)
                 .attr("cx", function (d) {
                     return d.x;
@@ -140,7 +143,7 @@ var d3ScaleFree = function () {
                     return d.y;
                 });
             link.transition()
-            .duration(1000)
+            .duration(anim)
                 .attr("x1", function (d) {
                     return d.source.x;
                 })
@@ -244,7 +247,7 @@ var d3ScaleFree = function () {
         update2(data);
     };
     document.getElementById("btnChange2").onclick = function () {
-        update();
+        update(1000);
     };
-    update();
+    update(0);
 };
