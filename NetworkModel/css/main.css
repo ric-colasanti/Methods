@@ -56,3 +56,7 @@ a{
     stroke: var(--link);
     stroke-width: 2px;
 }
+
+.bar{
+    fill:crimson;
+}
