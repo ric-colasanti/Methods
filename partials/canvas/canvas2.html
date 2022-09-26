@@ -50,7 +50,7 @@
     function SVG(elementName) {
         return document.createElementNS('http://www.w3.org/2000/svg', elementName);
     }
-
+   
     class SVGCell {
         constructor(id, size) {
             this.xPos = 0;
@@ -83,7 +83,7 @@
     var grid =[]
     function section1() {
         point = frame.createSVGPoint();
-        var bubble = SVG("g")
+        let bubble = SVG("g")
 
         for (y = 0; y < 65; y++) {
             grid.push([])
@@ -103,8 +103,45 @@
         }
         bubble.setAttribute("transform","scale("+frame.getAttribute("width")/(size*scale)+","+frame.getAttribute("width")/(size*scale)+")")
         frame.appendChild(bubble)
-
+        for( x=10;x<20;x++){
+            for(y=10;y<20;y++){
+                bubble.removeChild(grid[x][y].svg)
+            }
+        }
+        
+        return bubble
     }
 
-    section1()
+//     const getTransformString = (scale, x, y) =>
+//   "scale(" + scale + ") " + "translateX(" + x + "%) translateY(" + y + "%)";
+
+//     const getTransformParameters = (element) => {
+//   const transform = element.style.transform;
+//   let scale = 1,
+//     x = 0,
+//     y = 0;
+//   if (transform.includes("scale"))
+//     scale = parseFloat(transform.slice(transform.indexOf("scale") + 6));
+//   if (transform.includes("translateX"))
+//     x = parseInt(transform.slice(transform.indexOf("translateX") + 11));
+//   if (transform.includes("translateY"))
+//     y = parseInt(transform.slice(transform.indexOf("translateY") + 11));
+//   return { scale, x, y };
+// };
+
+//     const zoom = function(direction){
+//   const { scale, x, y } = getTransformParameters(frame);
+//   let dScale = 0.5;
+//   if (direction == "out") dScale *= -1;
+//   if (scale == 0.1 && direction == "out") dScale = 0;
+//   frame.style.transform = getTransformString(scale + dScale, x, y);
+// };
+// zoom("out")
+const transform = frame.style.transform;
+console.log(transform);
+let bubble = section1()
+scale = parseFloat(transform.slice(transform.indexOf("scale") + 6));
+//bubble.style.transform = "scale(" + 0.5 + ") "
+frame.style.transform = "scale(" + 0.1 + ") "
+    
 </script>
